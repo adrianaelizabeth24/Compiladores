@@ -4,6 +4,8 @@
 #Adriana Valenzuela a01195331
 #Mayra Ruiz a00812918
 
+
+#variables globales
 bscope = 0;
 iContadorDiccionarioVar = 1;
 iContadorDiccionarioFuncion = 1;
@@ -15,162 +17,130 @@ dV = {};
 dF = {};
 tmptipo = "";
 
-class tablaVar(object):
-       def __init__(self,nombre,tipo,scope):
-              self.nombre = nombre
-              self.tipo = tipo
-              self.scope = scope
-       def getNombre(self):
-              return self.nombre
-       def getTipo(self):
-              return self.tipo
-       def getScope(self):
-              return self.scope
-
-class tablaFunciones(object):
-      def __init__(self,nombre,tipo):
-          self.nombre = nombre
-          self.tipo = tipo
-      def getNombre(self):
-          return self.nombre
-      def getTipo(self):
-          return self.tipo
-
-class errorSintactico(Exception):
-	def __init__(self,value):
-		self.value = value
-	def __str__(self):
-		return repr(self.value)
-
-class errorLexico(Exception):
-	def __init__(self,value):
-		self.value = value
-	def __str__(self):
-		return repr(self.value)
-
-class errorSemantico(Exception):
-      def __init__(self,value):
-        self.value = value
-      def __str__(self):
-        return repr(self.value)
-
-
+from tablaVar import tablaVar
+from tablaFunciones import tablaFunciones
+from errorSintactico import errorSintactico
+from errorLexico import errorLexico
+from errorSemantico import errorSemantico
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
+#tipo de tokens que se retornan
 tokens = (
-	'INT', 
+  'INT', 
   'FLOAT',
   'STRING',
-	'PARENTESIS_IZQ',
-	'PARENTESIS_DER',
-	'RETURN',
-	'PUNTO_Y_COMA',
-	'WHILE',
-	'END_WHILE',
-	'CHECKWALL',
-	'MOVE',
-	'TURN_LEFT',
-	'TURN_RIGHT',
-	'PICK_BEEPER',
-	'PUT_BEEPER',
-	'IF',
-	'END_IF',
-	'ELIF',
-	'END_ELIF',
-	'ELSE',
-	'END_ELSE',
-	'PRINT',
-	'DEF',
-	'END_DEF',
-	'SUMA',
-	'RESTA',
-	'MULTIPLICACION',
-	'DIVISION',
-	'MENOR_QUE',
-	'MAYOR_QUE',
-	'EQUIVALE',
-	'IGUAL_A',
-	'DIFERENTE',
-	'MENOR_IGUAL',
-	'MAYOR_IGUAL',
-	'DOS_PUNTOS',
-	'COMA',
-	'ID',
-	'CTE_INT',
-	'CTE_STRING',
-	'CTE_FLOAT'
-	)
-
-
+  'BOOL',
+  'PARENTESIS_IZQ',
+  'PARENTESIS_DER',
+  'RETURN',
+  'PUNTO_Y_COMA',
+  'WHILE',
+  'END_WHILE',
+  'CHECKWALL',
+  'MOVE',
+  'TURN_LEFT',
+  'TURN_RIGHT',
+  'PICK_BEEPER',
+  'PUT_BEEPER',
+  'IF',
+  'END_IF',
+  'ELIF',
+  'END_ELIF',
+  'ELSE',
+  'END_ELSE',
+  'PRINT',
+  'DEF',
+  'END_DEF',
+  'SUMA',
+  'RESTA',
+  'MULTIPLICACION',
+  'DIVISION',
+  'MENOR_QUE',
+  'MAYOR_QUE',
+  'EQUIVALE',
+  'IGUAL_A',
+  'DIFERENTE',
+  'MENOR_IGUAL',
+  'MAYOR_IGUAL',
+  'DOS_PUNTOS',
+  'COMA',
+  'ID',
+  'CTE_INT',
+  'CTE_STRING',
+  'CTE_FLOAT',
+  'CTE_BOOL'
+  )
 
 #expresiones regulares
-t_SUMA					    = r'\+'
-t_RESTA					    = r'-'
-t_MULTIPLICACION	  = r'\*'
-t_DIVISION				  = r'/'
-t_PARENTESIS_IZQ		= r'\('
-t_PARENTESIS_DER		= r'\)'
-t_MENOR_QUE				  = r'\<'
-t_MAYOR_QUE				  = r'\>'
-t_MENOR_IGUAL			  = r'\<='
-t_MAYOR_IGUAL			  = r'\>='
-t_DIFERENTE				  = r'\<>'
-t_EQUIVALE				  = r'\='
-t_IGUAL_A 				  = r'\=='
-t_PUNTO_Y_COMA			= r'\;'
-t_DOS_PUNTOS			  = r'\:'
-t_COMA 					    = r'\,'
+t_SUMA              = r'\+'
+t_RESTA             = r'-'
+t_MULTIPLICACION    = r'\*'
+t_DIVISION          = r'/'
+t_PARENTESIS_IZQ    = r'\('
+t_PARENTESIS_DER    = r'\)'
+t_MENOR_QUE         = r'\<'
+t_MAYOR_QUE         = r'\>'
+t_MENOR_IGUAL       = r'\<='
+t_MAYOR_IGUAL       = r'\>='
+t_DIFERENTE         = r'\<>'
+t_EQUIVALE          = r'\='
+t_IGUAL_A           = r'\=='
+t_PUNTO_Y_COMA      = r'\;'
+t_DOS_PUNTOS        = r'\:'
+t_COMA              = r'\,'
 
 
+#palabras reservadas del lenguaje
 reserved = {
-	'int'		    :	'INT',
-  'float'		  :	'FLOAT',
+  'int'       : 'INT',
+  'float'     : 'FLOAT',
   'string'    : 'STRING',
-	'return'	  :	'RETURN',
-	'while'		  :	'WHILE',
-	'end_while' :	'END_WHILE',
-	'checkWall'	:	'CHECKWALL',
-	'move'		  :	'MOVE',
-	'turnLeft'	:	'TURN_LEFT',
-	'turnRight'	:	'TURN_RIGHT',
-	'pickBeeper':	'PICK_BEEPER',
-	'putBeeper' :	'PUT_BEEPER',
-	'if'		    :	'IF',
-	'end_if'	  :	'END_IF',
-	'elif'		  :	'ELIF',
-	'end_elif'	:	'END_ELIF',
-	'else'		  :	'ELSE',
-	'end_else'	:	'END_ELSE',
-	'print'		  :	'PRINT',
-	'def'		    :	'DEF',
-	'end_def'	  :	'END_DEF',
+  'bool'    : 'BOOL',
+  'return'    : 'RETURN',
+  'while'     : 'WHILE',
+  'end_while' : 'END_WHILE',
+  'checkWall' : 'CHECKWALL',
+  'move'      : 'MOVE',
+  'turnLeft'  : 'TURN_LEFT',
+  'turnRight' : 'TURN_RIGHT',
+  'pickBeeper': 'PICK_BEEPER',
+  'putBeeper' : 'PUT_BEEPER',
+  'if'        : 'IF',
+  'end_if'    : 'END_IF',
+  'elif'      : 'ELIF',
+  'end_elif'  : 'END_ELIF',
+  'else'      : 'ELSE',
+  'end_else'  : 'END_ELSE',
+  'print'     : 'PRINT',
+  'def'       : 'DEF',
+  'end_def'   : 'END_DEF',
 }
 
 #er de float se debe poner antes de int por que luego reconoce int . int
 def t_CTE_FLOAT(t):
-		r'[0-9]+\.[[0-9]+]'
-		t.value = float(t.value)
-		return t
+    r'[0-9]+\.[[0-9]+]'
+    t.value = float(t.value)
+    return t
 
 #er de cte int debe ser con d para que pueda funcionar
 def t_CTE_INT(t):
-		r'\d+'
-		t.value = int(t.value)
-		return t
+    r'\d+'
+    t.value = int(t.value)
+    return t
 
 #er de identidicador, deben comenzar con una letra y oyeden ser seguidos por cualquier letra guión bajo o bien un dígito
 def t_ID(t):
-		r'[a-zA-Z_][a-zA-Z_0-9]*'
-		t.type = reserved.get(t.value,'ID')
-		return t;
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')
+    return t;
 
 #er de string debe ser definida entre comillas y puede contener cualquier cosa
 def t_CTE_STRING(t):
-		r'\"[A-Za-z0-9_\(\)\{\}\[\]\<\>\!]*\"'
-		t.type = reserved.get(t.value,'CTE_STRING') 
-		return t;
+    r'\"[A-Za-z0-9_\(\)\{\}\[\]\<\>\!]*\"'
+    t.type = reserved.get(t.value,'CTE_STRING') 
+    return t;
 
 #ignora tabs y spaces
 t_ignore  = ' \t'
@@ -183,8 +153,8 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 def t_error(t):
-    	raise errorLexico("Error de Lexico: " + t.value[0] + " en linea : " + t.lexer.lineno)
-    	sys.exit()
+      raise errorLexico("Error de Lexico: " + t.value[0] + " en linea : " + t.lexer.lineno)
+      sys.exit()
 
 lexer = lex.lex()
 
@@ -206,7 +176,7 @@ def p_empty(p):
 def p_estatuto(p):
     '''
     estatuto : declaracion estatuto_2
-    		| estatuto_2
+             | estatuto_2
     '''
 
 def p_estatuto_2(p):
@@ -225,6 +195,7 @@ def p_opciones(p):
           | turnleft
           | turnright
           | move
+          | checkwall
           | pickbeeper
           | putbeeper
   '''
@@ -247,21 +218,22 @@ def p_declaracion(p):
     arregloVar.append(tablaVar(p[2],p[1],'local'))
 
   if(iContadorDiccionarioVar == 1):
-  	dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
+    dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
   else:
     for x in range(0,iContadorDiccionarioVar - 1):
+      print(arregloVar[x].getNombre())
       if(p[2] == arregloVar[x].getNombre()):
-      	raise errorSemantico("Variable ya definida: " + p[2])
+        raise errorSemantico("Variable ya definida: " + p[2])
     dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]
 
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
   print(dV)
 
 def p_declaracion_aux(p):
-	'''
-	declaracion_aux : declaracion_2
-					| empty
-	'''
+  '''
+  declaracion_aux : declaracion_2
+          | empty
+  '''
 
 def p_declaracion_2(p):
   '''
@@ -280,18 +252,18 @@ def p_declaracion_2(p):
     arregloVar.append(tablaVar(p[2],tmptipo,'local'))
 
   for x in range(0,iContadorDiccionarioVar - 1):
-  	if(p[2] == arregloVar[x].getNombre()):
-  		raise errorSemantico("Variable ya definida: " + p[2])
+    if(p[2] == arregloVar[x].getNombre()):
+      raise errorSemantico("Variable ya definida: " + p[2])
 
   dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]   
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
   print(dV)
 
 def p_a(p):
-	'''
-	a : declaracion_2
-	 | empty
-	'''
+  '''
+  a : declaracion_2
+   | empty
+  '''
 
 def p_declaracion_3(p):
   '''
@@ -304,6 +276,7 @@ def p_tipo(p):
   tipo : INT
        | FLOAT
        | STRING
+       | BOOL
   '''
   print(p[1]);
 
@@ -411,7 +384,7 @@ def p_ciclo(p):
 
 def p_function(p):
   '''
-  function : imprimeDef tipo ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+  function : imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
   '''
   global bscope
   global arregloFuncion
@@ -432,11 +405,17 @@ def p_function(p):
   print(dF)
   bscope = 0
 
+def p_aux(p):
+  '''
+  aux : tipo
+    | empty
+  '''
+
 def p_function_aux(p):
-	'''
-	function_aux : function_2
-				| empty
-	'''
+  '''
+  function_aux : function_2
+               | empty
+  '''
 
 def p_function_2(p):
   '''
@@ -448,16 +427,17 @@ def p_function_2(p):
 
   arregloVar.append(tablaVar(p[2],p[1],'local'))
 
+  print(arregloVar)
+
   if(iContadorDiccionarioVar == 1):
-  	dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
+    dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
   else:
     for x in range(0,iContadorDiccionarioVar - 1):
       if(p[2] == arregloVar[x].getNombre()):
-      	raise errorSemantico("Variable ya definida: " + p[2])
+        raise errorSemantico("Variable ya definida: " + p[2])
     dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]
 
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
-  print(dV)
 
 def p_function_3(p):
   '''
@@ -478,22 +458,22 @@ def p_function_5(p):
   ''' 
 
 def p_destroyVars(p):
-	'''
-	destroyVars : empty
-	'''
-	global arregloVar
-	global dV
-	global iContadorInicioLocal
-	global iAux
-	global iContadorDiccionarioVar
+  '''
+  destroyVars : empty
+  '''
+  global arregloVar
+  global dV
+  global iContadorInicioLocal
+  global iAux
+  global iContadorDiccionarioVar
 
-	iAux = iContadorInicioLocal
-	del arregloVar[iContadorInicioLocal:iContadorDiccionarioVar]
-	for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
-		del dV[x]
-	print("hola")
-	print(len(dV))
+  iAux = iContadorInicioLocal
+  del arregloVar[iContadorInicioLocal:iContadorDiccionarioVar - 1]
+  for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
+    del dV[x]
+  iContadorDiccionarioVar = iAux + 1
 
+  print(len(dV))
 
 def p_checkwall(p):
   '''
@@ -724,7 +704,7 @@ def p_imprimeComa(p):
 
 # Error rule for syntax errors
 def p_error(p):
-	raise errorSintactico("Error de sintaxis")
+  raise errorSintactico("Error de sintaxis")
 
 # Build the parser
 parser = yacc.yacc()
