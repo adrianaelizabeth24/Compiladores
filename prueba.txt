@@ -1,11 +1,5 @@
 int a;
+int b;
+int c;
 
-def int function2():
-	int b;
-	move();
-	return b;
-end_def
-
-if( a < b):
-	move();
-end_if
+a = c * b + 1;
