@@ -1,34 +1,11 @@
-def function1(int a, int a):
-	int c;
-	while(a < b):
-		if(a == b):
-			print("iguales");
-		end_if
-		elif(a < b):
-			print("hola");
-		end_elif
-		else:
-			print("cosa");
-		end_else
-		while(z < 9):
-			a = a + b;
-		end_while
-	end_while
-end_def
+int a;
 
-def function2():
+def int function2():
 	int b;
 	move();
+	return b;
 end_def
 
-def functionPrueba():
-	int c;
-end_def
-
-def functionPrueba2():
-	int z;
-end_def
-
-def functionPrueba3():
-	int a;
-end_def
+if( a < b):
+	move();
+end_if

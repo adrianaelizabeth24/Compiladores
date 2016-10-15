@@ -146,7 +146,6 @@ def t_CTE_STRING(t):
 t_ignore  = ' \t'
 t_ignore_comentario = '\#.*'
 
-
 #pasa los endofline
 def t_newline(t):
     r'\n+'
@@ -163,11 +162,6 @@ lexer = lex.lex()
 #################################################################################################################################################
 
 start = "estatuto"
-
-# Error rule for syntax errors
-def p_error(p):
-    print("Syntax error in input!")
-    sys.exit()
 
 def p_empty(p):
     'empty :'
@@ -198,6 +192,7 @@ def p_opciones(p):
           | checkwall
           | pickbeeper
           | putbeeper
+          | funcionUsuario
   '''
 
 def p_declaracion(p):
@@ -221,7 +216,6 @@ def p_declaracion(p):
     dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
   else:
     for x in range(0,iContadorDiccionarioVar - 1):
-      print(arregloVar[x].getNombre())
       if(p[2] == arregloVar[x].getNombre()):
         raise errorSemantico("Variable ya definida: " + p[2])
     dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]
@@ -282,18 +276,23 @@ def p_tipo(p):
 
 def p_asignacion(p):
   '''
-  asignacion : tipo imprimeID imprimeEquivale exp imprimePuntoYComa
-         | imprimeID imprimeEquivale exp imprimePuntoYComa
+  asignacion : ID imprimeEquivale asignacion_aux
 
   '''
+  global arregloVar
+  global iContadorDiccionarioVar
+  varAux = 0;
+  for x in range(0,iContadorDiccionarioVar - 1):
+  	if(p[1] != arregloVar[x].getNombre()):
+  		varAux += 1
+  if(varAux == iContadorDiccionarioVar - 1):
+  	raise errorSemantico("Variable no declarada: " + p[1])
 
-def p_var_cte(p):
-  '''
-  var_cte : ID
-          | CTE_INT
-          | CTE_FLOAT
-  '''
-  print(p[1])
+def p_asignacion_aux(p):
+	'''
+	asignacion_aux : exp imprimePuntoYComa
+					| funcionUsuario
+	'''
 
 def p_exp(p):
   '''
@@ -335,6 +334,36 @@ def p_termino_2(p):
             | empty
   '''
 
+def p_factor(p):
+  '''
+  factor : imprimeParentesisIzq exp imprimeParentesisDer
+          | imprimeSuma var_cte
+          | imprimeResta var_cte
+          | var_cte
+  '''
+
+def p_var_cte(p):
+  '''
+  var_cte : matchID
+          | CTE_INT
+          | CTE_FLOAT
+  '''
+  print(p[1])
+
+def p_matchID(p):
+	'''
+	matchID : ID
+	'''
+	global arregloVar
+	global iContadorDiccionarioVar
+	varAux = 0
+	for x in range(0,iContadorDiccionarioVar - 1):
+		if(p[1] != arregloVar[x].getNombre()):
+			varAux += 1
+	if(varAux == iContadorDiccionarioVar - 1):
+		raise errorSemantico("Variable no declarada: " + p[1])
+
+
 def p_condicion(p):
   '''
   condicion : imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
@@ -356,14 +385,6 @@ def p_condicion_4(p):
   '''
   condicion_4 : imprimeElse imprimeDosPuntos estatuto_2 imprimeEndElse
               | empty
-  '''
-
-def p_factor(p):
-  '''
-  factor : imprimeParentesisIzq exp imprimeParentesisDer
-          | imprimeSuma var_cte
-          | imprimeResta var_cte
-          | var_cte
   '''
 
 def p_escritura(p):
@@ -475,36 +496,77 @@ def p_destroyVars(p):
 
   print(len(dV))
 
+#define la sintaxixs de una función de usuario
+def p_funcionUsuario(p):
+	'''
+	funcionUsuario : ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+	'''
+	#checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
+	global arregloFuncion
+	global iContadorDiccionarioFuncion
+	varAux = 0
+	for x in range(0,iContadorDiccionarioFuncion - 1):
+		if(p[1] != arregloFuncion[x].getNombre()):
+			varAux += 1
+	if(varAux == iContadorDiccionarioFuncion - 1):
+		raise errorSemantico("Función no definida: " + p[1] + "()")
+
+#funcion auxiliar de p_funcionUsuario
+def p_functionUsuario_parametros(p):
+  '''
+  functionUsuario_parametros : functionUsuario_aux1
+               				| empty
+  '''
+
+#funcion auxiliar de p_funcionUsuario
+def p_functionUsuario_aux1(p):
+  '''
+  functionUsuario_aux1 : tipo ID functionUsuario_aux2
+  '''
+
+#funcion auxiliar de p_funcionUsuario
+def p_functionUsuario_aux2(p):
+  '''
+  functionUsuario_aux2 : COMA functionUsuario_aux1
+            			| empty
+  '''
+
+#función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):
   '''
   checkwall : CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un checkwall\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de move();
 def p_move(p):
   '''
   move : MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un move\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de turnRight();
 def p_turnright(p):
   '''
   turnright : TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un turnright\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de turnLeft();
 def p_turnleft(p):
   '''
   turnleft : TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un turnleft\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de pickBeeper();
 def p_pickbeeper(p):
   '''
   pickbeeper : PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un pickbeeper\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de putBeeper();
 def p_putbeeper(p):
   '''
   putbeeper : PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
@@ -639,13 +701,11 @@ def p_imprimeDiferente(p):
   '''
   print(p[1])
 
-
 def p_imprimeMayorQue(p):
   '''
   imprimeMayorQue : MAYOR_QUE
   '''
   print(p[1])
-
 
 def p_imprimeMenorQue(p):
   '''
@@ -653,20 +713,17 @@ def p_imprimeMenorQue(p):
   '''
   print(p[1])
 
-
 def p_imprimeIgualA(p):
   '''
   imprimeIgualA : IGUAL_A
   '''
   print(p[1])
 
-
 def p_imprimeMayorIgual(p):
   '''
   imprimeMayorIgual : MAYOR_IGUAL
   '''
   print(p[1])
-
 
 def p_imprimeMenorIgual(p):
   '''
