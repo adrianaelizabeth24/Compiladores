@@ -9,6 +9,9 @@ from tablaFunciones import tablaFunciones
 from errorSintactico import errorSintactico
 from errorLexico import errorLexico
 from errorSemantico import errorSemantico
+from cuadruplo import cuadruplo
+from Queue import Queue
+from Stack import Stack
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
@@ -29,6 +32,14 @@ op = -2
 op1 = -2
 op2 = -2
 tipo = -2
+operador = ""
+operando1 = ""
+operando2 = ""
+resultado = []
+iContadorTemporal = 0
+PilaO = Stack()
+POper = Stack()
+arregloCuadruplos = []
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
 #Cubo [OP1][OP2][OPERACION] = TIPO
@@ -518,12 +529,18 @@ def p_tipo(p):
 
 def p_asignacion(p):
   '''
-  asignacion : ID imprimeEquivale asignacion_aux
+  asignacion : ID  EQUIVALE asignacion_aux
 
   '''
   global arregloVar
   global iContadorDiccionarioVar
   global tipo
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
   varAux = 0;
   auxTipoStr = ""
   auxTipo = -2
@@ -535,6 +552,16 @@ def p_asignacion(p):
       auxTipo = dicTipos[auxTipoStr]
       if(auxTipo != tipo):
         raise errorSemantico("Tipos incompatibles de variables en :" + p[1])
+      else:
+        operador = "="
+        operando2 = PilaO.pop()
+        operando1 = PilaO.pop()
+        resultado.append(operando1)
+        arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
+        PilaO.push(resultado[iContadorTemporal])
+        iContadorTemporal += 1
+
+
   if(varAux == iContadorDiccionarioVar - 1):
   	raise errorSemantico("Variable no declarada: " + p[1])
 
@@ -562,7 +589,7 @@ def p_exp_2(p):
 
 def p_expresion(p):
   '''
-  expresion : termino expresion_2
+  expresion : termino reglaOperadorMM expresion_2
   '''
   global op
   global tipo
@@ -573,6 +600,27 @@ def p_expresion(p):
       tipo = cubo[tipo][op2][op]
     if(tipo == -1):
       raise errorSemantico("Uso incorrecto de tipos ")
+
+def p_reglaOperadorMM(p):
+  '''
+  reglaOperadorMM : empty
+  '''
+  global POper
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  if(POper.isEmpty() == 0):
+    if(POper.top() == "+" or POper.top() == "-"):
+      operador = POper.pop()
+      operando2 = PilaO.pop()
+      operando1 = PilaO.pop()
+      resultado[iContadorTemporal] = iContadorTemporal + 1
+      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
+      PilaO.push(resultado[iContadorTemporal])
+      iContadorTemporal += 1
 
 def p_expresion_2(p):
   '''
@@ -581,15 +629,18 @@ def p_expresion_2(p):
               | empty
   '''
   global op
+  global POper
   if(p[1] == "+"):
     op = dicOperadores["+"]
+    POper.push(p[1])
   elif(p[1] == "-"):
     op = dicOperadores["-"]
+    POper.push(p[1])
 
 
 def p_termino(p):
   '''
-  termino : factor termino_2
+  termino : factor reglaOperadorMD termino_2
   '''
   global op
   global tipo
@@ -600,6 +651,27 @@ def p_termino(p):
       tipo = cubo[tipo][op2][op]
     if(tipo == -1):
       raise errorSemantico("Uso incorrecto de tipos ")
+
+def p_reglaOperadorMD(p):
+  '''
+  reglaOperadorMD : empty
+  '''
+  global POper
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  if(POper.isEmpty() == 0):
+    if(POper.top() == "*" or POper.top() == "/"):
+      operador = POper.pop()
+      operando2 = PilaO.pop()
+      operando1 = PilaO.pop()
+      resultado[iContadorTemporal] = iContadorTemporal + 1
+      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
+      PilaO.push(resultado[iContadorTemporal])
+      iContadorTemporal += 1
 
 
 
@@ -611,10 +683,13 @@ def p_termino_2(p):
             | empty
   '''
   global op
+  global POper
   if(p[1] == '*'):
     op = dicOperadores["*"]
+    POper.push(p[1])
   elif(p[1] == '/'):
     op = dicOperadores["/"]
+    POper.push(p[1])
 
 def p_factor(p):
   '''
@@ -628,7 +703,6 @@ def p_var_cte(p):
           | matchCteInt
           | matchCteFloat
   '''
-  print(p[1])
 
 def p_matchID(p):
   '''
@@ -638,6 +712,7 @@ def p_matchID(p):
   global iContadorDiccionarioVar
   global op1
   global op2
+  global PilaO
   varAux = 0
   auxTipo = ""
   for x in range(0,iContadorDiccionarioVar - 1):
@@ -651,6 +726,7 @@ def p_matchID(p):
       else:
         op1 = dicTipos[auxTipo]
         print("op1 asignado")
+      PilaO.push(p[1])
 
   if(varAux == iContadorDiccionarioVar - 1):
     raise errorSemantico("Variable no declarada: " + p[1])
@@ -661,10 +737,12 @@ def p_matchCteInt(p):
   '''
   global op1
   global op2
+  global PilaO
   if(op1 != -2):
     op2 = dicTipos["int"]
   else:
     op1 = dicTipos["int"]
+  PilaO.push(p[1])
 
 def p_matchCteFloat(p):
   '''
@@ -672,12 +750,12 @@ def p_matchCteFloat(p):
   '''
   global op1
   global op2
+  global PilaO
   if(op1 != -2):
     op2 = dicTipos["float"]
   else:
     op1 = dicTipos["float"]
-
-
+  PilaO.push(p[1])
 
 def p_condicion(p):
   '''
@@ -816,7 +894,7 @@ def p_funcionUsuario(p):
   '''
   funcionUsuario : ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
   '''
-#checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
+  #checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
   global arregloFuncion
   global iContadorDiccionarioFuncion
   global tipo
@@ -1069,6 +1147,5 @@ for line in f:
   else:
     data = data + line
 result = parser.parse(data)
-print(dV)
-print(result)
+
 
