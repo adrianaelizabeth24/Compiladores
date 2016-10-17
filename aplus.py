@@ -529,7 +529,7 @@ def p_tipo(p):
 
 def p_asignacion(p):
   '''
-  asignacion : ID  EQUIVALE asignacion_aux
+  asignacion : ID EQUIVALE asignacion_aux
 
   '''
   global arregloVar
@@ -613,7 +613,7 @@ def p_reglaOperadorMM(p):
   global resultado
   global iContadorTemporal
   if(POper.isEmpty() == 0):
-    if(POper.top() == "+" or POper.top() == "-"):
+    if(POper.peek() == "+" or POper.peek() == "-"):
       operador = POper.pop()
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
@@ -635,7 +635,7 @@ def p_expresion_2(p):
     POper.push(p[1])
   elif(p[1] == "-"):
     op = dicOperadores["-"]
-    POper.push(p[1])
+  POper.push(p[1])
 
 
 def p_termino(p):
@@ -663,8 +663,16 @@ def p_reglaOperadorMD(p):
   global operando2
   global resultado
   global iContadorTemporal
-  if(POper.isEmpty() == 0):
-    if(POper.top() == "*" or POper.top() == "/"):
+  print("tamanio: ")
+  print(POper.size())
+  print("elementos")
+  POper.print()
+  print("fin de elementos")
+  if(POper.size() > 0):
+    print("Debug")
+    POper.print()
+    print("Acabeé de imprimir")
+    if(POper.peek() == "*" or POper.peek() == "/"):
       operador = POper.pop()
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
@@ -678,18 +686,38 @@ def p_reglaOperadorMD(p):
 
 def p_termino_2(p):
   '''
-  termino_2 : MULTIPLICACION termino
-            | DIVISION termino
+  termino_2 : MatchMultiplicacion
+            | MatchDivision
             | empty
+  '''
+
+def p_MatchMultiplicacion(p):
+  '''
+  MatchMultiplicacion : MULTIPLICACION termino
   '''
   global op
   global POper
-  if(p[1] == '*'):
-    op = dicOperadores["*"]
-    POper.push(p[1])
-  elif(p[1] == '/'):
-    op = dicOperadores["/"]
-    POper.push(p[1])
+  global dicOperadores
+  op = dicOperadores["*"]
+  print("op asignado *")
+  POper.push(p[1])
+  print("imprime pila")
+  POper.print()
+  print("fin de pila")
+
+def p_MatchDivision(p):
+  '''
+  MatchDivision : DIVISION termino
+  '''
+  global op
+  global POper
+  global dicOperadores
+  op = dicOperadores["/"]
+  print("op asignado /")
+  POper.push(p[1])
+  print("imprime pila")
+  POper.print()
+  print("fin de pila")
 
 def p_factor(p):
   '''
@@ -715,19 +743,27 @@ def p_matchID(p):
   global PilaO
   varAux = 0
   auxTipo = ""
+  #Checa si variable esta o no declarada
   for x in range(0,iContadorDiccionarioVar - 1):
     if(p[1] != arregloVar[x].getNombre()):
       varAux += 1
     else:
+      #cubo semantico tipo de dato correcto
       auxTipo = arregloVar[x].getTipo()
+      #-2 es cuando esta vacio
+      #si esta asignado el op1 lo guarda en op2
       if(op1 != -2):
         op2 = dicTipos[auxTipo]
         print("op2 asignado")
+        print(p[1])
       else:
+        #si no esta ninfuna guardar en op1
         op1 = dicTipos[auxTipo]
         print("op1 asignado")
+        print(p[1])
+      #Meter a pila operadores paso 1 del algoritmo
       PilaO.push(p[1])
-
+  #No esta declarada
   if(varAux == iContadorDiccionarioVar - 1):
     raise errorSemantico("Variable no declarada: " + p[1])
 
@@ -738,10 +774,12 @@ def p_matchCteInt(p):
   global op1
   global op2
   global PilaO
+  #cubo semantico toma el valor int directo guardo en op2 si esta ocupado op1
   if(op1 != -2):
     op2 = dicTipos["int"]
   else:
     op1 = dicTipos["int"]
+  #meter a pila de operadores
   PilaO.push(p[1])
 
 def p_matchCteFloat(p):
@@ -751,6 +789,7 @@ def p_matchCteFloat(p):
   global op1
   global op2
   global PilaO
+  #
   if(op1 != -2):
     op2 = dicTipos["float"]
   else:
@@ -1147,5 +1186,10 @@ for line in f:
   else:
     data = data + line
 result = parser.parse(data)
+for x in range(0,iContadorTemporal):
+  print(arregloCuadruplos[x].getOperador())
+  print(arregloCuadruplos[x].getOperando1())
+  print(arregloCuadruplos[x].getOperando2())
+  print(arregloCuadruplos[x].getResultado())
 
 

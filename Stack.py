@@ -30,9 +30,10 @@ class Stack:
               return self.items[0]
        
        #regresa el ultimo elemento de la lista se le conoce como el -1
-       def top(self):
-              size = len(self.items)
-              return self.items[size-1]
+       def peek(self):
+               temp = self.items.pop()
+               self.push(temp)
+               return temp
 
        #imprime los elementos de la lista en orden en el que fueron insertados
        def print(self):
