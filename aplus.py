@@ -4,6 +4,17 @@
 #Adriana Valenzuela a01195331
 #Mayra Ruiz a00812918
 
+from tablaVar import tablaVar
+from tablaFunciones import tablaFunciones
+from errorSintactico import errorSintactico
+from errorLexico import errorLexico
+from errorSemantico import errorSemantico
+from cuadruplo import cuadruplo
+from Queue import Queue
+from Stack import Stack
+import ply.lex as lex
+import ply.yacc as yacc
+import sys
 
 #variables globales
 bscope = 0;
@@ -15,16 +26,256 @@ arregloVar = [];
 arregloFuncion = [];
 dV = {};
 dF = {};
+tipoDeclaracion = ""
 tmptipo = "";
+op = -2
+op1 = -2
+op2 = -2
+tipo = -2
+operador = ""
+operando1 = ""
+operando2 = ""
+resultado = []
+iContadorTemporal = 0
+PilaO = Stack()
+POper = Stack()
+arregloCuadruplos = []
 
-from tablaVar import tablaVar
-from tablaFunciones import tablaFunciones
-from errorSintactico import errorSintactico
-from errorLexico import errorLexico
-from errorSemantico import errorSemantico
-import ply.lex as lex
-import ply.yacc as yacc
-import sys
+cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
+#Cubo [OP1][OP2][OPERACION] = TIPO
+# INT
+cubo[0][0][0] = 0     # int + int = int
+cubo[0][1][0] = 1     # int + float = float
+cubo[0][2][0] = -1    # int + string = error
+cubo[0][3][0] = -1    # int + bool = error
+
+cubo[0][0][1] = 0     # int - int = int
+cubo[0][1][1] = 1     # int - float = float
+cubo[0][2][1] = -1    # int - string = error
+cubo[0][3][1] = -1    # int - bool = error
+
+cubo[0][0][2] = 0     # int * int = int
+cubo[0][1][2] = 1     # int * float = float
+cubo[0][2][2] = -1    # int * string = error
+cubo[0][3][2] = -1    # int * bool = error
+
+cubo[0][0][3] = 1     # int / int = int
+cubo[0][1][3] = 1     # int / float = float
+cubo[0][2][3] = -1    # int / string = error
+cubo[0][3][3] = -1    # int / bool = error
+
+cubo[0][0][4] = 3     # int < int = bool
+cubo[0][1][4] = 3     # int < float = bool
+cubo[0][2][4] = -1    # int < string = error
+cubo[0][3][4] = -1    # int < bool = error
+
+cubo[0][0][5] = 3     # int > int = bool
+cubo[0][1][5] = 3     # int > float = bool
+cubo[0][2][5] = -1    # int > string = error
+cubo[0][3][5] = -1    # int > bool = error
+
+# ERROR
+cubo[0][0][6] = -1    # int = int = error
+cubo[0][1][6] = -1    # int = float = error
+cubo[0][2][6] = -1    # int = string = error
+cubo[0][3][6] = -1    # int = bool = error
+
+cubo[0][0][7] = 3     # int <> int = bool
+cubo[0][1][7] = 3     # int <> float = bool
+cubo[0][2][7] = -1    # int <> string = error
+cubo[0][3][7] = -1    # int <> bool = error
+
+cubo[0][0][8] = 3     # int == int = bool
+cubo[0][1][8] = 3     # int == float = bool
+cubo[0][2][8] = -1    # int == string = error
+cubo[0][3][8] = -1    # int == bool = error
+
+cubo[0][0][9] = -1    # int & int = error
+cubo[0][1][9] = -1    # int & float = error
+cubo[0][2][9] = -1    # int & string = error
+cubo[0][3][9] = -1    # int & bool = error
+
+cubo[0][0][10] = -1     # int | int = error
+cubo[0][1][10] = -1     # int | float = error
+cubo[0][2][10] = -1     # int | string = error
+cubo[0][3][10] = -1     # int | bool = error
+
+# FLOAT
+cubo[1][0][0] = 1     # float + int = float
+cubo[1][1][0] = 1     # float + float = float
+cubo[1][2][0] = -1    # float + string = error
+cubo[1][3][0] = -1    # float + bool = error
+
+cubo[1][0][1] = 1     # float - int = float
+cubo[1][1][1] = 1     # float - float = float
+cubo[1][2][1] = -1    # float - string = error
+cubo[1][3][1] = -1    # float - bool = error
+
+cubo[1][0][2] = 1     # float * int = float
+cubo[1][1][2] = 1     # float * float = float
+cubo[1][2][2] = -1    # float * string = error
+cubo[1][3][2] = -1    # float * bool = error
+
+cubo[1][0][3] = 1     # float / int = float
+cubo[1][1][3] = 1     # float / float = float
+cubo[1][2][3] = -1    # float / string = error
+cubo[1][3][3] = -1    # float / bool = error
+
+cubo[1][0][4] = 3     # float < int = bool
+cubo[1][1][4] = 3     # float < float = bool
+cubo[1][2][4] = -1    # float < string = error
+cubo[1][3][4] = -1    # float < bool = error
+
+cubo[1][0][5] = 3     # float > int = bool
+cubo[1][1][5] = 3     # float > float = bool
+cubo[1][2][5] = -1    # float > string = error
+cubo[1][3][5] = -1    # float > bool = error
+
+# ERROR
+cubo[1][0][6] = -1    # float = int = error
+cubo[1][1][6] = -1    # float = float = error
+cubo[1][2][6] = -1    # float = string = error
+cubo[1][3][6] = -1    # float = bool = error
+
+cubo[1][0][7] = 3     # float <> int = bool
+cubo[1][1][7] = 3     # float <> float = bool
+cubo[1][2][7] = -1    # float <> string = error
+cubo[1][3][7] = -1    # float <> bool = error
+
+cubo[1][0][8] = 3     # float == int = bool
+cubo[1][1][8] = 3     # float == float = bool
+cubo[1][2][8] = -1    # float == string = error
+cubo[1][3][8] = -1    # float == bool = error
+
+cubo[1][0][9] = -1    # float & int = error
+cubo[1][1][9] = -1    # float & float = error
+cubo[1][2][9] = -1    # float & string = error
+cubo[1][3][9] = -1    # float & bool = error
+
+cubo[1][0][10] = -1     # float | int = error
+cubo[1][1][10] = -1     # float | float = error
+cubo[1][2][10] = -1     # float | string = error
+cubo[1][3][10] = -1     # float | bool = error
+
+# STRING
+cubo[2][0][0] = -1    # string + int = error
+cubo[2][1][0] = -1    # string + float = error
+cubo[2][2][0] = -1    # string + string = error
+cubo[2][3][0] = -1    # string + bool = error
+
+cubo[2][0][1] = -1    # string - int = error
+cubo[2][1][1] = -1    # string - float = error
+cubo[2][2][1] = -1    # string - string = error
+cubo[2][3][1] = -1    # string - bool = error
+
+cubo[2][0][2] = -1    # string * int = error
+cubo[2][1][2] = -1    # string * float = error
+cubo[2][2][2] = -1    # string * string = error
+cubo[2][3][2] = -1    # string * bool = error
+
+cubo[2][0][3] = -1    # string / int = error
+cubo[2][1][3] = -1    # string / float = error
+cubo[2][2][3] = -1    # string / string = error
+cubo[2][3][3] = -1    # string / bool = error
+
+cubo[2][0][4] = -1    # string < int = error
+cubo[2][1][4] = -1    # string < float = error
+cubo[2][2][4] = 3     # string < string = bool
+cubo[2][3][4] = -1    # string < bool = error
+
+cubo[2][0][5] = -1    # string > int = error
+cubo[2][1][5] = -1    # string > float = error
+cubo[2][2][5] = 3     # string > string = bool
+cubo[2][3][5] = -1    # string > bool = error
+
+# ERROR
+cubo[2][0][6] = -1    # string = int = error
+cubo[2][1][6] = -1    # string = float = error
+cubo[2][2][6] = -1    # string = string = error
+cubo[2][3][6] = -1    # string = bool = error
+
+cubo[2][0][7] = -1    # string <> int = error
+cubo[2][1][7] = -1    # string <> float = error
+cubo[2][2][7] = 3     # string <> string = bool
+cubo[2][3][7] = -1    # string <> bool = error
+
+cubo[2][0][8] = -1    # string == int = error
+cubo[2][1][8] = -1    # string == float = error
+cubo[2][2][8] = 3     # string == string = bool
+cubo[2][3][8] = -1    # string == bool = error
+
+cubo[2][0][9] = -1    # string & int = error
+cubo[2][1][9] = -1    # string & float = error
+cubo[2][2][9] = -1    # string & string = error
+cubo[2][3][9] = -1    # string & bool = error
+
+cubo[2][0][10] = -1     # string | int = error
+cubo[2][1][10] = -1     # string | float = error
+cubo[2][2][10] = -1     # string | string = error
+cubo[2][3][10] = -1     # string | bool = error
+
+# BOOL
+cubo[3][0][0] = -1    # bool + int = error
+cubo[3][1][0] = -1    # bool + float = error
+cubo[3][2][0] = -1    # bool + string = error
+cubo[3][3][0] = -1    # bool + bool = error
+
+cubo[3][0][1] = -1    # bool - int = error
+cubo[3][1][1] = -1    # bool - float = error
+cubo[3][2][1] = -1    # bool - string = error
+cubo[3][3][1] = -1    # bool - bool = error
+
+cubo[3][0][2] = -1    # bool * int = error
+cubo[3][1][2] = -1    # bool * float = error
+cubo[3][2][2] = -1    # bool * string = error
+cubo[3][3][2] = -1    # bool * bool = error
+
+cubo[3][0][3] = -1    # bool / int = error
+cubo[3][1][3] = -1    # bool / float = error
+cubo[3][2][3] = -1    # bool / string = error
+cubo[3][3][3] = -1    # bool / bool = error
+
+cubo[3][0][4] = -1    # bool < int = error
+cubo[3][1][4] = -1    # bool < float = error
+cubo[3][2][4] = -1    # bool < string = error
+cubo[3][3][4] = -1    # bool < bool = error
+
+cubo[3][0][5] = -1    # bool > int = error
+cubo[3][1][5] = -1    # bool > float = error
+cubo[3][2][5] = -1    # bool > string = error
+cubo[3][3][5] = -1    # bool > bool = error
+
+# ERROR
+cubo[3][0][6] = -1    # bool = int = error
+cubo[3][1][6] = -1    # bool = float = error
+cubo[3][2][6] = -1    # bool = string = error
+cubo[3][3][6] = -1    # bool = bool = error
+
+cubo[3][0][7] = -1    # bool <> int = error
+cubo[3][1][7] = -1    # bool <> float = error
+cubo[3][2][7] = -1    # bool <> string = error
+cubo[3][3][7] = 3     # bool <> bool = bool
+
+cubo[3][0][8] = -1    # bool == int = error
+cubo[3][1][8] = -1    # bool == float = error
+cubo[3][2][8] = -1    # bool == string = error
+cubo[3][3][8] = 3     # bool == bool = bool
+
+cubo[3][0][9] = -1    # bool & int = error
+cubo[3][1][9] = -1    # bool & float = error
+cubo[3][2][9] = -1    # bool & string = error
+cubo[3][3][9] = 3     # bool & bool = bool
+
+cubo[3][0][10] = -1     # bool | int = error
+cubo[3][1][10] = -1     # bool | float = error
+cubo[3][2][10] = -1     # bool | string = error
+cubo[3][3][10] = 3    # bool | bool = bool
+
+dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10}
+
+dicTipos = {"int" : 0, "float" : 1, "string" : 2, "bool" : 3, "error" : -1}
+
+
 
 #tipo de tokens que se retornan
 tokens = (
@@ -146,7 +397,6 @@ def t_CTE_STRING(t):
 t_ignore  = ' \t'
 t_ignore_comentario = '\#.*'
 
-
 #pasa los endofline
 def t_newline(t):
     r'\n+'
@@ -163,11 +413,6 @@ lexer = lex.lex()
 #################################################################################################################################################
 
 start = "estatuto"
-
-# Error rule for syntax errors
-def p_error(p):
-    print("Syntax error in input!")
-    sys.exit()
 
 def p_empty(p):
     'empty :'
@@ -198,6 +443,7 @@ def p_opciones(p):
           | checkwall
           | pickbeeper
           | putbeeper
+          | funcionUsuario
   '''
 
 def p_declaracion(p):
@@ -209,19 +455,19 @@ def p_declaracion(p):
   global iContadorDiccionarioVar
   global dV
   global tmptipo;
+  global tipoDeclaracion
 
-  tmptipo = p[1]
+  tmptipo = tipoDeclaracion
 
   if(bscope == 0):
-    arregloVar.append(tablaVar(p[2],p[1],'global'))
+    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global'))
   else:
-    arregloVar.append(tablaVar(p[2],p[1],'local'))
+    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local'))
 
   if(iContadorDiccionarioVar == 1):
     dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
   else:
     for x in range(0,iContadorDiccionarioVar - 1):
-      print(arregloVar[x].getNombre())
       if(p[2] == arregloVar[x].getNombre()):
         raise errorSemantico("Variable ya definida: " + p[2])
     dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]
@@ -276,24 +522,54 @@ def p_tipo(p):
   tipo : INT
        | FLOAT
        | STRING
-       | BOOL
   '''
+  global tipoDeclaracion
+  tipoDeclaracion = p[1]
   print(p[1]);
 
 def p_asignacion(p):
   '''
-  asignacion : tipo imprimeID imprimeEquivale exp imprimePuntoYComa
-         | imprimeID imprimeEquivale exp imprimePuntoYComa
+  asignacion : ID  EQUIVALE asignacion_aux
 
   '''
+  global arregloVar
+  global iContadorDiccionarioVar
+  global tipo
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  varAux = 0;
+  auxTipoStr = ""
+  auxTipo = -2
+  for x in range(0,iContadorDiccionarioVar - 1):
+    if(p[1] != arregloVar[x].getNombre()):
+      varAux += 1
+    else:
+      auxTipoStr = arregloVar[x].getTipo()
+      auxTipo = dicTipos[auxTipoStr]
+      if(auxTipo != tipo):
+        raise errorSemantico("Tipos incompatibles de variables en :" + p[1])
+      else:
+        operador = "="
+        operando2 = PilaO.pop()
+        operando1 = PilaO.pop()
+        resultado.append(operando1)
+        arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
+        PilaO.push(resultado[iContadorTemporal])
+        iContadorTemporal += 1
 
-def p_var_cte(p):
-  '''
-  var_cte : ID
-          | CTE_INT
-          | CTE_FLOAT
-  '''
-  print(p[1])
+
+  if(varAux == iContadorDiccionarioVar - 1):
+  	raise errorSemantico("Variable no declarada: " + p[1])
+
+def p_asignacion_aux(p):
+	'''
+	asignacion_aux : exp imprimePuntoYComa
+					       | funcionUsuario
+	'''
 
 def p_exp(p):
   '''
@@ -313,27 +589,173 @@ def p_exp_2(p):
 
 def p_expresion(p):
   '''
-  expresion : termino expresion_2
+  expresion : termino reglaOperadorMM expresion_2
   '''
+  global op
+  global tipo
+  if(op != -2):
+    if(tipo == -2):
+      tipo = cubo[op1][op2][op]
+    else:
+      tipo = cubo[tipo][op2][op]
+    if(tipo == -1):
+      raise errorSemantico("Uso incorrecto de tipos ")
+
+def p_reglaOperadorMM(p):
+  '''
+  reglaOperadorMM : empty
+  '''
+  global POper
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  if(POper.isEmpty() == 0):
+    if(POper.top() == "+" or POper.top() == "-"):
+      operador = POper.pop()
+      operando2 = PilaO.pop()
+      operando1 = PilaO.pop()
+      resultado[iContadorTemporal] = iContadorTemporal + 1
+      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
+      PilaO.push(resultado[iContadorTemporal])
+      iContadorTemporal += 1
 
 def p_expresion_2(p):
   '''
-  expresion_2 : imprimeSuma expresion
-              | imprimeResta expresion
+  expresion_2 : SUMA expresion
+              | RESTA expresion
               | empty
   '''
+  global op
+  global POper
+  if(p[1] == "+"):
+    op = dicOperadores["+"]
+    POper.push(p[1])
+  elif(p[1] == "-"):
+    op = dicOperadores["-"]
+    POper.push(p[1])
+
 
 def p_termino(p):
   '''
-  termino : factor termino_2
+  termino : factor reglaOperadorMD termino_2
   '''
+  global op
+  global tipo
+  if(op != -2):
+    if(tipo == -2):
+      tipo = cubo[op1][op2][op]
+    else:
+      tipo = cubo[tipo][op2][op]
+    if(tipo == -1):
+      raise errorSemantico("Uso incorrecto de tipos ")
+
+def p_reglaOperadorMD(p):
+  '''
+  reglaOperadorMD : empty
+  '''
+  global POper
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  if(POper.isEmpty() == 0):
+    if(POper.top() == "*" or POper.top() == "/"):
+      operador = POper.pop()
+      operando2 = PilaO.pop()
+      operando1 = PilaO.pop()
+      resultado[iContadorTemporal] = iContadorTemporal + 1
+      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
+      PilaO.push(resultado[iContadorTemporal])
+      iContadorTemporal += 1
+
+
+
 
 def p_termino_2(p):
   '''
-  termino_2 : imprimeMultiplicacion termino
-            | imprimeDivision termino
+  termino_2 : MULTIPLICACION termino
+            | DIVISION termino
             | empty
   '''
+  global op
+  global POper
+  if(p[1] == '*'):
+    op = dicOperadores["*"]
+    POper.push(p[1])
+  elif(p[1] == '/'):
+    op = dicOperadores["/"]
+    POper.push(p[1])
+
+def p_factor(p):
+  '''
+  factor : imprimeParentesisIzq exp imprimeParentesisDer
+         | var_cte
+  '''
+
+def p_var_cte(p):
+  '''
+  var_cte : matchID
+          | matchCteInt
+          | matchCteFloat
+  '''
+
+def p_matchID(p):
+  '''
+  matchID : ID
+  '''
+  global arregloVar
+  global iContadorDiccionarioVar
+  global op1
+  global op2
+  global PilaO
+  varAux = 0
+  auxTipo = ""
+  for x in range(0,iContadorDiccionarioVar - 1):
+    if(p[1] != arregloVar[x].getNombre()):
+      varAux += 1
+    else:
+      auxTipo = arregloVar[x].getTipo()
+      if(op1 != -2):
+        op2 = dicTipos[auxTipo]
+        print("op2 asignado")
+      else:
+        op1 = dicTipos[auxTipo]
+        print("op1 asignado")
+      PilaO.push(p[1])
+
+  if(varAux == iContadorDiccionarioVar - 1):
+    raise errorSemantico("Variable no declarada: " + p[1])
+
+def p_matchCteInt(p):
+  '''
+  matchCteInt : CTE_INT
+  '''
+  global op1
+  global op2
+  global PilaO
+  if(op1 != -2):
+    op2 = dicTipos["int"]
+  else:
+    op1 = dicTipos["int"]
+  PilaO.push(p[1])
+
+def p_matchCteFloat(p):
+  '''
+  matchCteFloat : CTE_FLOAT
+  '''
+  global op1
+  global op2
+  global PilaO
+  if(op1 != -2):
+    op2 = dicTipos["float"]
+  else:
+    op1 = dicTipos["float"]
+  PilaO.push(p[1])
 
 def p_condicion(p):
   '''
@@ -356,14 +778,6 @@ def p_condicion_4(p):
   '''
   condicion_4 : imprimeElse imprimeDosPuntos estatuto_2 imprimeEndElse
               | empty
-  '''
-
-def p_factor(p):
-  '''
-  factor : imprimeParentesisIzq exp imprimeParentesisDer
-          | imprimeSuma var_cte
-          | imprimeResta var_cte
-          | var_cte
   '''
 
 def p_escritura(p):
@@ -475,36 +889,82 @@ def p_destroyVars(p):
 
   print(len(dV))
 
+#define la sintaxixs de una función de usuario
+def p_funcionUsuario(p):
+  '''
+  funcionUsuario : ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+  '''
+  #checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
+  global arregloFuncion
+  global iContadorDiccionarioFuncion
+  global tipo
+  auxTipo
+  varAux = 0
+  for x in range(0,iContadorDiccionarioFuncion - 1):
+    if(p[1] != arregloFuncion[x].getNombre()):
+      varAux += 1
+    else:
+      auxTipo = arregloFuncion[x].getTipo()
+      tipo = dicTipos[auxTipo]
+  if(varAux == iContadorDiccionarioFuncion - 1):
+    raise errorSemantico("Función no definida: " + p[1] + "()")
+
+#funcion auxiliar de p_funcionUsuario
+def p_functionUsuario_parametros(p):
+  '''
+  functionUsuario_parametros : functionUsuario_aux1
+               				| empty
+  '''
+
+#funcion auxiliar de p_funcionUsuario
+def p_functionUsuario_aux1(p):
+  '''
+  functionUsuario_aux1 : tipo ID functionUsuario_aux2
+  '''
+
+#funcion auxiliar de p_funcionUsuario
+def p_functionUsuario_aux2(p):
+  '''
+  functionUsuario_aux2 : COMA functionUsuario_aux1
+            			| empty
+  '''
+
+#función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):
   '''
   checkwall : CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un checkwall\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de move();
 def p_move(p):
   '''
   move : MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un move\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de turnRight();
 def p_turnright(p):
   '''
   turnright : TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un turnright\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de turnLeft();
 def p_turnleft(p):
   '''
   turnleft : TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un turnleft\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de pickBeeper();
 def p_pickbeeper(p):
   '''
   pickbeeper : PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
   print("Encontré un pickbeeper\n")
 
+#función de sintaxis que revisa si se recive la función predeinida de putBeeper();
 def p_putbeeper(p):
   '''
   putbeeper : PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
@@ -609,36 +1069,11 @@ def p_imprimeEndIf(p):
   '''
   print(p[1])
 
-def p_imprimeMultiplicacion(p):
-  '''
-  imprimeMultiplicacion : MULTIPLICACION
-  '''
-  print(p[1])
-
-def p_imprimeDivision(p):
-  '''
-  imprimeDivision : DIVISION
-  '''
-  print(p[1])
-
-def p_imprimeSuma(p):
-  '''
-  imprimeSuma : SUMA
-  '''
-  print(p[1])
-
-def p_imprimeResta(p):
-  '''
-  imprimeResta : RESTA
-  '''
-  print(p[1])
-
 def p_imprimeDiferente(p):
   '''
   imprimeDiferente : DIFERENTE
   '''
   print(p[1])
-
 
 def p_imprimeMayorQue(p):
   '''
@@ -646,13 +1081,11 @@ def p_imprimeMayorQue(p):
   '''
   print(p[1])
 
-
 def p_imprimeMenorQue(p):
   '''
   imprimeMenorQue : MENOR_QUE
   '''
   print(p[1])
-
 
 def p_imprimeIgualA(p):
   '''
@@ -660,13 +1093,11 @@ def p_imprimeIgualA(p):
   '''
   print(p[1])
 
-
 def p_imprimeMayorIgual(p):
   '''
   imprimeMayorIgual : MAYOR_IGUAL
   '''
   print(p[1])
-
 
 def p_imprimeMenorIgual(p):
   '''
@@ -716,6 +1147,5 @@ for line in f:
   else:
     data = data + line
 result = parser.parse(data)
-print(dV)
-print(result)
+
 
