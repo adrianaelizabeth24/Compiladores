@@ -552,14 +552,14 @@ def p_asignacion(p):
       auxTipo = dicTipos[auxTipoStr]
       if(auxTipo != tipo):
         raise errorSemantico("Tipos incompatibles de variables en :" + p[1])
-      else:
+      '''else:
         operador = "="
         operando2 = PilaO.pop()
         operando1 = PilaO.pop()
         resultado.append(operando1)
         arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
         PilaO.append(resultado[iContadorTemporal])
-        iContadorTemporal += 1
+        iContadorTemporal += 1'''
 
 
   if(varAux == iContadorDiccionarioVar - 1):
@@ -589,7 +589,7 @@ def p_exp_2(p):
 
 def p_expresion(p):
   '''
-  expresion : termino reglaOperadorMM expresion_2
+  expresion : termino expresion_2
   '''
   global op
   global tipo
@@ -600,11 +600,6 @@ def p_expresion(p):
       tipo = cubo[tipo][op2][op]
     if(tipo == -1):
       raise errorSemantico("Uso incorrecto de tipos ")
-
-def p_reglaOperadorMM(p):
-  '''
-  reglaOperadorMM : empty
-  '''
   global POper
   global PilaO
   global operador
@@ -612,12 +607,28 @@ def p_reglaOperadorMM(p):
   global operando2
   global resultado
   global iContadorTemporal
+  print("tamanio: ")
+  print(len(POper))
+  print("elementos")
+  print(POper)
+  print("fin de elementos")
   if(len(POper) > 0):
+    print("Debug")
+    print(POper)
+    print(PilaO)
+    print("Acabeé de imprimir")
     if(POper[-1] == "+" or POper[-1] == "-"):
       operador = POper.pop()
+      print("operador de mi cuadruplo")
+      print(operador)
       operando2 = PilaO.pop()
+      print("Primer elemento fuera")
+      print(operando2)
+      print(PilaO)
+      print("tam pila o")
+      print(len(PilaO))
       operando1 = PilaO.pop()
-      resultado[iContadorTemporal] = iContadorTemporal + 1
+      resultado.append(iContadorTemporal + 1)
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
       PilaO.append(resultado[iContadorTemporal])
       iContadorTemporal += 1
@@ -1187,9 +1198,8 @@ for line in f:
     data = data + line
 result = parser.parse(data)
 for x in range(0,iContadorTemporal):
-  print(arregloCuadruplos[x].getOperador())
-  print(arregloCuadruplos[x].getOperando1())
-  print(arregloCuadruplos[x].getOperando2())
-  print(arregloCuadruplos[x].getResultado())
-
-
+	print("Cuadruplo num " + str(x))
+	print(arregloCuadruplos[x].getOperador())
+	print(arregloCuadruplos[x].getOperando1())
+	print(arregloCuadruplos[x].getOperando2())
+	print(arregloCuadruplos[x].getResultado())
