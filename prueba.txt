@@ -1,5 +1,7 @@
 float a;
 float b;
 float c;
+float j;
+float k;
 
-a = c * b + a;
+a = c * b + a * (j + k);

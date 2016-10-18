@@ -653,15 +653,21 @@ def p_termino(p):
   '''
   termino : factor termino_2
   '''
+  ##cubo semantico
   global op
   global tipo
+  #toma el tipo resultante de una operación
   if(op != -2):
     if(tipo == -2):
       tipo = cubo[op1][op2][op]
+    #si ya hay un tipo existente agarra ese tipo, el operador nuevo y genera un nuevo tipo de tipo
     else:
       tipo = cubo[tipo][op2][op]
+    #si el tipo resulta ser -1 significa que trata de usar dos tipos de variables no permitidas
     if(tipo == -1):
       raise errorSemantico("Uso incorrecto de tipos ")
+
+  ##generacion de cuadruplos
   global POper
   global PilaO
   global operador
@@ -669,29 +675,19 @@ def p_termino(p):
   global operando2
   global resultado
   global iContadorTemporal
-  print("tamanio: ")
-  print(len(POper))
-  print("elementos")
-  print(POper)
-  print("fin de elementos")
+  #entra si ya entro una multiplicacion o division a la pila o suma o resta
   if(len(POper) > 0):
-    print("Debug")
-    print(POper)
-    print(PilaO)
-    print("Acabeé de imprimir")
+  	#pregunta si el tope es multiplicacion o division en caso de serlo prosigue
     if(POper[-1] == "*" or POper[-1] == "/"):
+      #saca el operador y ambos operandos
       operador = POper.pop()
-      print("operador de mi cuadruplo")
-      print(operador)
       operando2 = PilaO.pop()
-      print("Primer elemento fuera")
-      print(operando2)
-      print(PilaO)
-      print("tam pila o")
-      print(len(PilaO))
       operando1 = PilaO.pop()
+      #al arreglo de resultados mete el numero de temporal
       resultado.append(iContadorTemporal + 1)
+      #genera un nuevo cuadruplo
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
+      #mete el temporal
       PilaO.append(resultado[iContadorTemporal])
       iContadorTemporal += 1
 
@@ -706,29 +702,25 @@ def p_MatchMultiplicacion(p):
   '''
   MatchMultiplicacion : MULTIPLICACION termino
   '''
+  #si llega una multiplicacion la mete dentro de la pila de operadores
   global op
   global POper
   global dicOperadores
   op = dicOperadores["*"]
-  print("op asignado *")
   POper.append(p[1])
-  print("imprime pila")
-  print(POper)
-  print("fin de pila")
+
 
 def p_MatchDivision(p):
   '''
   MatchDivision : DIVISION termino
   '''
+  #si llega una division la mete en la pila de operadores
   global op
   global POper
   global dicOperadores
   op = dicOperadores["/"]
-  print("op asignado /")
   POper.append(p[1])
-  print("imprime pila")
-  print(POper)
-  print("fin de pila")
+
 
 def p_factor(p):
   '''
@@ -800,11 +792,12 @@ def p_matchCteFloat(p):
   global op1
   global op2
   global PilaO
-  #
+  #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
   if(op1 != -2):
     op2 = dicTipos["float"]
   else:
     op1 = dicTipos["float"]
+  #mete la constante a la pila de operandos
   PilaO.append(p[1])
 
 def p_condicion(p):
