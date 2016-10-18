@@ -37,8 +37,8 @@ operando1 = ""
 operando2 = ""
 resultado = []
 iContadorTemporal = 0
-PilaO = Stack()
-POper = Stack()
+PilaO = []
+POper = []
 arregloCuadruplos = []
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
@@ -558,7 +558,7 @@ def p_asignacion(p):
         operando1 = PilaO.pop()
         resultado.append(operando1)
         arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
-        PilaO.push(resultado[iContadorTemporal])
+        PilaO.append(resultado[iContadorTemporal])
         iContadorTemporal += 1
 
 
@@ -568,7 +568,7 @@ def p_asignacion(p):
 def p_asignacion_aux(p):
 	'''
 	asignacion_aux : exp imprimePuntoYComa
-					       | funcionUsuario
+					| funcionUsuario
 	'''
 
 def p_exp(p):
@@ -612,14 +612,14 @@ def p_reglaOperadorMM(p):
   global operando2
   global resultado
   global iContadorTemporal
-  if(POper.isEmpty() == 0):
-    if(POper.peek() == "+" or POper.peek() == "-"):
+  if(len(POper) > 0):
+    if(POper[-1] == "+" or POper[-1] == "-"):
       operador = POper.pop()
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
       resultado[iContadorTemporal] = iContadorTemporal + 1
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
-      PilaO.push(resultado[iContadorTemporal])
+      PilaO.append(resultado[iContadorTemporal])
       iContadorTemporal += 1
 
 def p_expresion_2(p):
@@ -632,15 +632,15 @@ def p_expresion_2(p):
   global POper
   if(p[1] == "+"):
     op = dicOperadores["+"]
-    POper.push(p[1])
+    POper.append(p[1])
   elif(p[1] == "-"):
     op = dicOperadores["-"]
-  POper.push(p[1])
+  POper.append(p[1])
 
 
 def p_termino(p):
   '''
-  termino : factor reglaOperadorMD termino_2
+  termino : factor termino_2
   '''
   global op
   global tipo
@@ -651,11 +651,6 @@ def p_termino(p):
       tipo = cubo[tipo][op2][op]
     if(tipo == -1):
       raise errorSemantico("Uso incorrecto de tipos ")
-
-def p_reglaOperadorMD(p):
-  '''
-  reglaOperadorMD : empty
-  '''
   global POper
   global PilaO
   global operador
@@ -664,25 +659,30 @@ def p_reglaOperadorMD(p):
   global resultado
   global iContadorTemporal
   print("tamanio: ")
-  print(POper.size())
+  print(len(POper))
   print("elementos")
-  POper.print()
+  print(POper)
   print("fin de elementos")
-  if(POper.size() > 0):
+  if(len(POper) > 0):
     print("Debug")
-    POper.print()
+    print(POper)
+    print(PilaO)
     print("Acabeé de imprimir")
-    if(POper.peek() == "*" or POper.peek() == "/"):
+    if(POper[-1] == "*" or POper[-1] == "/"):
       operador = POper.pop()
+      print("operador de mi cuadruplo")
+      print(operador)
       operando2 = PilaO.pop()
+      print("Primer elemento fuera")
+      print(operando2)
+      print(PilaO)
+      print("tam pila o")
+      print(len(PilaO))
       operando1 = PilaO.pop()
-      resultado[iContadorTemporal] = iContadorTemporal + 1
+      resultado.append(iContadorTemporal + 1)
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
-      PilaO.push(resultado[iContadorTemporal])
+      PilaO.append(resultado[iContadorTemporal])
       iContadorTemporal += 1
-
-
-
 
 def p_termino_2(p):
   '''
@@ -700,9 +700,9 @@ def p_MatchMultiplicacion(p):
   global dicOperadores
   op = dicOperadores["*"]
   print("op asignado *")
-  POper.push(p[1])
+  POper.append(p[1])
   print("imprime pila")
-  POper.print()
+  print(POper)
   print("fin de pila")
 
 def p_MatchDivision(p):
@@ -714,9 +714,9 @@ def p_MatchDivision(p):
   global dicOperadores
   op = dicOperadores["/"]
   print("op asignado /")
-  POper.push(p[1])
+  POper.append(p[1])
   print("imprime pila")
-  POper.print()
+  print(POper)
   print("fin de pila")
 
 def p_factor(p):
@@ -762,7 +762,7 @@ def p_matchID(p):
         print("op1 asignado")
         print(p[1])
       #Meter a pila operadores paso 1 del algoritmo
-      PilaO.push(p[1])
+      PilaO.append(p[1])
   #No esta declarada
   if(varAux == iContadorDiccionarioVar - 1):
     raise errorSemantico("Variable no declarada: " + p[1])
@@ -780,7 +780,7 @@ def p_matchCteInt(p):
   else:
     op1 = dicTipos["int"]
   #meter a pila de operadores
-  PilaO.push(p[1])
+  PilaO.append(p[1])
 
 def p_matchCteFloat(p):
   '''
@@ -794,7 +794,7 @@ def p_matchCteFloat(p):
     op2 = dicTipos["float"]
   else:
     op1 = dicTipos["float"]
-  PilaO.push(p[1])
+  PilaO.append(p[1])
 
 def p_condicion(p):
   '''
