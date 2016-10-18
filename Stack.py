@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 #clase stack
 class Stack:
 
@@ -36,7 +39,7 @@ class Stack:
                return temp
 
        #imprime los elementos de la lista en orden en el que fueron insertados
-       def print(self):
+       def printSelf(self):
               size = len(self.items)
               s = 0
               while s < size:
