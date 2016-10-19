@@ -4,4 +4,4 @@ float c;
 float j;
 float k;
 
-a = c * b + a * (j + k);
+a = c * b + c;

@@ -529,7 +529,7 @@ def p_tipo(p):
 
 def p_asignacion(p):
   '''
-  asignacion : ID EQUIVALE asignacion_aux
+  asignacion : matchID EQUIVALE asignacion_aux
 
   '''
   global arregloVar
@@ -542,28 +542,27 @@ def p_asignacion(p):
   global resultado
   global iContadorTemporal
   varAux = 0;
-  auxTipoStr = ""
-  auxTipo = -2
-  for x in range(0,iContadorDiccionarioVar - 1):
-    if(p[1] != arregloVar[x].getNombre()):
-      varAux += 1
-    else:
-      auxTipoStr = arregloVar[x].getTipo()
-      auxTipo = dicTipos[auxTipoStr]
-      if(auxTipo != tipo):
-        raise errorSemantico("Tipos incompatibles de variables en :" + p[1])
-      '''else:
-        operador = "="
-        operando2 = PilaO.pop()
-        operando1 = PilaO.pop()
-        resultado.append(operando1)
-        arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
-        PilaO.append(resultado[iContadorTemporal])
-        iContadorTemporal += 1'''
+  #auxTipoStr = ""
+  #auxTipo = -2
+  #for x in range(0,iContadorDiccionarioVar - 1):
+   # if(p[1] != arregloVar[x].getNombre()):
+    #  varAux += 1
+    #else:
+     # auxTipoStr = arregloVar[x].getTipo()
+      #auxTipo = dicTipos[auxTipoStr]
+      #if(auxTipo != tipo):
+       # raise errorSemantico("Tipos incompatibles de variables en :" + p[1])
+      #else:
+  operador = "="
+  operando2 = PilaO.pop()
+  operando1 = PilaO.pop()
+  resultado.append(operando1)
+  arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
+  PilaO.append(resultado[iContadorTemporal])
+  iContadorTemporal += 1
 
-
-  if(varAux == iContadorDiccionarioVar - 1):
-  	raise errorSemantico("Variable no declarada: " + p[1])
+  #if(varAux == iContadorDiccionarioVar - 1):
+  #	raise errorSemantico("Variable no declarada: " + str(p[1]))
 
 def p_asignacion_aux(p):
 	'''
