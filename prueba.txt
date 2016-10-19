@@ -2,4 +2,4 @@ int a;
 int b;
 int c;
 
-a = c * b * 1;
+a = b < c;
