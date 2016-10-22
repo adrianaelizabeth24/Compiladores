@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #clase queue
 class Queue:
 
@@ -37,7 +34,7 @@ class Queue:
               return self.items[-1]
 
        #imprime los elementos de la lista en orden en el que fueron insertados
-       def printSelf(self):
+       def print(self):
               size = len(self.items)
               s = 0
               while s < size:

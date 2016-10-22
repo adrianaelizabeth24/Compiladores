@@ -1,5 +1,5 @@
-int a;
-int b;
-int c;
+float a;
+float c;
+float j;
 
-a = b < c;
+a = c;
