@@ -2,4 +2,6 @@ float a;
 float c;
 float j;
 
-a = c;
+while(a < c):
+	j = j + 1;
+end_while

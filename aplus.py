@@ -618,26 +618,10 @@ def p_expresion(p):
 
   if(bCiclo == 1):
     PSaltos.append(iContadorTemporal)
-  print("tamanio: ")
-  print(len(POper))
-  print("elementos")
-  print(POper)
-  print("fin de elementos")
   if(len(POper) > 0):
-    print("Debug")
-    print(POper)
-    print(PilaO)
-    print("Acabeé de imprimir")
     if(POper[-1] == "+" or POper[-1] == "-"):
       operador = POper.pop()
-      print("operador de mi cuadruplo")
-      print(operador)
       operando2 = PilaO.pop()
-      print("Primer elemento fuera")
-      print(operando2)
-      print(PilaO)
-      print("tam pila o")
-      print(len(PilaO))
       operando1 = PilaO.pop()
       resultado.append(iContadorTemporal + 1)
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
@@ -680,26 +664,10 @@ def p_termino(p):
   global operando2
   global resultado
   global iContadorTemporal
-  print("tamanio: ")
-  print(len(POper))
-  print("elementos")
-  print(POper)
-  print("fin de elementos")
   if(len(POper) > 0):
-    print("Debug")
-    print(POper)
-    print(PilaO)
-    print("Acabeé de imprimir")
     if(POper[-1] == "*" or POper[-1] == "/"):
       operador = POper.pop()
-      print("operador de mi cuadruplo")
-      print(operador)
       operando2 = PilaO.pop()
-      print("Primer elemento fuera")
-      print(operando2)
-      print(PilaO)
-      print("tam pila o")
-      print(len(PilaO))
       operando1 = PilaO.pop()
       resultado.append(iContadorTemporal + 1)
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
@@ -721,11 +689,7 @@ def p_MatchMultiplicacion(p):
   global POper
   global dicOperadores
   op = dicOperadores["*"]
-  print("op asignado *")
   POper.append(p[1])
-  print("imprime pila")
-  print(POper)
-  print("fin de pila")
 
 def p_MatchDivision(p):
   '''
@@ -735,11 +699,7 @@ def p_MatchDivision(p):
   global POper
   global dicOperadores
   op = dicOperadores["/"]
-  print("op asignado /")
   POper.append(p[1])
-  print("imprime pila")
-  print(POper)
-  print("fin de pila")
 
 def p_factor(p):
   '''
