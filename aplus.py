@@ -586,6 +586,7 @@ def p_exp_2(p):
 
   # no se puede hacer p[1] por que pertenece a otra función
   operador = p[1]
+  print("op asignado")
   operando2 = PilaO.pop()
   operando1 = PilaO.pop()
   resultado.append(iContadorTemporal + 1)
@@ -601,10 +602,10 @@ def p_expresion(p):
   global tipo
   global POper
   global PilaO
+  global resultado
   global operador
   global operando1
   global operando2
-  global resultado
   global iContadorTemporal
   global bCiclo
 
@@ -703,7 +704,7 @@ def p_MatchDivision(p):
 
 def p_factor(p):
   '''
-  factor : imprimeParentesisIzq exp imprimeParentesisDer
+  factor : imprimeParentesisIzq expresion imprimeParentesisDer
          | var_cte
   '''
 
@@ -814,7 +815,7 @@ def p_escritura_2(p):
 
 def p_ciclo(p):
   '''
-  ciclo : imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+  ciclo : imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
   '''
 
 def p_cuaciclo1(p):
