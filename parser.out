@@ -2,8 +2,8 @@ Created by PLY version 3.9 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    BOOL
     CTE_BOOL
+    BOOL
 
 Grammar
 
@@ -282,6 +282,7 @@ state 0
     (100) imprimePrint -> . PRINT
     (98) imprimeWhile -> . WHILE
 
+<<<<<<< HEAD
     INT             shift and go to state 13
     FLOAT           shift and go to state 6
     STRING          shift and go to state 5
@@ -344,9 +345,194 @@ state 1
     END_IF          reduce using rule 16 (opciones -> putbeeper .)
     END_WHILE       reduce using rule 16 (opciones -> putbeeper .)
     END_ELIF        reduce using rule 16 (opciones -> putbeeper .)
+=======
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
+    $end            reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    opciones                       shift and go to state 3
+    funcionUsuario                 shift and go to state 5
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    asignacion                     shift and go to state 10
+    declaracion                    shift and go to state 7
+    imprimeDef                     shift and go to state 14
+    matchID                        shift and go to state 15
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    tipo                           shift and go to state 20
+    estatuto                       shift and go to state 22
+    move                           shift and go to state 33
+    checkwall                      shift and go to state 28
+    function                       shift and go to state 29
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 23
+    empty                          shift and go to state 25
+    condicion                      shift and go to state 34
+    imprimeWhile                   shift and go to state 36
+    imprimePrint                   shift and go to state 37
+
+state 1
+
+    (15) opciones -> pickbeeper .
+
+    TURN_LEFT       reduce using rule 15 (opciones -> pickbeeper .)
+    TURN_RIGHT      reduce using rule 15 (opciones -> pickbeeper .)
+    MOVE            reduce using rule 15 (opciones -> pickbeeper .)
+    CHECKWALL       reduce using rule 15 (opciones -> pickbeeper .)
+    PICK_BEEPER     reduce using rule 15 (opciones -> pickbeeper .)
+    PUT_BEEPER      reduce using rule 15 (opciones -> pickbeeper .)
+    ID              reduce using rule 15 (opciones -> pickbeeper .)
+    DEF             reduce using rule 15 (opciones -> pickbeeper .)
+    IF              reduce using rule 15 (opciones -> pickbeeper .)
+    PRINT           reduce using rule 15 (opciones -> pickbeeper .)
+    WHILE           reduce using rule 15 (opciones -> pickbeeper .)
+    $end            reduce using rule 15 (opciones -> pickbeeper .)
+    END_WHILE       reduce using rule 15 (opciones -> pickbeeper .)
+    END_ELSE        reduce using rule 15 (opciones -> pickbeeper .)
+    END_ELIF        reduce using rule 15 (opciones -> pickbeeper .)
+    RETURN          reduce using rule 15 (opciones -> pickbeeper .)
+    END_DEF         reduce using rule 15 (opciones -> pickbeeper .)
+    END_IF          reduce using rule 15 (opciones -> pickbeeper .)
 
 
 state 2
+
+    (107) imprimeIf -> IF .
+
+    CHECKWALL       reduce using rule 107 (imprimeIf -> IF .)
+    PARENTESIS_IZQ  reduce using rule 107 (imprimeIf -> IF .)
+    ID              reduce using rule 107 (imprimeIf -> IF .)
+    CTE_INT         reduce using rule 107 (imprimeIf -> IF .)
+    CTE_FLOAT       reduce using rule 107 (imprimeIf -> IF .)
+
+
+state 3
+
+    (4) estatuto_2 -> opciones . estatuto_2
+    (4) estatuto_2 -> . opciones estatuto_2
+    (5) estatuto_2 -> . empty
+    (6) opciones -> . asignacion
+    (7) opciones -> . function destroyVars
+    (8) opciones -> . condicion
+    (9) opciones -> . escritura
+    (10) opciones -> . ciclo
+    (11) opciones -> . turnleft
+    (12) opciones -> . turnright
+    (13) opciones -> . move
+    (14) opciones -> . checkwall
+    (15) opciones -> . pickbeeper
+    (16) opciones -> . putbeeper
+    (17) opciones -> . funcionUsuario
+    (1) empty -> .
+    (29) asignacion -> . matchID EQUIVALE asignacion_aux
+    (70) function -> . imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (58) condicion -> . imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
+    (65) escritura -> . imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
+    (68) ciclo -> . imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+    (92) turnleft -> . TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (91) turnright -> . TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (90) move -> . MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (89) checkwall -> . CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (93) pickbeeper -> . PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (94) putbeeper -> . PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (83) funcionUsuario -> . ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+    (55) matchID -> . ID
+    (96) imprimeDef -> . DEF
+    (107) imprimeIf -> . IF
+    (100) imprimePrint -> . PRINT
+    (98) imprimeWhile -> . WHILE
+
+    $end            reduce using rule 1 (empty -> .)
+    RETURN          reduce using rule 1 (empty -> .)
+    END_DEF         reduce using rule 1 (empty -> .)
+    END_IF          reduce using rule 1 (empty -> .)
+    END_WHILE       reduce using rule 1 (empty -> .)
+    END_ELIF        reduce using rule 1 (empty -> .)
+    END_ELSE        reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    funcionUsuario                 shift and go to state 5
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    checkwall                      shift and go to state 28
+    asignacion                     shift and go to state 10
+    function                       shift and go to state 29
+    opciones                       shift and go to state 3
+    imprimeDef                     shift and go to state 14
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 38
+    imprimePrint                   shift and go to state 37
+    imprimeWhile                   shift and go to state 36
+    matchID                        shift and go to state 15
+    condicion                      shift and go to state 34
+
+state 4
+
+    (96) imprimeDef -> DEF .
+
+    INT             reduce using rule 96 (imprimeDef -> DEF .)
+    FLOAT           reduce using rule 96 (imprimeDef -> DEF .)
+    STRING          reduce using rule 96 (imprimeDef -> DEF .)
+    ID              reduce using rule 96 (imprimeDef -> DEF .)
+
+
+state 5
+
+    (17) opciones -> funcionUsuario .
+
+    TURN_LEFT       reduce using rule 17 (opciones -> funcionUsuario .)
+    TURN_RIGHT      reduce using rule 17 (opciones -> funcionUsuario .)
+    MOVE            reduce using rule 17 (opciones -> funcionUsuario .)
+    CHECKWALL       reduce using rule 17 (opciones -> funcionUsuario .)
+    PICK_BEEPER     reduce using rule 17 (opciones -> funcionUsuario .)
+    PUT_BEEPER      reduce using rule 17 (opciones -> funcionUsuario .)
+    ID              reduce using rule 17 (opciones -> funcionUsuario .)
+    DEF             reduce using rule 17 (opciones -> funcionUsuario .)
+    IF              reduce using rule 17 (opciones -> funcionUsuario .)
+    PRINT           reduce using rule 17 (opciones -> funcionUsuario .)
+    WHILE           reduce using rule 17 (opciones -> funcionUsuario .)
+    $end            reduce using rule 17 (opciones -> funcionUsuario .)
+    END_WHILE       reduce using rule 17 (opciones -> funcionUsuario .)
+    END_ELSE        reduce using rule 17 (opciones -> funcionUsuario .)
+    END_ELIF        reduce using rule 17 (opciones -> funcionUsuario .)
+    RETURN          reduce using rule 17 (opciones -> funcionUsuario .)
+    END_DEF         reduce using rule 17 (opciones -> funcionUsuario .)
+    END_IF          reduce using rule 17 (opciones -> funcionUsuario .)
+>>>>>>> origin/branchAdriana
+
+
+state 6
 
     (10) opciones -> ciclo .
 
@@ -361,6 +547,7 @@ state 2
     IF              reduce using rule 10 (opciones -> ciclo .)
     PRINT           reduce using rule 10 (opciones -> ciclo .)
     WHILE           reduce using rule 10 (opciones -> ciclo .)
+<<<<<<< HEAD
     END_ELSE        reduce using rule 10 (opciones -> ciclo .)
     $end            reduce using rule 10 (opciones -> ciclo .)
     RETURN          reduce using rule 10 (opciones -> ciclo .)
@@ -368,33 +555,128 @@ state 2
     END_IF          reduce using rule 10 (opciones -> ciclo .)
     END_WHILE       reduce using rule 10 (opciones -> ciclo .)
     END_ELIF        reduce using rule 10 (opciones -> ciclo .)
+=======
+    $end            reduce using rule 10 (opciones -> ciclo .)
+    END_WHILE       reduce using rule 10 (opciones -> ciclo .)
+    END_ELSE        reduce using rule 10 (opciones -> ciclo .)
+    END_ELIF        reduce using rule 10 (opciones -> ciclo .)
+    RETURN          reduce using rule 10 (opciones -> ciclo .)
+    END_DEF         reduce using rule 10 (opciones -> ciclo .)
+    END_IF          reduce using rule 10 (opciones -> ciclo .)
+>>>>>>> origin/branchAdriana
 
 
-state 3
+state 7
 
     (100) imprimePrint -> PRINT .
 
     PARENTESIS_IZQ  reduce using rule 100 (imprimePrint -> PRINT .)
 
+<<<<<<< HEAD
+=======
+    $end            reduce using rule 1 (empty -> .)
+    RETURN          reduce using rule 1 (empty -> .)
+    END_DEF         reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
 
-state 4
+    pickbeeper                     shift and go to state 1
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    funcionUsuario                 shift and go to state 5
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    checkwall                      shift and go to state 28
+    asignacion                     shift and go to state 10
+    function                       shift and go to state 29
+    opciones                       shift and go to state 3
+    imprimeDef                     shift and go to state 14
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 39
+    imprimePrint                   shift and go to state 37
+    imprimeWhile                   shift and go to state 36
+    matchID                        shift and go to state 15
+    condicion                      shift and go to state 34
+>>>>>>> origin/branchAdriana
 
+state 8
+
+<<<<<<< HEAD
     (93) pickbeeper -> PICK_BEEPER . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
     (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+=======
+    (16) opciones -> putbeeper .
+>>>>>>> origin/branchAdriana
 
-    PARENTESIS_IZQ  shift and go to state 39
+    TURN_LEFT       reduce using rule 16 (opciones -> putbeeper .)
+    TURN_RIGHT      reduce using rule 16 (opciones -> putbeeper .)
+    MOVE            reduce using rule 16 (opciones -> putbeeper .)
+    CHECKWALL       reduce using rule 16 (opciones -> putbeeper .)
+    PICK_BEEPER     reduce using rule 16 (opciones -> putbeeper .)
+    PUT_BEEPER      reduce using rule 16 (opciones -> putbeeper .)
+    ID              reduce using rule 16 (opciones -> putbeeper .)
+    DEF             reduce using rule 16 (opciones -> putbeeper .)
+    IF              reduce using rule 16 (opciones -> putbeeper .)
+    PRINT           reduce using rule 16 (opciones -> putbeeper .)
+    WHILE           reduce using rule 16 (opciones -> putbeeper .)
+    $end            reduce using rule 16 (opciones -> putbeeper .)
+    END_WHILE       reduce using rule 16 (opciones -> putbeeper .)
+    END_ELSE        reduce using rule 16 (opciones -> putbeeper .)
+    END_ELIF        reduce using rule 16 (opciones -> putbeeper .)
+    RETURN          reduce using rule 16 (opciones -> putbeeper .)
+    END_DEF         reduce using rule 16 (opciones -> putbeeper .)
+    END_IF          reduce using rule 16 (opciones -> putbeeper .)
 
+<<<<<<< HEAD
     imprimeParentesisIzq           shift and go to state 38
+=======
+>>>>>>> origin/branchAdriana
 
-state 5
+state 9
 
+<<<<<<< HEAD
     (28) tipo -> STRING .
 
     ID              reduce using rule 28 (tipo -> STRING .)
+=======
+    (12) opciones -> turnright .
+
+    TURN_LEFT       reduce using rule 12 (opciones -> turnright .)
+    TURN_RIGHT      reduce using rule 12 (opciones -> turnright .)
+    MOVE            reduce using rule 12 (opciones -> turnright .)
+    CHECKWALL       reduce using rule 12 (opciones -> turnright .)
+    PICK_BEEPER     reduce using rule 12 (opciones -> turnright .)
+    PUT_BEEPER      reduce using rule 12 (opciones -> turnright .)
+    ID              reduce using rule 12 (opciones -> turnright .)
+    DEF             reduce using rule 12 (opciones -> turnright .)
+    IF              reduce using rule 12 (opciones -> turnright .)
+    PRINT           reduce using rule 12 (opciones -> turnright .)
+    WHILE           reduce using rule 12 (opciones -> turnright .)
+    $end            reduce using rule 12 (opciones -> turnright .)
+    END_WHILE       reduce using rule 12 (opciones -> turnright .)
+    END_ELSE        reduce using rule 12 (opciones -> turnright .)
+    END_ELIF        reduce using rule 12 (opciones -> turnright .)
+    RETURN          reduce using rule 12 (opciones -> turnright .)
+    END_DEF         reduce using rule 12 (opciones -> turnright .)
+    END_IF          reduce using rule 12 (opciones -> turnright .)
+>>>>>>> origin/branchAdriana
 
 
-state 6
+state 10
 
+<<<<<<< HEAD
     (27) tipo -> FLOAT .
 
     ID              reduce using rule 27 (tipo -> FLOAT .)
@@ -446,15 +728,58 @@ state 8
     END_IF          reduce using rule 17 (opciones -> funcionUsuario .)
     END_WHILE       reduce using rule 17 (opciones -> funcionUsuario .)
     END_ELIF        reduce using rule 17 (opciones -> funcionUsuario .)
+=======
+    (6) opciones -> asignacion .
+
+    TURN_LEFT       reduce using rule 6 (opciones -> asignacion .)
+    TURN_RIGHT      reduce using rule 6 (opciones -> asignacion .)
+    MOVE            reduce using rule 6 (opciones -> asignacion .)
+    CHECKWALL       reduce using rule 6 (opciones -> asignacion .)
+    PICK_BEEPER     reduce using rule 6 (opciones -> asignacion .)
+    PUT_BEEPER      reduce using rule 6 (opciones -> asignacion .)
+    ID              reduce using rule 6 (opciones -> asignacion .)
+    DEF             reduce using rule 6 (opciones -> asignacion .)
+    IF              reduce using rule 6 (opciones -> asignacion .)
+    PRINT           reduce using rule 6 (opciones -> asignacion .)
+    WHILE           reduce using rule 6 (opciones -> asignacion .)
+    $end            reduce using rule 6 (opciones -> asignacion .)
+    END_WHILE       reduce using rule 6 (opciones -> asignacion .)
+    END_ELSE        reduce using rule 6 (opciones -> asignacion .)
+    END_ELIF        reduce using rule 6 (opciones -> asignacion .)
+    RETURN          reduce using rule 6 (opciones -> asignacion .)
+    END_DEF         reduce using rule 6 (opciones -> asignacion .)
+    END_IF          reduce using rule 6 (opciones -> asignacion .)
 
 
+state 11
+
+    (92) turnleft -> TURN_LEFT . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+
+    PARENTESIS_IZQ  shift and go to state 40
+>>>>>>> origin/branchAdriana
+
+    imprimeParentesisIzq           shift and go to state 41
+
+<<<<<<< HEAD
 state 9
+=======
+state 12
+
+    (26) tipo -> INT .
+
+    ID              reduce using rule 26 (tipo -> INT .)
+
+
+state 13
+>>>>>>> origin/branchAdriana
 
     (94) putbeeper -> PUT_BEEPER . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
     (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
 
-    PARENTESIS_IZQ  shift and go to state 39
+    PARENTESIS_IZQ  shift and go to state 40
 
+<<<<<<< HEAD
     imprimeParentesisIzq           shift and go to state 40
 
 state 10
@@ -503,19 +828,25 @@ state 13
     ID              reduce using rule 26 (tipo -> INT .)
 
 
+=======
+    imprimeParentesisIzq           shift and go to state 42
+
+>>>>>>> origin/branchAdriana
 state 14
 
-    (7) opciones -> function . destroyVars
-    (82) destroyVars -> . empty
+    (70) function -> imprimeDef . aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (71) aux -> . tipo
+    (72) aux -> . empty
+    (26) tipo -> . INT
+    (27) tipo -> . FLOAT
+    (28) tipo -> . STRING
     (1) empty -> .
 
-    TURN_LEFT       reduce using rule 1 (empty -> .)
-    TURN_RIGHT      reduce using rule 1 (empty -> .)
-    MOVE            reduce using rule 1 (empty -> .)
-    CHECKWALL       reduce using rule 1 (empty -> .)
-    PICK_BEEPER     reduce using rule 1 (empty -> .)
-    PUT_BEEPER      reduce using rule 1 (empty -> .)
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
     ID              reduce using rule 1 (empty -> .)
+<<<<<<< HEAD
     DEF             reduce using rule 1 (empty -> .)
     IF              reduce using rule 1 (empty -> .)
     PRINT           reduce using rule 1 (empty -> .)
@@ -542,10 +873,23 @@ state 15
     END_ELSE        reduce using rule 5 (estatuto_2 -> empty .)
     END_IF          reduce using rule 5 (estatuto_2 -> empty .)
     END_ELIF        reduce using rule 5 (estatuto_2 -> empty .)
+=======
+
+    empty                          shift and go to state 44
+    aux                            shift and go to state 45
+    tipo                           shift and go to state 43
+
+state 15
+
+    (29) asignacion -> matchID . EQUIVALE asignacion_aux
+
+    EQUIVALE        shift and go to state 46
+>>>>>>> origin/branchAdriana
 
 
 state 16
 
+<<<<<<< HEAD
     (9) opciones -> escritura .
 
     TURN_LEFT       reduce using rule 9 (opciones -> escritura .)
@@ -566,19 +910,33 @@ state 16
     END_IF          reduce using rule 9 (opciones -> escritura .)
     END_WHILE       reduce using rule 9 (opciones -> escritura .)
     END_ELIF        reduce using rule 9 (opciones -> escritura .)
+=======
+    (94) putbeeper -> PUT_BEEPER . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
 
+    PARENTESIS_IZQ  shift and go to state 40
+>>>>>>> origin/branchAdriana
+
+    imprimeParentesisIzq           shift and go to state 47
 
 state 17
 
+<<<<<<< HEAD
     (18) declaracion -> tipo . ID declaracion_aux imprimePuntoYComa declaracion_3
 
     ID              shift and go to state 44
+=======
+    (28) tipo -> STRING .
+
+    ID              reduce using rule 28 (tipo -> STRING .)
+>>>>>>> origin/branchAdriana
 
 
 state 18
 
-    (11) opciones -> turnleft .
+    (9) opciones -> escritura .
 
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 11 (opciones -> turnleft .)
     TURN_RIGHT      reduce using rule 11 (opciones -> turnleft .)
     MOVE            reduce using rule 11 (opciones -> turnleft .)
@@ -597,6 +955,26 @@ state 18
     END_IF          reduce using rule 11 (opciones -> turnleft .)
     END_WHILE       reduce using rule 11 (opciones -> turnleft .)
     END_ELIF        reduce using rule 11 (opciones -> turnleft .)
+=======
+    TURN_LEFT       reduce using rule 9 (opciones -> escritura .)
+    TURN_RIGHT      reduce using rule 9 (opciones -> escritura .)
+    MOVE            reduce using rule 9 (opciones -> escritura .)
+    CHECKWALL       reduce using rule 9 (opciones -> escritura .)
+    PICK_BEEPER     reduce using rule 9 (opciones -> escritura .)
+    PUT_BEEPER      reduce using rule 9 (opciones -> escritura .)
+    ID              reduce using rule 9 (opciones -> escritura .)
+    DEF             reduce using rule 9 (opciones -> escritura .)
+    IF              reduce using rule 9 (opciones -> escritura .)
+    PRINT           reduce using rule 9 (opciones -> escritura .)
+    WHILE           reduce using rule 9 (opciones -> escritura .)
+    $end            reduce using rule 9 (opciones -> escritura .)
+    END_WHILE       reduce using rule 9 (opciones -> escritura .)
+    END_ELSE        reduce using rule 9 (opciones -> escritura .)
+    END_ELIF        reduce using rule 9 (opciones -> escritura .)
+    RETURN          reduce using rule 9 (opciones -> escritura .)
+    END_DEF         reduce using rule 9 (opciones -> escritura .)
+    END_IF          reduce using rule 9 (opciones -> escritura .)
+>>>>>>> origin/branchAdriana
 
 
 state 19
@@ -618,6 +996,7 @@ state 19
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     CHECKWALL       shift and go to state 28
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
@@ -741,15 +1120,31 @@ state 24
     imprimeParentesisIzq           shift and go to state 62
 
 state 25
+=======
+    CHECKWALL       shift and go to state 13
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
 
-    (70) function -> imprimeDef . aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
-    (71) aux -> . tipo
-    (72) aux -> . empty
-    (26) tipo -> . INT
-    (27) tipo -> . FLOAT
-    (28) tipo -> . STRING
-    (1) empty -> .
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    termino                        shift and go to state 50
+    matchCteInt                    shift and go to state 51
+    exp                            shift and go to state 52
+    condicion_2                    shift and go to state 54
+    checkwall                      shift and go to state 56
+    var_cte                        shift and go to state 58
+    expresion                      shift and go to state 59
+    matchCteFloat                  shift and go to state 60
+    matchID                        shift and go to state 61
 
+state 20
+>>>>>>> origin/branchAdriana
+
+    (18) declaracion -> tipo . ID declaracion_aux imprimePuntoYComa declaracion_3
+
+<<<<<<< HEAD
     INT             shift and go to state 13
     FLOAT           shift and go to state 6
     STRING          shift and go to state 5
@@ -760,10 +1155,17 @@ state 25
     aux                            shift and go to state 65
 
 state 26
+=======
+    ID              shift and go to state 62
+
+
+state 21
+>>>>>>> origin/branchAdriana
 
     (92) turnleft -> TURN_LEFT . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
     (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
 
     imprimeParentesisIzq           shift and go to state 66
@@ -843,9 +1245,26 @@ state 27
     turnleft                       shift and go to state 18
     imprimeWhile                   shift and go to state 11
     imprimeIf                      shift and go to state 19
+=======
+    EQUIVALE        reduce using rule 55 (matchID -> ID .)
+    MULTIPLICACION  reduce using rule 55 (matchID -> ID .)
+    DIVISION        reduce using rule 55 (matchID -> ID .)
+    SUMA            reduce using rule 55 (matchID -> ID .)
+    RESTA           reduce using rule 55 (matchID -> ID .)
+    PUNTO_Y_COMA    reduce using rule 55 (matchID -> ID .)
+    PARENTESIS_IZQ  shift and go to state 40
+
+    imprimeParentesisIzq           shift and go to state 63
+
+state 22
+
+    (0) S' -> estatuto .
+
+>>>>>>> origin/branchAdriana
 
 state 28
 
+<<<<<<< HEAD
     (89) checkwall -> CHECKWALL . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
     (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
 
@@ -854,6 +1273,9 @@ state 28
     imprimeParentesisIzq           shift and go to state 68
 
 state 29
+=======
+state 23
+>>>>>>> origin/branchAdriana
 
     (3) estatuto -> estatuto_2 .
 
@@ -862,7 +1284,52 @@ state 29
     $end            reduce using rule 3 (estatuto -> estatuto_2 .)
 
 
+<<<<<<< HEAD
 state 30
+=======
+state 24
+
+    (98) imprimeWhile -> WHILE .
+
+    PARENTESIS_IZQ  reduce using rule 98 (imprimeWhile -> WHILE .)
+    ID              reduce using rule 98 (imprimeWhile -> WHILE .)
+    CTE_INT         reduce using rule 98 (imprimeWhile -> WHILE .)
+    CTE_FLOAT       reduce using rule 98 (imprimeWhile -> WHILE .)
+
+
+state 25
+
+    (5) estatuto_2 -> empty .
+
+    $end            reduce using rule 5 (estatuto_2 -> empty .)
+    RETURN          reduce using rule 5 (estatuto_2 -> empty .)
+    END_DEF         reduce using rule 5 (estatuto_2 -> empty .)
+    END_IF          reduce using rule 5 (estatuto_2 -> empty .)
+    END_WHILE       reduce using rule 5 (estatuto_2 -> empty .)
+    END_ELIF        reduce using rule 5 (estatuto_2 -> empty .)
+    END_ELSE        reduce using rule 5 (estatuto_2 -> empty .)
+
+
+state 26
+
+    (90) move -> MOVE . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+
+    PARENTESIS_IZQ  shift and go to state 40
+
+    imprimeParentesisIzq           shift and go to state 64
+
+state 27
+
+    (91) turnright -> TURN_RIGHT . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+
+    PARENTESIS_IZQ  shift and go to state 40
+
+    imprimeParentesisIzq           shift and go to state 65
+
+state 28
+>>>>>>> origin/branchAdriana
 
     (14) opciones -> checkwall .
 
@@ -879,9 +1346,13 @@ state 30
     WHILE           reduce using rule 14 (opciones -> checkwall .)
     END_ELSE        reduce using rule 14 (opciones -> checkwall .)
     $end            reduce using rule 14 (opciones -> checkwall .)
+    END_WHILE       reduce using rule 14 (opciones -> checkwall .)
+    END_ELSE        reduce using rule 14 (opciones -> checkwall .)
+    END_ELIF        reduce using rule 14 (opciones -> checkwall .)
     RETURN          reduce using rule 14 (opciones -> checkwall .)
     END_DEF         reduce using rule 14 (opciones -> checkwall .)
     END_IF          reduce using rule 14 (opciones -> checkwall .)
+<<<<<<< HEAD
     END_WHILE       reduce using rule 14 (opciones -> checkwall .)
     END_ELIF        reduce using rule 14 (opciones -> checkwall .)
 
@@ -918,8 +1389,13 @@ state 32
     END_IF          reduce using rule 13 (opciones -> move .)
     END_WHILE       reduce using rule 13 (opciones -> move .)
     END_ELIF        reduce using rule 13 (opciones -> move .)
+=======
 
+>>>>>>> origin/branchAdriana
 
+state 29
+
+<<<<<<< HEAD
 state 33
 
     (6) opciones -> asignacion .
@@ -947,15 +1423,101 @@ state 33
 state 34
 
     (107) imprimeIf -> IF .
+=======
+    (7) opciones -> function . destroyVars
+    (82) destroyVars -> . empty
+    (1) empty -> .
 
-    CHECKWALL       reduce using rule 107 (imprimeIf -> IF .)
-    PARENTESIS_IZQ  reduce using rule 107 (imprimeIf -> IF .)
-    ID              reduce using rule 107 (imprimeIf -> IF .)
-    CTE_INT         reduce using rule 107 (imprimeIf -> IF .)
-    CTE_FLOAT       reduce using rule 107 (imprimeIf -> IF .)
+    TURN_LEFT       reduce using rule 1 (empty -> .)
+    TURN_RIGHT      reduce using rule 1 (empty -> .)
+    MOVE            reduce using rule 1 (empty -> .)
+    CHECKWALL       reduce using rule 1 (empty -> .)
+    PICK_BEEPER     reduce using rule 1 (empty -> .)
+    PUT_BEEPER      reduce using rule 1 (empty -> .)
+    ID              reduce using rule 1 (empty -> .)
+    DEF             reduce using rule 1 (empty -> .)
+    IF              reduce using rule 1 (empty -> .)
+    PRINT           reduce using rule 1 (empty -> .)
+    WHILE           reduce using rule 1 (empty -> .)
+    $end            reduce using rule 1 (empty -> .)
+    RETURN          reduce using rule 1 (empty -> .)
+    END_DEF         reduce using rule 1 (empty -> .)
+    END_IF          reduce using rule 1 (empty -> .)
+    END_WHILE       reduce using rule 1 (empty -> .)
+    END_ELIF        reduce using rule 1 (empty -> .)
+    END_ELSE        reduce using rule 1 (empty -> .)
+
+    destroyVars                    shift and go to state 66
+    empty                          shift and go to state 67
+
+state 30
+
+    (100) imprimePrint -> PRINT .
+
+    PARENTESIS_IZQ  reduce using rule 100 (imprimePrint -> PRINT .)
 
 
+state 31
+
+    (27) tipo -> FLOAT .
+>>>>>>> origin/branchAdriana
+
+    ID              reduce using rule 27 (tipo -> FLOAT .)
+
+
+<<<<<<< HEAD
 state 35
+=======
+state 32
+
+    (11) opciones -> turnleft .
+
+    TURN_LEFT       reduce using rule 11 (opciones -> turnleft .)
+    TURN_RIGHT      reduce using rule 11 (opciones -> turnleft .)
+    MOVE            reduce using rule 11 (opciones -> turnleft .)
+    CHECKWALL       reduce using rule 11 (opciones -> turnleft .)
+    PICK_BEEPER     reduce using rule 11 (opciones -> turnleft .)
+    PUT_BEEPER      reduce using rule 11 (opciones -> turnleft .)
+    ID              reduce using rule 11 (opciones -> turnleft .)
+    DEF             reduce using rule 11 (opciones -> turnleft .)
+    IF              reduce using rule 11 (opciones -> turnleft .)
+    PRINT           reduce using rule 11 (opciones -> turnleft .)
+    WHILE           reduce using rule 11 (opciones -> turnleft .)
+    $end            reduce using rule 11 (opciones -> turnleft .)
+    END_WHILE       reduce using rule 11 (opciones -> turnleft .)
+    END_ELSE        reduce using rule 11 (opciones -> turnleft .)
+    END_ELIF        reduce using rule 11 (opciones -> turnleft .)
+    RETURN          reduce using rule 11 (opciones -> turnleft .)
+    END_DEF         reduce using rule 11 (opciones -> turnleft .)
+    END_IF          reduce using rule 11 (opciones -> turnleft .)
+
+
+state 33
+
+    (13) opciones -> move .
+
+    TURN_LEFT       reduce using rule 13 (opciones -> move .)
+    TURN_RIGHT      reduce using rule 13 (opciones -> move .)
+    MOVE            reduce using rule 13 (opciones -> move .)
+    CHECKWALL       reduce using rule 13 (opciones -> move .)
+    PICK_BEEPER     reduce using rule 13 (opciones -> move .)
+    PUT_BEEPER      reduce using rule 13 (opciones -> move .)
+    ID              reduce using rule 13 (opciones -> move .)
+    DEF             reduce using rule 13 (opciones -> move .)
+    IF              reduce using rule 13 (opciones -> move .)
+    PRINT           reduce using rule 13 (opciones -> move .)
+    WHILE           reduce using rule 13 (opciones -> move .)
+    $end            reduce using rule 13 (opciones -> move .)
+    END_WHILE       reduce using rule 13 (opciones -> move .)
+    END_ELSE        reduce using rule 13 (opciones -> move .)
+    END_ELIF        reduce using rule 13 (opciones -> move .)
+    RETURN          reduce using rule 13 (opciones -> move .)
+    END_DEF         reduce using rule 13 (opciones -> move .)
+    END_IF          reduce using rule 13 (opciones -> move .)
+
+
+state 34
+>>>>>>> origin/branchAdriana
 
     (8) opciones -> condicion .
 
@@ -972,18 +1534,49 @@ state 35
     WHILE           reduce using rule 8 (opciones -> condicion .)
     END_ELSE        reduce using rule 8 (opciones -> condicion .)
     $end            reduce using rule 8 (opciones -> condicion .)
+    END_WHILE       reduce using rule 8 (opciones -> condicion .)
+    END_ELSE        reduce using rule 8 (opciones -> condicion .)
+    END_ELIF        reduce using rule 8 (opciones -> condicion .)
     RETURN          reduce using rule 8 (opciones -> condicion .)
     END_DEF         reduce using rule 8 (opciones -> condicion .)
     END_IF          reduce using rule 8 (opciones -> condicion .)
+<<<<<<< HEAD
     END_WHILE       reduce using rule 8 (opciones -> condicion .)
     END_ELIF        reduce using rule 8 (opciones -> condicion .)
+=======
 
+
+state 35
+
+    (93) pickbeeper -> PICK_BEEPER . imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+
+    PARENTESIS_IZQ  shift and go to state 40
+>>>>>>> origin/branchAdriana
+
+    imprimeParentesisIzq           shift and go to state 68
 
 state 36
 
+<<<<<<< HEAD
     (65) escritura -> imprimePrint . imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
+=======
+    (68) ciclo -> imprimeWhile . exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+    (32) exp -> . expresion exp_2
+    (40) expresion -> . termino expresion_2
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+>>>>>>> origin/branchAdriana
     (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
 
     imprimeParentesisIzq           shift and go to state 69
@@ -1001,19 +1594,63 @@ state 37
     RESTA           reduce using rule 55 (matchID -> ID .)
     PUNTO_Y_COMA    reduce using rule 55 (matchID -> ID .)
     PARENTESIS_IZQ  shift and go to state 39
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    exp                            shift and go to state 69
+    factor                         shift and go to state 48
+    matchCteFloat                  shift and go to state 60
+    matchID                        shift and go to state 61
+    imprimeParentesisIzq           shift and go to state 49
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    matchCteInt                    shift and go to state 51
+    expresion                      shift and go to state 59
+
+state 37
+
+    (65) escritura -> imprimePrint . imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+
+    PARENTESIS_IZQ  shift and go to state 40
+>>>>>>> origin/branchAdriana
 
     imprimeParentesisIzq           shift and go to state 70
 
 state 38
 
+<<<<<<< HEAD
     (93) pickbeeper -> PICK_BEEPER imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
     (102) imprimeParentesisDer -> . PARENTESIS_DER
 
     PARENTESIS_DER  shift and go to state 72
+=======
+    (4) estatuto_2 -> opciones estatuto_2 .
+
+    $end            reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+    RETURN          reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+    END_DEF         reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+    END_IF          reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+    END_WHILE       reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+    END_ELIF        reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+    END_ELSE        reduce using rule 4 (estatuto_2 -> opciones estatuto_2 .)
+>>>>>>> origin/branchAdriana
 
     imprimeParentesisDer           shift and go to state 71
 
 state 39
+
+    (2) estatuto -> declaracion estatuto_2 .
+
+    RETURN          reduce using rule 2 (estatuto -> declaracion estatuto_2 .)
+    END_DEF         reduce using rule 2 (estatuto -> declaracion estatuto_2 .)
+    $end            reduce using rule 2 (estatuto -> declaracion estatuto_2 .)
+
+
+state 40
 
     (101) imprimeParentesisIzq -> PARENTESIS_IZQ .
 
@@ -1022,24 +1659,144 @@ state 39
     CTE_INT         reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
     CTE_FLOAT       reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
     PARENTESIS_DER  reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
+<<<<<<< HEAD
     INT             reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
     FLOAT           reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
     STRING          reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
+=======
+>>>>>>> origin/branchAdriana
     CTE_STRING      reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
+    INT             reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
+    FLOAT           reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
+    STRING          reduce using rule 101 (imprimeParentesisIzq -> PARENTESIS_IZQ .)
 
 
-state 40
+state 41
 
+<<<<<<< HEAD
     (94) putbeeper -> PUT_BEEPER imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
+=======
+    (92) turnleft -> TURN_LEFT imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
+>>>>>>> origin/branchAdriana
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+<<<<<<< HEAD
+    imprimeParentesisDer           shift and go to state 73
+=======
+    imprimeParentesisDer           shift and go to state 71
+>>>>>>> origin/branchAdriana
+
+state 42
+
+<<<<<<< HEAD
+    (68) ciclo -> imprimeWhile imprimeParentesisIzq . exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+=======
+    (89) checkwall -> CHECKWALL imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
     (102) imprimeParentesisDer -> . PARENTESIS_DER
 
     PARENTESIS_DER  shift and go to state 72
 
     imprimeParentesisDer           shift and go to state 73
 
-state 41
+state 43
 
-    (68) ciclo -> imprimeWhile imprimeParentesisIzq . exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+    (71) aux -> tipo .
+
+    ID              reduce using rule 71 (aux -> tipo .)
+
+
+state 44
+
+    (72) aux -> empty .
+
+    ID              reduce using rule 72 (aux -> empty .)
+
+
+state 45
+
+    (70) function -> imprimeDef aux . ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+
+    ID              shift and go to state 74
+
+
+state 46
+
+    (29) asignacion -> matchID EQUIVALE . asignacion_aux
+    (30) asignacion_aux -> . expresion imprimePuntoYComa
+    (31) asignacion_aux -> . funcionUsuario
+    (40) expresion -> . termino expresion_2
+    (83) funcionUsuario -> . ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
+
+    ID              shift and go to state 21
+    PARENTESIS_IZQ  shift and go to state 40
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    matchCteFloat                  shift and go to state 60
+    funcionUsuario                 shift and go to state 75
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    expresion                      shift and go to state 76
+    asignacion_aux                 shift and go to state 77
+    matchID                        shift and go to state 61
+
+state 47
+
+    (94) putbeeper -> PUT_BEEPER imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+    imprimeParentesisDer           shift and go to state 78
+
+state 48
+
+    (44) termino -> factor . termino_2
+    (45) termino_2 -> . MatchMultiplicacion
+    (46) termino_2 -> . MatchDivision
+    (47) termino_2 -> . empty
+    (48) MatchMultiplicacion -> . MULTIPLICACION termino
+    (49) MatchDivision -> . DIVISION termino
+    (1) empty -> .
+
+    MULTIPLICACION  shift and go to state 83
+    DIVISION        shift and go to state 79
+    SUMA            reduce using rule 1 (empty -> .)
+    RESTA           reduce using rule 1 (empty -> .)
+    DIFERENTE       reduce using rule 1 (empty -> .)
+    MAYOR_QUE       reduce using rule 1 (empty -> .)
+    MENOR_QUE       reduce using rule 1 (empty -> .)
+    IGUAL_A         reduce using rule 1 (empty -> .)
+    MAYOR_IGUAL     reduce using rule 1 (empty -> .)
+    MENOR_IGUAL     reduce using rule 1 (empty -> .)
+    DOS_PUNTOS      reduce using rule 1 (empty -> .)
+    PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+
+    MatchDivision                  shift and go to state 80
+    empty                          shift and go to state 81
+    MatchMultiplicacion            shift and go to state 82
+    termino_2                      shift and go to state 84
+
+state 49
+
+    (50) factor -> imprimeParentesisIzq . exp imprimeParentesisDer
+>>>>>>> origin/branchAdriana
     (32) exp -> . expresion exp_2
     (40) expresion -> . termino expresion_2
     (44) termino -> . factor termino_2
@@ -1053,6 +1810,7 @@ state 41
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -1093,9 +1851,51 @@ state 42
 
 
 state 43
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    exp                            shift and go to state 85
+    matchCteFloat                  shift and go to state 60
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    termino                        shift and go to state 50
+    matchCteInt                    shift and go to state 51
+    expresion                      shift and go to state 59
+    matchID                        shift and go to state 61
+
+state 50
+
+    (40) expresion -> termino . expresion_2
+    (41) expresion_2 -> . SUMA expresion
+    (42) expresion_2 -> . RESTA expresion
+    (43) expresion_2 -> . empty
+    (1) empty -> .
+
+    SUMA            shift and go to state 87
+    RESTA           shift and go to state 89
+    DIFERENTE       reduce using rule 1 (empty -> .)
+    MAYOR_QUE       reduce using rule 1 (empty -> .)
+    MENOR_QUE       reduce using rule 1 (empty -> .)
+    IGUAL_A         reduce using rule 1 (empty -> .)
+    MAYOR_IGUAL     reduce using rule 1 (empty -> .)
+    MENOR_IGUAL     reduce using rule 1 (empty -> .)
+    DOS_PUNTOS      reduce using rule 1 (empty -> .)
+    PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+
+    empty                          shift and go to state 88
+    expresion_2                    shift and go to state 86
+
+state 51
+>>>>>>> origin/branchAdriana
 
     (82) destroyVars -> empty .
 
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 82 (destroyVars -> empty .)
     TURN_RIGHT      reduce using rule 82 (destroyVars -> empty .)
     MOVE            reduce using rule 82 (destroyVars -> empty .)
@@ -1127,13 +1927,92 @@ state 44
 
     PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
     COMA            shift and go to state 77
+=======
+    MULTIPLICACION  reduce using rule 53 (var_cte -> matchCteInt .)
+    DIVISION        reduce using rule 53 (var_cte -> matchCteInt .)
+    SUMA            reduce using rule 53 (var_cte -> matchCteInt .)
+    RESTA           reduce using rule 53 (var_cte -> matchCteInt .)
+    DIFERENTE       reduce using rule 53 (var_cte -> matchCteInt .)
+    MAYOR_QUE       reduce using rule 53 (var_cte -> matchCteInt .)
+    MENOR_QUE       reduce using rule 53 (var_cte -> matchCteInt .)
+    IGUAL_A         reduce using rule 53 (var_cte -> matchCteInt .)
+    MAYOR_IGUAL     reduce using rule 53 (var_cte -> matchCteInt .)
+    MENOR_IGUAL     reduce using rule 53 (var_cte -> matchCteInt .)
+    DOS_PUNTOS      reduce using rule 53 (var_cte -> matchCteInt .)
+    PUNTO_Y_COMA    reduce using rule 53 (var_cte -> matchCteInt .)
+    PARENTESIS_DER  reduce using rule 53 (var_cte -> matchCteInt .)
+
+
+state 52
+
+    (59) condicion_2 -> exp .
+
+    DOS_PUNTOS      reduce using rule 59 (condicion_2 -> exp .)
+
+
+state 53
+
+    (55) matchID -> ID .
+
+    MULTIPLICACION  reduce using rule 55 (matchID -> ID .)
+    DIVISION        reduce using rule 55 (matchID -> ID .)
+    SUMA            reduce using rule 55 (matchID -> ID .)
+    RESTA           reduce using rule 55 (matchID -> ID .)
+    DIFERENTE       reduce using rule 55 (matchID -> ID .)
+    MAYOR_QUE       reduce using rule 55 (matchID -> ID .)
+    MENOR_QUE       reduce using rule 55 (matchID -> ID .)
+    IGUAL_A         reduce using rule 55 (matchID -> ID .)
+    MAYOR_IGUAL     reduce using rule 55 (matchID -> ID .)
+    MENOR_IGUAL     reduce using rule 55 (matchID -> ID .)
+    DOS_PUNTOS      reduce using rule 55 (matchID -> ID .)
+    PUNTO_Y_COMA    reduce using rule 55 (matchID -> ID .)
+    PARENTESIS_DER  reduce using rule 55 (matchID -> ID .)
+
+
+state 54
+
+    (58) condicion -> imprimeIf condicion_2 . imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
+    (108) imprimeDosPuntos -> . DOS_PUNTOS
+
+    DOS_PUNTOS      shift and go to state 91
+>>>>>>> origin/branchAdriana
 
     declaracion_aux                shift and go to state 75
     imprimeComa                    shift and go to state 76
     declaracion_2                  shift and go to state 78
     empty                          shift and go to state 79
 
+<<<<<<< HEAD
 state 45
+=======
+state 55
+
+    (56) matchCteInt -> CTE_INT .
+
+    MULTIPLICACION  reduce using rule 56 (matchCteInt -> CTE_INT .)
+    DIVISION        reduce using rule 56 (matchCteInt -> CTE_INT .)
+    SUMA            reduce using rule 56 (matchCteInt -> CTE_INT .)
+    RESTA           reduce using rule 56 (matchCteInt -> CTE_INT .)
+    DIFERENTE       reduce using rule 56 (matchCteInt -> CTE_INT .)
+    MAYOR_QUE       reduce using rule 56 (matchCteInt -> CTE_INT .)
+    MENOR_QUE       reduce using rule 56 (matchCteInt -> CTE_INT .)
+    IGUAL_A         reduce using rule 56 (matchCteInt -> CTE_INT .)
+    MAYOR_IGUAL     reduce using rule 56 (matchCteInt -> CTE_INT .)
+    MENOR_IGUAL     reduce using rule 56 (matchCteInt -> CTE_INT .)
+    PUNTO_Y_COMA    reduce using rule 56 (matchCteInt -> CTE_INT .)
+    DOS_PUNTOS      reduce using rule 56 (matchCteInt -> CTE_INT .)
+    PARENTESIS_DER  reduce using rule 56 (matchCteInt -> CTE_INT .)
+
+
+state 56
+
+    (60) condicion_2 -> checkwall .
+
+    DOS_PUNTOS      reduce using rule 60 (condicion_2 -> checkwall .)
+
+
+state 57
+>>>>>>> origin/branchAdriana
 
     (57) matchCteFloat -> CTE_FLOAT .
 
@@ -1148,10 +2027,11 @@ state 45
     MAYOR_IGUAL     reduce using rule 57 (matchCteFloat -> CTE_FLOAT .)
     MENOR_IGUAL     reduce using rule 57 (matchCteFloat -> CTE_FLOAT .)
     DOS_PUNTOS      reduce using rule 57 (matchCteFloat -> CTE_FLOAT .)
-    PARENTESIS_DER  reduce using rule 57 (matchCteFloat -> CTE_FLOAT .)
     PUNTO_Y_COMA    reduce using rule 57 (matchCteFloat -> CTE_FLOAT .)
+    PARENTESIS_DER  reduce using rule 57 (matchCteFloat -> CTE_FLOAT .)
 
 
+<<<<<<< HEAD
 state 46
 
     (53) var_cte -> matchCteInt .
@@ -1376,6 +2256,8 @@ state 57
     MENOR_IGUAL     reduce using rule 56 (matchCteInt -> CTE_INT .)
 
 
+=======
+>>>>>>> origin/branchAdriana
 state 58
 
     (51) factor -> var_cte .
@@ -1397,15 +2279,32 @@ state 58
 
 state 59
 
-    (2) estatuto -> declaracion estatuto_2 .
+    (32) exp -> expresion . exp_2
+    (33) exp_2 -> . DIFERENTE expresion
+    (34) exp_2 -> . MAYOR_QUE expresion
+    (35) exp_2 -> . MENOR_QUE expresion
+    (36) exp_2 -> . IGUAL_A expresion
+    (37) exp_2 -> . MAYOR_IGUAL expresion
+    (38) exp_2 -> . MENOR_IGUAL expresion
+    (39) exp_2 -> . empty
+    (1) empty -> .
 
-    RETURN          reduce using rule 2 (estatuto -> declaracion estatuto_2 .)
-    END_DEF         reduce using rule 2 (estatuto -> declaracion estatuto_2 .)
-    $end            reduce using rule 2 (estatuto -> declaracion estatuto_2 .)
+    DIFERENTE       shift and go to state 98
+    MAYOR_QUE       shift and go to state 92
+    MENOR_QUE       shift and go to state 97
+    IGUAL_A         shift and go to state 94
+    MAYOR_IGUAL     shift and go to state 95
+    MENOR_IGUAL     shift and go to state 93
+    DOS_PUNTOS      reduce using rule 1 (empty -> .)
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+    PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
 
+    empty                          shift and go to state 96
+    exp_2                          shift and go to state 99
 
 state 60
 
+<<<<<<< HEAD
     (90) move -> MOVE imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
     (102) imprimeParentesisDer -> . PARENTESIS_DER
 
@@ -1464,19 +2363,149 @@ state 63
 
 
 state 64
+=======
+    (54) var_cte -> matchCteFloat .
+
+    MULTIPLICACION  reduce using rule 54 (var_cte -> matchCteFloat .)
+    DIVISION        reduce using rule 54 (var_cte -> matchCteFloat .)
+    SUMA            reduce using rule 54 (var_cte -> matchCteFloat .)
+    RESTA           reduce using rule 54 (var_cte -> matchCteFloat .)
+    DIFERENTE       reduce using rule 54 (var_cte -> matchCteFloat .)
+    MAYOR_QUE       reduce using rule 54 (var_cte -> matchCteFloat .)
+    MENOR_QUE       reduce using rule 54 (var_cte -> matchCteFloat .)
+    IGUAL_A         reduce using rule 54 (var_cte -> matchCteFloat .)
+    MAYOR_IGUAL     reduce using rule 54 (var_cte -> matchCteFloat .)
+    MENOR_IGUAL     reduce using rule 54 (var_cte -> matchCteFloat .)
+    DOS_PUNTOS      reduce using rule 54 (var_cte -> matchCteFloat .)
+    PUNTO_Y_COMA    reduce using rule 54 (var_cte -> matchCteFloat .)
+    PARENTESIS_DER  reduce using rule 54 (var_cte -> matchCteFloat .)
+
+
+state 61
+
+    (52) var_cte -> matchID .
+
+    MULTIPLICACION  reduce using rule 52 (var_cte -> matchID .)
+    DIVISION        reduce using rule 52 (var_cte -> matchID .)
+    SUMA            reduce using rule 52 (var_cte -> matchID .)
+    RESTA           reduce using rule 52 (var_cte -> matchID .)
+    DIFERENTE       reduce using rule 52 (var_cte -> matchID .)
+    MAYOR_QUE       reduce using rule 52 (var_cte -> matchID .)
+    MENOR_QUE       reduce using rule 52 (var_cte -> matchID .)
+    IGUAL_A         reduce using rule 52 (var_cte -> matchID .)
+    MAYOR_IGUAL     reduce using rule 52 (var_cte -> matchID .)
+    MENOR_IGUAL     reduce using rule 52 (var_cte -> matchID .)
+    DOS_PUNTOS      reduce using rule 52 (var_cte -> matchID .)
+    PUNTO_Y_COMA    reduce using rule 52 (var_cte -> matchID .)
+    PARENTESIS_DER  reduce using rule 52 (var_cte -> matchID .)
+
+
+state 62
+
+    (18) declaracion -> tipo ID . declaracion_aux imprimePuntoYComa declaracion_3
+    (19) declaracion_aux -> . declaracion_2
+    (20) declaracion_aux -> . empty
+    (21) declaracion_2 -> . imprimeComa ID a
+    (1) empty -> .
+    (111) imprimeComa -> . COMA
+
+    PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
+    COMA            shift and go to state 102
+
+    imprimeComa                    shift and go to state 100
+    empty                          shift and go to state 103
+    declaracion_2                  shift and go to state 101
+    declaracion_aux                shift and go to state 104
+
+state 63
+
+    (83) funcionUsuario -> ID imprimeParentesisIzq . functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+    (84) functionUsuario_parametros -> . functionUsuario_aux1
+    (85) functionUsuario_parametros -> . empty
+    (86) functionUsuario_aux1 -> . tipo ID functionUsuario_aux2
+    (1) empty -> .
+    (26) tipo -> . INT
+    (27) tipo -> . FLOAT
+    (28) tipo -> . STRING
+
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
+
+    functionUsuario_aux1           shift and go to state 105
+    empty                          shift and go to state 107
+    tipo                           shift and go to state 106
+    functionUsuario_parametros     shift and go to state 108
+
+state 64
+
+    (90) move -> MOVE imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+    imprimeParentesisDer           shift and go to state 109
+
+state 65
+
+    (91) turnright -> TURN_RIGHT imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+    imprimeParentesisDer           shift and go to state 110
+
+state 66
+
+    (7) opciones -> function destroyVars .
+
+    TURN_LEFT       reduce using rule 7 (opciones -> function destroyVars .)
+    TURN_RIGHT      reduce using rule 7 (opciones -> function destroyVars .)
+    MOVE            reduce using rule 7 (opciones -> function destroyVars .)
+    CHECKWALL       reduce using rule 7 (opciones -> function destroyVars .)
+    PICK_BEEPER     reduce using rule 7 (opciones -> function destroyVars .)
+    PUT_BEEPER      reduce using rule 7 (opciones -> function destroyVars .)
+    ID              reduce using rule 7 (opciones -> function destroyVars .)
+    DEF             reduce using rule 7 (opciones -> function destroyVars .)
+    IF              reduce using rule 7 (opciones -> function destroyVars .)
+    PRINT           reduce using rule 7 (opciones -> function destroyVars .)
+    WHILE           reduce using rule 7 (opciones -> function destroyVars .)
+    $end            reduce using rule 7 (opciones -> function destroyVars .)
+    END_WHILE       reduce using rule 7 (opciones -> function destroyVars .)
+    END_ELSE        reduce using rule 7 (opciones -> function destroyVars .)
+    END_ELIF        reduce using rule 7 (opciones -> function destroyVars .)
+    RETURN          reduce using rule 7 (opciones -> function destroyVars .)
+    END_DEF         reduce using rule 7 (opciones -> function destroyVars .)
+    END_IF          reduce using rule 7 (opciones -> function destroyVars .)
+
+
+state 67
+>>>>>>> origin/branchAdriana
 
     (71) aux -> tipo .
 
     ID              reduce using rule 71 (aux -> tipo .)
 
 
+<<<<<<< HEAD
 state 65
 
     (70) function -> imprimeDef aux . ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
 
     ID              shift and go to state 106
+=======
+state 68
 
+    (93) pickbeeper -> PICK_BEEPER imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
 
+    PARENTESIS_DER  shift and go to state 72
+>>>>>>> origin/branchAdriana
+
+    imprimeParentesisDer           shift and go to state 111
+
+<<<<<<< HEAD
 state 66
 
     (92) turnleft -> TURN_LEFT imprimeParentesisIzq . imprimeParentesisDer imprimePuntoYComa
@@ -1510,6 +2539,19 @@ state 68
 
 state 69
 
+=======
+state 69
+
+    (68) ciclo -> imprimeWhile exp . imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+    (108) imprimeDosPuntos -> . DOS_PUNTOS
+
+    DOS_PUNTOS      shift and go to state 91
+
+    imprimeDosPuntos               shift and go to state 112
+
+state 70
+
+>>>>>>> origin/branchAdriana
     (65) escritura -> imprimePrint imprimeParentesisIzq . escritura_2 imprimeParentesisDer imprimePuntoYComa
     (66) escritura_2 -> . CTE_STRING
     (67) escritura_2 -> . exp
@@ -1526,6 +2568,7 @@ state 69
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     CTE_STRING      shift and go to state 109
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
@@ -1590,8 +2633,101 @@ state 72
     MAYOR_IGUAL     reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
     MENOR_IGUAL     reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
     PARENTESIS_DER  reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+=======
+    CTE_STRING      shift and go to state 114
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    exp                            shift and go to state 113
+    matchCteFloat                  shift and go to state 60
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    termino                        shift and go to state 50
+    escritura_2                    shift and go to state 115
+    matchCteInt                    shift and go to state 51
+    expresion                      shift and go to state 59
+    matchID                        shift and go to state 61
+
+state 71
+
+    (92) turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 117
+
+state 72
+
+    (102) imprimeParentesisDer -> PARENTESIS_DER .
+
+    PUNTO_Y_COMA    reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    MULTIPLICACION  reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    DIVISION        reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    SUMA            reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    RESTA           reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    DIFERENTE       reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    MAYOR_QUE       reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    MENOR_QUE       reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    IGUAL_A         reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    MAYOR_IGUAL     reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    MENOR_IGUAL     reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    DOS_PUNTOS      reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
+    PARENTESIS_DER  reduce using rule 102 (imprimeParentesisDer -> PARENTESIS_DER .)
 
 
+state 73
+
+    (89) checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 118
+
+state 74
+
+    (70) function -> imprimeDef aux ID . imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+
+    PARENTESIS_IZQ  shift and go to state 40
+
+    imprimeParentesisIzq           shift and go to state 119
+
+state 75
+
+    (31) asignacion_aux -> funcionUsuario .
+
+    TURN_LEFT       reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    TURN_RIGHT      reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    MOVE            reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    CHECKWALL       reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    PICK_BEEPER     reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    PUT_BEEPER      reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    ID              reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    DEF             reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    IF              reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    PRINT           reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    WHILE           reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    $end            reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    RETURN          reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    END_DEF         reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    END_IF          reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    END_WHILE       reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    END_ELIF        reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+    END_ELSE        reduce using rule 31 (asignacion_aux -> funcionUsuario .)
+
+
+state 76
+>>>>>>> origin/branchAdriana
+
+    (30) asignacion_aux -> expresion . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+<<<<<<< HEAD
 state 73
 
     (94) putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
@@ -1641,13 +2777,131 @@ state 78
 
 
 state 79
+=======
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 120
+
+state 77
+
+    (29) asignacion -> matchID EQUIVALE asignacion_aux .
+
+    TURN_LEFT       reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    TURN_RIGHT      reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    MOVE            reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    CHECKWALL       reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    PICK_BEEPER     reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    PUT_BEEPER      reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    ID              reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    DEF             reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    IF              reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    PRINT           reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    WHILE           reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    END_ELSE        reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    END_IF          reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    END_WHILE       reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    $end            reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    RETURN          reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    END_DEF         reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+    END_ELIF        reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+
+
+state 78
+
+    (94) putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 121
+
+state 79
+
+    (49) MatchDivision -> DIVISION . termino
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
+
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    termino                        shift and go to state 122
+    matchCteInt                    shift and go to state 51
+    matchCteFloat                  shift and go to state 60
+    matchID                        shift and go to state 61
+
+state 80
+
+    (46) termino_2 -> MatchDivision .
+
+    SUMA            reduce using rule 46 (termino_2 -> MatchDivision .)
+    RESTA           reduce using rule 46 (termino_2 -> MatchDivision .)
+    DIFERENTE       reduce using rule 46 (termino_2 -> MatchDivision .)
+    MAYOR_QUE       reduce using rule 46 (termino_2 -> MatchDivision .)
+    MENOR_QUE       reduce using rule 46 (termino_2 -> MatchDivision .)
+    IGUAL_A         reduce using rule 46 (termino_2 -> MatchDivision .)
+    MAYOR_IGUAL     reduce using rule 46 (termino_2 -> MatchDivision .)
+    MENOR_IGUAL     reduce using rule 46 (termino_2 -> MatchDivision .)
+    DOS_PUNTOS      reduce using rule 46 (termino_2 -> MatchDivision .)
+    PUNTO_Y_COMA    reduce using rule 46 (termino_2 -> MatchDivision .)
+    PARENTESIS_DER  reduce using rule 46 (termino_2 -> MatchDivision .)
+
+
+state 81
+
+    (47) termino_2 -> empty .
+
+    SUMA            reduce using rule 47 (termino_2 -> empty .)
+    RESTA           reduce using rule 47 (termino_2 -> empty .)
+    DIFERENTE       reduce using rule 47 (termino_2 -> empty .)
+    MAYOR_QUE       reduce using rule 47 (termino_2 -> empty .)
+    MENOR_QUE       reduce using rule 47 (termino_2 -> empty .)
+    IGUAL_A         reduce using rule 47 (termino_2 -> empty .)
+    MAYOR_IGUAL     reduce using rule 47 (termino_2 -> empty .)
+    MENOR_IGUAL     reduce using rule 47 (termino_2 -> empty .)
+    DOS_PUNTOS      reduce using rule 47 (termino_2 -> empty .)
+    PUNTO_Y_COMA    reduce using rule 47 (termino_2 -> empty .)
+    PARENTESIS_DER  reduce using rule 47 (termino_2 -> empty .)
+
+
+state 82
+>>>>>>> origin/branchAdriana
 
     (20) declaracion_aux -> empty .
 
+<<<<<<< HEAD
     PUNTO_Y_COMA    reduce using rule 20 (declaracion_aux -> empty .)
 
 
 state 80
+=======
+    SUMA            reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    RESTA           reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    DIFERENTE       reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    MAYOR_QUE       reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    MENOR_QUE       reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    IGUAL_A         reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    MAYOR_IGUAL     reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    MENOR_IGUAL     reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    DOS_PUNTOS      reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    PUNTO_Y_COMA    reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+    PARENTESIS_DER  reduce using rule 45 (termino_2 -> MatchMultiplicacion .)
+
+
+state 83
+>>>>>>> origin/branchAdriana
 
     (38) exp_2 -> MENOR_IGUAL . expresion
     (40) expresion -> . termino expresion_2
@@ -1662,6 +2916,7 @@ state 80
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -1706,6 +2961,63 @@ state 81
     var_cte                        shift and go to state 58
 
 state 82
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    termino                        shift and go to state 123
+    matchCteInt                    shift and go to state 51
+    matchCteFloat                  shift and go to state 60
+    matchID                        shift and go to state 61
+
+state 84
+
+    (44) termino -> factor termino_2 .
+
+    SUMA            reduce using rule 44 (termino -> factor termino_2 .)
+    RESTA           reduce using rule 44 (termino -> factor termino_2 .)
+    DIFERENTE       reduce using rule 44 (termino -> factor termino_2 .)
+    MAYOR_QUE       reduce using rule 44 (termino -> factor termino_2 .)
+    MENOR_QUE       reduce using rule 44 (termino -> factor termino_2 .)
+    IGUAL_A         reduce using rule 44 (termino -> factor termino_2 .)
+    MAYOR_IGUAL     reduce using rule 44 (termino -> factor termino_2 .)
+    MENOR_IGUAL     reduce using rule 44 (termino -> factor termino_2 .)
+    DOS_PUNTOS      reduce using rule 44 (termino -> factor termino_2 .)
+    PARENTESIS_DER  reduce using rule 44 (termino -> factor termino_2 .)
+    PUNTO_Y_COMA    reduce using rule 44 (termino -> factor termino_2 .)
+
+
+state 85
+
+    (50) factor -> imprimeParentesisIzq exp . imprimeParentesisDer
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+    imprimeParentesisDer           shift and go to state 124
+
+state 86
+
+    (40) expresion -> termino expresion_2 .
+
+    DIFERENTE       reduce using rule 40 (expresion -> termino expresion_2 .)
+    MAYOR_QUE       reduce using rule 40 (expresion -> termino expresion_2 .)
+    MENOR_QUE       reduce using rule 40 (expresion -> termino expresion_2 .)
+    IGUAL_A         reduce using rule 40 (expresion -> termino expresion_2 .)
+    MAYOR_IGUAL     reduce using rule 40 (expresion -> termino expresion_2 .)
+    MENOR_IGUAL     reduce using rule 40 (expresion -> termino expresion_2 .)
+    PARENTESIS_DER  reduce using rule 40 (expresion -> termino expresion_2 .)
+    DOS_PUNTOS      reduce using rule 40 (expresion -> termino expresion_2 .)
+    PUNTO_Y_COMA    reduce using rule 40 (expresion -> termino expresion_2 .)
+
+
+state 87
+>>>>>>> origin/branchAdriana
 
     (33) exp_2 -> DIFERENTE . expresion
     (40) expresion -> . termino expresion_2
@@ -1720,6 +3032,7 @@ state 82
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -1735,8 +3048,194 @@ state 82
     var_cte                        shift and go to state 58
 
 state 83
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
 
-    (37) exp_2 -> MAYOR_IGUAL . expresion
+    expresion                      shift and go to state 125
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+
+state 88
+
+    (43) expresion_2 -> empty .
+
+    DIFERENTE       reduce using rule 43 (expresion_2 -> empty .)
+    MAYOR_QUE       reduce using rule 43 (expresion_2 -> empty .)
+    MENOR_QUE       reduce using rule 43 (expresion_2 -> empty .)
+    IGUAL_A         reduce using rule 43 (expresion_2 -> empty .)
+    MAYOR_IGUAL     reduce using rule 43 (expresion_2 -> empty .)
+    MENOR_IGUAL     reduce using rule 43 (expresion_2 -> empty .)
+    DOS_PUNTOS      reduce using rule 43 (expresion_2 -> empty .)
+    PUNTO_Y_COMA    reduce using rule 43 (expresion_2 -> empty .)
+    PARENTESIS_DER  reduce using rule 43 (expresion_2 -> empty .)
+
+
+state 89
+
+    (42) expresion_2 -> RESTA . expresion
+    (40) expresion -> . termino expresion_2
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
+
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    expresion                      shift and go to state 126
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+
+state 90
+
+    (58) condicion -> imprimeIf condicion_2 imprimeDosPuntos . estatuto_2 imprimeEndIf condicion_3 condicion_4
+    (4) estatuto_2 -> . opciones estatuto_2
+    (5) estatuto_2 -> . empty
+    (6) opciones -> . asignacion
+    (7) opciones -> . function destroyVars
+    (8) opciones -> . condicion
+    (9) opciones -> . escritura
+    (10) opciones -> . ciclo
+    (11) opciones -> . turnleft
+    (12) opciones -> . turnright
+    (13) opciones -> . move
+    (14) opciones -> . checkwall
+    (15) opciones -> . pickbeeper
+    (16) opciones -> . putbeeper
+    (17) opciones -> . funcionUsuario
+    (1) empty -> .
+    (29) asignacion -> . matchID EQUIVALE asignacion_aux
+    (70) function -> . imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (58) condicion -> . imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
+    (65) escritura -> . imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
+    (68) ciclo -> . imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+    (92) turnleft -> . TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (91) turnright -> . TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (90) move -> . MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (89) checkwall -> . CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (93) pickbeeper -> . PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (94) putbeeper -> . PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (83) funcionUsuario -> . ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+    (55) matchID -> . ID
+    (96) imprimeDef -> . DEF
+    (107) imprimeIf -> . IF
+    (100) imprimePrint -> . PRINT
+    (98) imprimeWhile -> . WHILE
+
+    END_IF          reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    opciones                       shift and go to state 3
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    funcionUsuario                 shift and go to state 5
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    asignacion                     shift and go to state 10
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    checkwall                      shift and go to state 28
+    function                       shift and go to state 29
+    imprimeDef                     shift and go to state 14
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 127
+    imprimePrint                   shift and go to state 37
+    imprimeWhile                   shift and go to state 36
+    matchID                        shift and go to state 15
+    condicion                      shift and go to state 34
+
+state 91
+
+    (108) imprimeDosPuntos -> DOS_PUNTOS .
+
+    TURN_LEFT       reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    TURN_RIGHT      reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    MOVE            reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    CHECKWALL       reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    PICK_BEEPER     reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    PUT_BEEPER      reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    ID              reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    DEF             reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    IF              reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    PRINT           reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    WHILE           reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    END_IF          reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    END_ELSE        reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    END_WHILE       reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    END_ELIF        reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    INT             reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    FLOAT           reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    STRING          reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    RETURN          reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+    END_DEF         reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
+
+
+state 92
+
+    (34) exp_2 -> MAYOR_QUE . expresion
+    (40) expresion -> . termino expresion_2
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
+
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    expresion                      shift and go to state 128
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+
+state 93
+>>>>>>> origin/branchAdriana
+
+    (38) exp_2 -> MENOR_IGUAL . expresion
     (40) expresion -> . termino expresion_2
     (44) termino -> . factor termino_2
     (50) factor -> . imprimeParentesisIzq expresion imprimeParentesisDer
@@ -1749,6 +3248,7 @@ state 83
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -1762,16 +3262,60 @@ state 83
     expresion                      shift and go to state 125
     factor                         shift and go to state 55
     var_cte                        shift and go to state 58
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
 
-state 84
+    expresion                      shift and go to state 129
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+>>>>>>> origin/branchAdriana
 
+state 94
+
+<<<<<<< HEAD
     (32) exp -> expresion exp_2 .
 
     DOS_PUNTOS      reduce using rule 32 (exp -> expresion exp_2 .)
     PARENTESIS_DER  reduce using rule 32 (exp -> expresion exp_2 .)
     PUNTO_Y_COMA    reduce using rule 32 (exp -> expresion exp_2 .)
+=======
+    (36) exp_2 -> IGUAL_A . expresion
+    (40) expresion -> . termino expresion_2
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
 
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+>>>>>>> origin/branchAdriana
 
+    expresion                      shift and go to state 130
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+
+<<<<<<< HEAD
 state 85
 
     (39) exp_2 -> empty .
@@ -1784,6 +3328,11 @@ state 85
 state 86
 
     (35) exp_2 -> MENOR_QUE . expresion
+=======
+state 95
+
+    (37) exp_2 -> MAYOR_IGUAL . expresion
+>>>>>>> origin/branchAdriana
     (40) expresion -> . termino expresion_2
     (44) termino -> . factor termino_2
     (50) factor -> . imprimeParentesisIzq expresion imprimeParentesisDer
@@ -1796,6 +3345,7 @@ state 86
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -1809,10 +3359,38 @@ state 86
     expresion                      shift and go to state 126
     factor                         shift and go to state 55
     var_cte                        shift and go to state 58
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
 
-state 87
+    expresion                      shift and go to state 131
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+>>>>>>> origin/branchAdriana
 
+state 96
+
+<<<<<<< HEAD
     (36) exp_2 -> IGUAL_A . expresion
+=======
+    (39) exp_2 -> empty .
+
+    DOS_PUNTOS      reduce using rule 39 (exp_2 -> empty .)
+    PARENTESIS_DER  reduce using rule 39 (exp_2 -> empty .)
+    PUNTO_Y_COMA    reduce using rule 39 (exp_2 -> empty .)
+
+
+state 97
+
+    (35) exp_2 -> MENOR_QUE . expresion
+>>>>>>> origin/branchAdriana
     (40) expresion -> . termino expresion_2
     (44) termino -> . factor termino_2
     (50) factor -> . imprimeParentesisIzq expresion imprimeParentesisDer
@@ -1825,6 +3403,7 @@ state 87
     (56) matchCteInt -> . CTE_INT
     (57) matchCteFloat -> . CTE_FLOAT
 
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -1838,8 +3417,23 @@ state 87
     expresion                      shift and go to state 127
     factor                         shift and go to state 55
     var_cte                        shift and go to state 58
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
 
-state 88
+    expresion                      shift and go to state 132
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+>>>>>>> origin/branchAdriana
+
+state 98
 
     (58) condicion -> imprimeIf condicion_2 imprimeDosPuntos . estatuto_2 imprimeEndIf condicion_3 condicion_4
     (4) estatuto_2 -> . opciones estatuto_2
@@ -1875,6 +3469,7 @@ state 88
     (100) imprimePrint -> . PRINT
     (98) imprimeWhile -> . WHILE
 
+<<<<<<< HEAD
     END_IF          reduce using rule 1 (empty -> .)
     TURN_LEFT       shift and go to state 26
     TURN_RIGHT      shift and go to state 24
@@ -1908,9 +3503,25 @@ state 88
     turnleft                       shift and go to state 18
     imprimeWhile                   shift and go to state 11
     imprimeIf                      shift and go to state 19
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
 
-state 89
+    expresion                      shift and go to state 133
+    matchCteFloat                  shift and go to state 60
+    termino                        shift and go to state 50
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    matchCteInt                    shift and go to state 51
+    matchID                        shift and go to state 61
+>>>>>>> origin/branchAdriana
 
+state 99
+
+<<<<<<< HEAD
     (108) imprimeDosPuntos -> DOS_PUNTOS .
 
     TURN_LEFT       reduce using rule 108 (imprimeDosPuntos -> DOS_PUNTOS .)
@@ -2160,11 +3771,33 @@ state 101
     (110) imprimePuntoYComa -> . PUNTO_Y_COMA
 
     PUNTO_Y_COMA    shift and go to state 117
+=======
+    (32) exp -> expresion exp_2 .
+
+    PUNTO_Y_COMA    reduce using rule 32 (exp -> expresion exp_2 .)
+    DOS_PUNTOS      reduce using rule 32 (exp -> expresion exp_2 .)
+    PARENTESIS_DER  reduce using rule 32 (exp -> expresion exp_2 .)
+
+
+state 100
+
+    (21) declaracion_2 -> imprimeComa . ID a
+
+    ID              shift and go to state 134
+
+
+state 101
+
+    (19) declaracion_aux -> declaracion_2 .
+
+    PUNTO_Y_COMA    reduce using rule 19 (declaracion_aux -> declaracion_2 .)
+>>>>>>> origin/branchAdriana
 
     imprimePuntoYComa              shift and go to state 134
 
 state 102
 
+<<<<<<< HEAD
     (29) asignacion -> matchID EQUIVALE asignacion_aux .
 
     TURN_LEFT       reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
@@ -2185,10 +3818,16 @@ state 102
     $end            reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
     END_ELSE        reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
     END_WHILE       reduce using rule 29 (asignacion -> matchID EQUIVALE asignacion_aux .)
+=======
+    (111) imprimeComa -> COMA .
+
+    ID              reduce using rule 111 (imprimeComa -> COMA .)
+>>>>>>> origin/branchAdriana
 
 
 state 103
 
+<<<<<<< HEAD
     (30) asignacion_aux -> expresion . imprimePuntoYComa
     (110) imprimePuntoYComa -> . PUNTO_Y_COMA
 
@@ -2226,24 +3865,57 @@ state 105
     (110) imprimePuntoYComa -> . PUNTO_Y_COMA
 
     PUNTO_Y_COMA    shift and go to state 117
+=======
+    (20) declaracion_aux -> empty .
+
+    PUNTO_Y_COMA    reduce using rule 20 (declaracion_aux -> empty .)
+
+
+state 104
+
+    (18) declaracion -> tipo ID declaracion_aux . imprimePuntoYComa declaracion_3
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 135
+
+state 105
+
+    (84) functionUsuario_parametros -> functionUsuario_aux1 .
+
+    PARENTESIS_DER  reduce using rule 84 (functionUsuario_parametros -> functionUsuario_aux1 .)
+>>>>>>> origin/branchAdriana
 
     imprimePuntoYComa              shift and go to state 136
 
 state 106
 
+<<<<<<< HEAD
     (70) function -> imprimeDef aux ID . imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
     (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
 
     PARENTESIS_IZQ  shift and go to state 39
+=======
+    (86) functionUsuario_aux1 -> tipo . ID functionUsuario_aux2
+
+    ID              shift and go to state 136
+>>>>>>> origin/branchAdriana
 
     imprimeParentesisIzq           shift and go to state 137
 
 state 107
 
+<<<<<<< HEAD
     (92) turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
     (110) imprimePuntoYComa -> . PUNTO_Y_COMA
 
     PUNTO_Y_COMA    shift and go to state 117
+=======
+    (85) functionUsuario_parametros -> empty .
+
+    PARENTESIS_DER  reduce using rule 85 (functionUsuario_parametros -> empty .)
+>>>>>>> origin/branchAdriana
 
     imprimePuntoYComa              shift and go to state 138
 
@@ -2252,6 +3924,7 @@ state 108
     (89) checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
     (110) imprimePuntoYComa -> . PUNTO_Y_COMA
 
+<<<<<<< HEAD
     PUNTO_Y_COMA    shift and go to state 117
 
     imprimePuntoYComa              shift and go to state 139
@@ -2521,8 +4194,40 @@ state 129
     DOS_PUNTOS      reduce using rule 41 (expresion_2 -> SUMA expresion .)
     PARENTESIS_DER  reduce using rule 41 (expresion_2 -> SUMA expresion .)
     PUNTO_Y_COMA    reduce using rule 41 (expresion_2 -> SUMA expresion .)
+=======
+    PARENTESIS_DER  shift and go to state 72
 
+    imprimeParentesisDer           shift and go to state 137
 
+state 109
+
+    (90) move -> MOVE imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 138
+
+state 110
+
+    (91) turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 139
+
+state 111
+
+    (93) pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+>>>>>>> origin/branchAdriana
+
+    imprimePuntoYComa              shift and go to state 140
+
+<<<<<<< HEAD
 state 130
 
     (42) expresion_2 -> RESTA expresion .
@@ -2571,10 +4276,83 @@ state 132
     PARENTESIS_DER  reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
     PUNTO_Y_COMA    reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
 
+=======
+state 112
+
+    (68) ciclo -> imprimeWhile exp imprimeDosPuntos . cuaciclo1 estatuto_2 imprimeEndWhile
+    (69) cuaciclo1 -> . empty
+    (1) empty -> .
+
+    TURN_LEFT       reduce using rule 1 (empty -> .)
+    TURN_RIGHT      reduce using rule 1 (empty -> .)
+    MOVE            reduce using rule 1 (empty -> .)
+    CHECKWALL       reduce using rule 1 (empty -> .)
+    PICK_BEEPER     reduce using rule 1 (empty -> .)
+    PUT_BEEPER      reduce using rule 1 (empty -> .)
+    ID              reduce using rule 1 (empty -> .)
+    DEF             reduce using rule 1 (empty -> .)
+    IF              reduce using rule 1 (empty -> .)
+    PRINT           reduce using rule 1 (empty -> .)
+    WHILE           reduce using rule 1 (empty -> .)
+    END_WHILE       reduce using rule 1 (empty -> .)
+
+    cuaciclo1                      shift and go to state 141
+    empty                          shift and go to state 142
+
+state 113
+
+    (67) escritura_2 -> exp .
+
+    PARENTESIS_DER  reduce using rule 67 (escritura_2 -> exp .)
+
+
+state 114
+
+    (66) escritura_2 -> CTE_STRING .
+
+    PARENTESIS_DER  reduce using rule 66 (escritura_2 -> CTE_STRING .)
+
+
+state 115
+
+    (65) escritura -> imprimePrint imprimeParentesisIzq escritura_2 . imprimeParentesisDer imprimePuntoYComa
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+    imprimeParentesisDer           shift and go to state 143
+
+state 116
+>>>>>>> origin/branchAdriana
 
 state 133
 
+<<<<<<< HEAD
     (50) factor -> imprimeParentesisIzq expresion imprimeParentesisDer .
+=======
+    TURN_LEFT       reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    TURN_RIGHT      reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    MOVE            reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    CHECKWALL       reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    PICK_BEEPER     reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    PUT_BEEPER      reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    ID              reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    DEF             reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    IF              reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    PRINT           reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    WHILE           reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    $end            reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    RETURN          reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    END_DEF         reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    END_IF          reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    END_WHILE       reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    END_ELIF        reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    END_ELSE        reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    DOS_PUNTOS      reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    INT             reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    FLOAT           reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+    STRING          reduce using rule 110 (imprimePuntoYComa -> PUNTO_Y_COMA .)
+>>>>>>> origin/branchAdriana
 
     MULTIPLICACION  reduce using rule 50 (factor -> imprimeParentesisIzq expresion imprimeParentesisDer .)
     DIVISION        reduce using rule 50 (factor -> imprimeParentesisIzq expresion imprimeParentesisDer .)
@@ -2590,11 +4368,16 @@ state 133
     MAYOR_IGUAL     reduce using rule 50 (factor -> imprimeParentesisIzq expresion imprimeParentesisDer .)
     MENOR_IGUAL     reduce using rule 50 (factor -> imprimeParentesisIzq expresion imprimeParentesisDer .)
 
+<<<<<<< HEAD
 
 state 134
+=======
+state 117
+>>>>>>> origin/branchAdriana
 
-    (90) move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
+    (92) turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
 
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     TURN_RIGHT      reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     MOVE            reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
@@ -2616,9 +4399,33 @@ state 134
 
 
 state 135
+=======
+    TURN_LEFT       reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+
+
+state 118
+>>>>>>> origin/branchAdriana
 
     (30) asignacion_aux -> expresion imprimePuntoYComa .
 
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
     TURN_RIGHT      reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
     MOVE            reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
@@ -2640,9 +4447,41 @@ state 135
 
 
 state 136
+=======
+    TURN_LEFT       reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DOS_PUNTOS      reduce using rule 89 (checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
 
-    (91) turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
 
+state 119
+>>>>>>> origin/branchAdriana
+
+    (70) function -> imprimeDef aux ID imprimeParentesisIzq . function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (73) function_aux -> . function_2
+    (74) function_aux -> . empty
+    (75) function_2 -> . tipo ID function_3
+    (1) empty -> .
+    (26) tipo -> . INT
+    (27) tipo -> . FLOAT
+    (28) tipo -> . STRING
+
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     TURN_RIGHT      reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     MOVE            reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
@@ -2664,6 +4503,150 @@ state 136
 
 
 state 137
+=======
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
+
+    function_aux                   shift and go to state 144
+    tipo                           shift and go to state 145
+    function_2                     shift and go to state 146
+    empty                          shift and go to state 147
+
+state 120
+
+    (30) asignacion_aux -> expresion imprimePuntoYComa .
+
+    TURN_LEFT       reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    MOVE            reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    ID              reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    DEF             reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    IF              reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    PRINT           reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    WHILE           reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    $end            reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    RETURN          reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    END_DEF         reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    END_IF          reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    END_WHILE       reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    END_ELIF        reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+    END_ELSE        reduce using rule 30 (asignacion_aux -> expresion imprimePuntoYComa .)
+
+
+state 121
+
+    (94) putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
+
+    TURN_LEFT       reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 94 (putbeeper -> PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+
+
+state 122
+
+    (49) MatchDivision -> DIVISION termino .
+
+    SUMA            reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    RESTA           reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    DIFERENTE       reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    MAYOR_QUE       reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    MENOR_QUE       reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    IGUAL_A         reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    MAYOR_IGUAL     reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    MENOR_IGUAL     reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    DOS_PUNTOS      reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    PUNTO_Y_COMA    reduce using rule 49 (MatchDivision -> DIVISION termino .)
+    PARENTESIS_DER  reduce using rule 49 (MatchDivision -> DIVISION termino .)
+
+
+state 123
+
+    (48) MatchMultiplicacion -> MULTIPLICACION termino .
+
+    SUMA            reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    RESTA           reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    DIFERENTE       reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    MAYOR_QUE       reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    MENOR_QUE       reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    IGUAL_A         reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    MAYOR_IGUAL     reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    MENOR_IGUAL     reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    DOS_PUNTOS      reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    PUNTO_Y_COMA    reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+    PARENTESIS_DER  reduce using rule 48 (MatchMultiplicacion -> MULTIPLICACION termino .)
+
+
+state 124
+
+    (50) factor -> imprimeParentesisIzq exp imprimeParentesisDer .
+
+    MULTIPLICACION  reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    DIVISION        reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    SUMA            reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    RESTA           reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    DOS_PUNTOS      reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    PARENTESIS_DER  reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    PUNTO_Y_COMA    reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    DIFERENTE       reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    MAYOR_QUE       reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    MENOR_QUE       reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    IGUAL_A         reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    MAYOR_IGUAL     reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+    MENOR_IGUAL     reduce using rule 50 (factor -> imprimeParentesisIzq exp imprimeParentesisDer .)
+
+
+state 125
+
+    (41) expresion_2 -> SUMA expresion .
+
+    DIFERENTE       reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    MAYOR_QUE       reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    MENOR_QUE       reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    IGUAL_A         reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    MAYOR_IGUAL     reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    MENOR_IGUAL     reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    DOS_PUNTOS      reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    PUNTO_Y_COMA    reduce using rule 41 (expresion_2 -> SUMA expresion .)
+    PARENTESIS_DER  reduce using rule 41 (expresion_2 -> SUMA expresion .)
+
+
+state 126
+
+    (42) expresion_2 -> RESTA expresion .
+
+    DIFERENTE       reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    MAYOR_QUE       reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    MENOR_QUE       reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    IGUAL_A         reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    MAYOR_IGUAL     reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    MENOR_IGUAL     reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    DOS_PUNTOS      reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    PUNTO_Y_COMA    reduce using rule 42 (expresion_2 -> RESTA expresion .)
+    PARENTESIS_DER  reduce using rule 42 (expresion_2 -> RESTA expresion .)
+
+
+state 127
+>>>>>>> origin/branchAdriana
 
     (70) function -> imprimeDef aux ID imprimeParentesisIzq . function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
     (73) function_aux -> . function_2
@@ -2674,6 +4657,7 @@ state 137
     (27) tipo -> . FLOAT
     (28) tipo -> . STRING
 
+<<<<<<< HEAD
     PARENTESIS_DER  reduce using rule 1 (empty -> .)
     INT             shift and go to state 13
     FLOAT           shift and go to state 6
@@ -2685,9 +4669,17 @@ state 137
     tipo                           shift and go to state 155
 
 state 138
+=======
+    END_IF          shift and go to state 148
 
-    (92) turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
+    imprimeEndIf                   shift and go to state 149
 
+state 128
+>>>>>>> origin/branchAdriana
+
+    (34) exp_2 -> MAYOR_QUE expresion .
+
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     TURN_RIGHT      reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     MOVE            reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
@@ -2706,8 +4698,22 @@ state 138
     END_IF          reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     END_WHILE       reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
     END_ELSE        reduce using rule 92 (turnleft -> TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+=======
+    DOS_PUNTOS      reduce using rule 34 (exp_2 -> MAYOR_QUE expresion .)
+    PARENTESIS_DER  reduce using rule 34 (exp_2 -> MAYOR_QUE expresion .)
+    PUNTO_Y_COMA    reduce using rule 34 (exp_2 -> MAYOR_QUE expresion .)
 
 
+state 129
+
+    (38) exp_2 -> MENOR_IGUAL expresion .
+>>>>>>> origin/branchAdriana
+
+    DOS_PUNTOS      reduce using rule 38 (exp_2 -> MENOR_IGUAL expresion .)
+    PARENTESIS_DER  reduce using rule 38 (exp_2 -> MENOR_IGUAL expresion .)
+    PUNTO_Y_COMA    reduce using rule 38 (exp_2 -> MENOR_IGUAL expresion .)
+
+<<<<<<< HEAD
 state 139
 
     (89) checkwall -> CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
@@ -2743,10 +4749,30 @@ state 140
     imprimePuntoYComa              shift and go to state 156
 
 state 141
+=======
 
-    (83) funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer . imprimePuntoYComa
-    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+state 130
 
+    (36) exp_2 -> IGUAL_A expresion .
+
+    DOS_PUNTOS      reduce using rule 36 (exp_2 -> IGUAL_A expresion .)
+    PARENTESIS_DER  reduce using rule 36 (exp_2 -> IGUAL_A expresion .)
+    PUNTO_Y_COMA    reduce using rule 36 (exp_2 -> IGUAL_A expresion .)
+
+
+state 131
+
+    (37) exp_2 -> MAYOR_IGUAL expresion .
+
+    DOS_PUNTOS      reduce using rule 37 (exp_2 -> MAYOR_IGUAL expresion .)
+    PARENTESIS_DER  reduce using rule 37 (exp_2 -> MAYOR_IGUAL expresion .)
+    PUNTO_Y_COMA    reduce using rule 37 (exp_2 -> MAYOR_IGUAL expresion .)
+
+>>>>>>> origin/branchAdriana
+
+state 132
+
+<<<<<<< HEAD
     PUNTO_Y_COMA    shift and go to state 117
 
     imprimePuntoYComa              shift and go to state 157
@@ -2760,11 +4786,48 @@ state 142
 
     COMA            shift and go to state 158
     PARENTESIS_DER  reduce using rule 1 (empty -> .)
+=======
+    (35) exp_2 -> MENOR_QUE expresion .
+
+    DOS_PUNTOS      reduce using rule 35 (exp_2 -> MENOR_QUE expresion .)
+    PARENTESIS_DER  reduce using rule 35 (exp_2 -> MENOR_QUE expresion .)
+    PUNTO_Y_COMA    reduce using rule 35 (exp_2 -> MENOR_QUE expresion .)
+
+
+state 133
+
+    (33) exp_2 -> DIFERENTE expresion .
+
+    DOS_PUNTOS      reduce using rule 33 (exp_2 -> DIFERENTE expresion .)
+    PARENTESIS_DER  reduce using rule 33 (exp_2 -> DIFERENTE expresion .)
+    PUNTO_Y_COMA    reduce using rule 33 (exp_2 -> DIFERENTE expresion .)
+>>>>>>> origin/branchAdriana
 
     functionUsuario_aux2           shift and go to state 159
     empty                          shift and go to state 160
 
+<<<<<<< HEAD
 state 143
+=======
+state 134
+
+    (21) declaracion_2 -> imprimeComa ID . a
+    (22) a -> . declaracion_2
+    (23) a -> . empty
+    (21) declaracion_2 -> . imprimeComa ID a
+    (1) empty -> .
+    (111) imprimeComa -> . COMA
+
+    PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
+    COMA            shift and go to state 102
+
+    empty                          shift and go to state 151
+    imprimeComa                    shift and go to state 100
+    declaracion_2                  shift and go to state 152
+    a                              shift and go to state 150
+
+state 135
+>>>>>>> origin/branchAdriana
 
     (68) ciclo -> imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos . cuaciclo1 estatuto_2 imprimeEndWhile
     (69) cuaciclo1 -> . empty
@@ -2781,6 +4844,7 @@ state 143
     IF              reduce using rule 1 (empty -> .)
     PRINT           reduce using rule 1 (empty -> .)
     WHILE           reduce using rule 1 (empty -> .)
+<<<<<<< HEAD
     END_WHILE       reduce using rule 1 (empty -> .)
 
     empty                          shift and go to state 161
@@ -2807,9 +4871,95 @@ state 144
 
 
 state 145
+=======
+    $end            reduce using rule 1 (empty -> .)
+    RETURN          reduce using rule 1 (empty -> .)
+    END_DEF         reduce using rule 1 (empty -> .)
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
+
+    declaracion_3                  shift and go to state 153
+    empty                          shift and go to state 155
+    tipo                           shift and go to state 20
+    declaracion                    shift and go to state 154
+
+state 136
+
+    (86) functionUsuario_aux1 -> tipo ID . functionUsuario_aux2
+    (87) functionUsuario_aux2 -> . COMA functionUsuario_aux1
+    (88) functionUsuario_aux2 -> . empty
+    (1) empty -> .
+
+    COMA            shift and go to state 156
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+
+    functionUsuario_aux2           shift and go to state 158
+    empty                          shift and go to state 157
+
+state 137
+
+    (83) funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 159
+
+state 138
+
+    (90) move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
+
+    TURN_LEFT       reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 90 (move -> MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+
+
+state 139
+
+    (91) turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .
+
+    TURN_LEFT       reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 91 (turnright -> TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+
+
+state 140
+>>>>>>> origin/branchAdriana
 
     (25) declaracion_3 -> empty .
 
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 25 (declaracion_3 -> empty .)
     TURN_RIGHT      reduce using rule 25 (declaracion_3 -> empty .)
     MOVE            reduce using rule 25 (declaracion_3 -> empty .)
@@ -2824,10 +4974,128 @@ state 145
     $end            reduce using rule 25 (declaracion_3 -> empty .)
     RETURN          reduce using rule 25 (declaracion_3 -> empty .)
     END_DEF         reduce using rule 25 (declaracion_3 -> empty .)
+=======
+    TURN_LEFT       reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 93 (pickbeeper -> PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa .)
 
+
+state 141
+
+    (68) ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 . estatuto_2 imprimeEndWhile
+    (4) estatuto_2 -> . opciones estatuto_2
+    (5) estatuto_2 -> . empty
+    (6) opciones -> . asignacion
+    (7) opciones -> . function destroyVars
+    (8) opciones -> . condicion
+    (9) opciones -> . escritura
+    (10) opciones -> . ciclo
+    (11) opciones -> . turnleft
+    (12) opciones -> . turnright
+    (13) opciones -> . move
+    (14) opciones -> . checkwall
+    (15) opciones -> . pickbeeper
+    (16) opciones -> . putbeeper
+    (17) opciones -> . funcionUsuario
+    (1) empty -> .
+    (29) asignacion -> . matchID EQUIVALE asignacion_aux
+    (70) function -> . imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (58) condicion -> . imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
+    (65) escritura -> . imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
+    (68) ciclo -> . imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+    (92) turnleft -> . TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (91) turnright -> . TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (90) move -> . MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (89) checkwall -> . CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (93) pickbeeper -> . PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (94) putbeeper -> . PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (83) funcionUsuario -> . ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+    (55) matchID -> . ID
+    (96) imprimeDef -> . DEF
+    (107) imprimeIf -> . IF
+    (100) imprimePrint -> . PRINT
+    (98) imprimeWhile -> . WHILE
+
+    END_WHILE       reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    opciones                       shift and go to state 3
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    funcionUsuario                 shift and go to state 5
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    checkwall                      shift and go to state 28
+    asignacion                     shift and go to state 10
+    function                       shift and go to state 29
+    imprimeDef                     shift and go to state 14
+    matchID                        shift and go to state 15
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 160
+    imprimePrint                   shift and go to state 37
+    imprimeWhile                   shift and go to state 36
+    condicion                      shift and go to state 34
+>>>>>>> origin/branchAdriana
+
+state 142
+
+    (69) cuaciclo1 -> empty .
+
+    TURN_LEFT       reduce using rule 69 (cuaciclo1 -> empty .)
+    TURN_RIGHT      reduce using rule 69 (cuaciclo1 -> empty .)
+    MOVE            reduce using rule 69 (cuaciclo1 -> empty .)
+    CHECKWALL       reduce using rule 69 (cuaciclo1 -> empty .)
+    PICK_BEEPER     reduce using rule 69 (cuaciclo1 -> empty .)
+    PUT_BEEPER      reduce using rule 69 (cuaciclo1 -> empty .)
+    ID              reduce using rule 69 (cuaciclo1 -> empty .)
+    DEF             reduce using rule 69 (cuaciclo1 -> empty .)
+    IF              reduce using rule 69 (cuaciclo1 -> empty .)
+    PRINT           reduce using rule 69 (cuaciclo1 -> empty .)
+    WHILE           reduce using rule 69 (cuaciclo1 -> empty .)
+    END_WHILE       reduce using rule 69 (cuaciclo1 -> empty .)
+
+
+state 143
+
+    (65) escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 161
 
 state 146
 
+<<<<<<< HEAD
     (24) declaracion_3 -> declaracion .
 
     TURN_LEFT       reduce using rule 24 (declaracion_3 -> declaracion .)
@@ -2845,12 +5113,26 @@ state 146
     RETURN          reduce using rule 24 (declaracion_3 -> declaracion .)
     END_DEF         reduce using rule 24 (declaracion_3 -> declaracion .)
 
+=======
+    (70) function -> imprimeDef aux ID imprimeParentesisIzq function_aux . imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (102) imprimeParentesisDer -> . PARENTESIS_DER
+
+    PARENTESIS_DER  shift and go to state 72
+
+    imprimeParentesisDer           shift and go to state 162
+>>>>>>> origin/branchAdriana
 
 state 147
 
+<<<<<<< HEAD
     (22) a -> declaracion_2 .
 
     PUNTO_Y_COMA    reduce using rule 22 (a -> declaracion_2 .)
+=======
+    (75) function_2 -> tipo . ID function_3
+
+    ID              shift and go to state 163
+>>>>>>> origin/branchAdriana
 
 
 state 148
@@ -2868,6 +5150,20 @@ state 149
 
 
 state 150
+
+    (73) function_aux -> function_2 .
+
+    PARENTESIS_DER  reduce using rule 73 (function_aux -> function_2 .)
+
+
+state 147
+
+    (74) function_aux -> empty .
+
+    PARENTESIS_DER  reduce using rule 74 (function_aux -> empty .)
+
+
+state 148
 
     (109) imprimeEndIf -> END_IF .
 
@@ -2893,7 +5189,11 @@ state 150
     END_ELIF        reduce using rule 109 (imprimeEndIf -> END_IF .)
 
 
+<<<<<<< HEAD
 state 151
+=======
+state 149
+>>>>>>> origin/branchAdriana
 
     (58) condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf . condicion_3 condicion_4
     (61) condicion_3 -> . imprimeElif condicion_2 imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3
@@ -2901,7 +5201,11 @@ state 151
     (105) imprimeElif -> . ELIF
     (1) empty -> .
 
+<<<<<<< HEAD
     ELIF            shift and go to state 166
+=======
+    ELIF            shift and go to state 167
+>>>>>>> origin/branchAdriana
     ELSE            reduce using rule 1 (empty -> .)
     TURN_LEFT       reduce using rule 1 (empty -> .)
     TURN_RIGHT      reduce using rule 1 (empty -> .)
@@ -2922,6 +5226,7 @@ state 151
     END_ELSE        reduce using rule 1 (empty -> .)
     END_ELIF        reduce using rule 1 (empty -> .)
 
+<<<<<<< HEAD
     empty                          shift and go to state 163
     condicion_3                    shift and go to state 164
     imprimeElif                    shift and go to state 165
@@ -2934,30 +5239,70 @@ state 152
     PARENTESIS_DER  shift and go to state 72
 
     imprimeParentesisDer           shift and go to state 167
+=======
+    empty                          shift and go to state 164
+    imprimeElif                    shift and go to state 165
+    condicion_3                    shift and go to state 166
+>>>>>>> origin/branchAdriana
 
 state 153
 
-    (74) function_aux -> empty .
+    (21) declaracion_2 -> imprimeComa ID a .
 
-    PARENTESIS_DER  reduce using rule 74 (function_aux -> empty .)
+    PUNTO_Y_COMA    reduce using rule 21 (declaracion_2 -> imprimeComa ID a .)
 
 
+<<<<<<< HEAD
 state 154
 
     (73) function_aux -> function_2 .
 
     PARENTESIS_DER  reduce using rule 73 (function_aux -> function_2 .)
+=======
+state 151
+
+    (23) a -> empty .
+
+    PUNTO_Y_COMA    reduce using rule 23 (a -> empty .)
+
+
+state 152
+
+    (22) a -> declaracion_2 .
+
+    PUNTO_Y_COMA    reduce using rule 22 (a -> declaracion_2 .)
+>>>>>>> origin/branchAdriana
 
 
 state 155
 
+<<<<<<< HEAD
     (75) function_2 -> tipo . ID function_3
 
     ID              shift and go to state 168
+=======
+    (18) declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .
+
+    TURN_LEFT       reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    TURN_RIGHT      reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    MOVE            reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    CHECKWALL       reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    PICK_BEEPER     reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    PUT_BEEPER      reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    ID              reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    DEF             reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    IF              reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    PRINT           reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    WHILE           reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    $end            reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    RETURN          reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+    END_DEF         reduce using rule 18 (declaracion -> tipo ID declaracion_aux imprimePuntoYComa declaracion_3 .)
+>>>>>>> origin/branchAdriana
 
 
 state 156
 
+<<<<<<< HEAD
     (65) escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .
 
     TURN_LEFT       reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
@@ -2978,10 +5323,29 @@ state 156
     $end            reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
     END_WHILE       reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
     END_ELIF        reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+=======
+    (24) declaracion_3 -> declaracion .
+
+    TURN_LEFT       reduce using rule 24 (declaracion_3 -> declaracion .)
+    TURN_RIGHT      reduce using rule 24 (declaracion_3 -> declaracion .)
+    MOVE            reduce using rule 24 (declaracion_3 -> declaracion .)
+    CHECKWALL       reduce using rule 24 (declaracion_3 -> declaracion .)
+    PICK_BEEPER     reduce using rule 24 (declaracion_3 -> declaracion .)
+    PUT_BEEPER      reduce using rule 24 (declaracion_3 -> declaracion .)
+    ID              reduce using rule 24 (declaracion_3 -> declaracion .)
+    DEF             reduce using rule 24 (declaracion_3 -> declaracion .)
+    IF              reduce using rule 24 (declaracion_3 -> declaracion .)
+    PRINT           reduce using rule 24 (declaracion_3 -> declaracion .)
+    WHILE           reduce using rule 24 (declaracion_3 -> declaracion .)
+    $end            reduce using rule 24 (declaracion_3 -> declaracion .)
+    RETURN          reduce using rule 24 (declaracion_3 -> declaracion .)
+    END_DEF         reduce using rule 24 (declaracion_3 -> declaracion .)
+>>>>>>> origin/branchAdriana
 
 
 state 157
 
+<<<<<<< HEAD
     (83) funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .
 
     TURN_LEFT       reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
@@ -3002,10 +5366,51 @@ state 157
     END_DEF         reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
     END_WHILE       reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
     END_ELIF        reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+=======
+    (25) declaracion_3 -> empty .
+
+    TURN_LEFT       reduce using rule 25 (declaracion_3 -> empty .)
+    TURN_RIGHT      reduce using rule 25 (declaracion_3 -> empty .)
+    MOVE            reduce using rule 25 (declaracion_3 -> empty .)
+    CHECKWALL       reduce using rule 25 (declaracion_3 -> empty .)
+    PICK_BEEPER     reduce using rule 25 (declaracion_3 -> empty .)
+    PUT_BEEPER      reduce using rule 25 (declaracion_3 -> empty .)
+    ID              reduce using rule 25 (declaracion_3 -> empty .)
+    DEF             reduce using rule 25 (declaracion_3 -> empty .)
+    IF              reduce using rule 25 (declaracion_3 -> empty .)
+    PRINT           reduce using rule 25 (declaracion_3 -> empty .)
+    WHILE           reduce using rule 25 (declaracion_3 -> empty .)
+    $end            reduce using rule 25 (declaracion_3 -> empty .)
+    RETURN          reduce using rule 25 (declaracion_3 -> empty .)
+    END_DEF         reduce using rule 25 (declaracion_3 -> empty .)
+
+
+state 156
+
+    (87) functionUsuario_aux2 -> COMA . functionUsuario_aux1
+    (86) functionUsuario_aux1 -> . tipo ID functionUsuario_aux2
+    (26) tipo -> . INT
+    (27) tipo -> . FLOAT
+    (28) tipo -> . STRING
+
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
+
+    functionUsuario_aux1           shift and go to state 168
+    tipo                           shift and go to state 106
+
+state 157
+
+    (88) functionUsuario_aux2 -> empty .
+
+    PARENTESIS_DER  reduce using rule 88 (functionUsuario_aux2 -> empty .)
+>>>>>>> origin/branchAdriana
 
 
 state 158
 
+<<<<<<< HEAD
     (87) functionUsuario_aux2 -> COMA . functionUsuario_aux1
     (86) functionUsuario_aux1 -> . tipo ID functionUsuario_aux2
     (26) tipo -> . INT
@@ -3015,26 +5420,63 @@ state 158
     INT             shift and go to state 13
     FLOAT           shift and go to state 6
     STRING          shift and go to state 5
+=======
+    (86) functionUsuario_aux1 -> tipo ID functionUsuario_aux2 .
+
+    PARENTESIS_DER  reduce using rule 86 (functionUsuario_aux1 -> tipo ID functionUsuario_aux2 .)
+>>>>>>> origin/branchAdriana
 
     functionUsuario_aux1           shift and go to state 169
     tipo                           shift and go to state 115
 
 state 159
 
+<<<<<<< HEAD
     (86) functionUsuario_aux1 -> tipo ID functionUsuario_aux2 .
 
     PARENTESIS_DER  reduce using rule 86 (functionUsuario_aux1 -> tipo ID functionUsuario_aux2 .)
+=======
+    (83) funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .
+
+    TURN_LEFT       reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 83 (funcionUsuario -> ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa .)
+>>>>>>> origin/branchAdriana
 
 
 state 160
 
+<<<<<<< HEAD
     (88) functionUsuario_aux2 -> empty .
 
     PARENTESIS_DER  reduce using rule 88 (functionUsuario_aux2 -> empty .)
+=======
+    (68) ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 . imprimeEndWhile
+    (99) imprimeEndWhile -> . END_WHILE
 
+    END_WHILE       shift and go to state 169
+>>>>>>> origin/branchAdriana
+
+    imprimeEndWhile                shift and go to state 170
 
 state 161
 
+<<<<<<< HEAD
     (69) cuaciclo1 -> empty .
 
     TURN_LEFT       reduce using rule 69 (cuaciclo1 -> empty .)
@@ -3049,10 +5491,33 @@ state 161
     PRINT           reduce using rule 69 (cuaciclo1 -> empty .)
     WHILE           reduce using rule 69 (cuaciclo1 -> empty .)
     END_WHILE       reduce using rule 69 (cuaciclo1 -> empty .)
+=======
+    (65) escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .
+
+    TURN_LEFT       reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    TURN_RIGHT      reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    MOVE            reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    CHECKWALL       reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    PICK_BEEPER     reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    PUT_BEEPER      reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    ID              reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    DEF             reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    IF              reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    PRINT           reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    WHILE           reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    END_ELIF        reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    END_IF          reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    RETURN          reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    END_DEF         reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    END_WHILE       reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    $end            reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+    END_ELSE        reduce using rule 65 (escritura -> imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa .)
+>>>>>>> origin/branchAdriana
 
 
 state 162
 
+<<<<<<< HEAD
     (68) ciclo -> imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 . estatuto_2 imprimeEndWhile
     (4) estatuto_2 -> . opciones estatuto_2
     (5) estatuto_2 -> . empty
@@ -3123,6 +5588,30 @@ state 162
 
 state 163
 
+=======
+    (70) function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer . imprimeDosPuntos estatuto function_4 imprimeEndDef
+    (108) imprimeDosPuntos -> . DOS_PUNTOS
+
+    DOS_PUNTOS      shift and go to state 91
+
+    imprimeDosPuntos               shift and go to state 171
+
+state 163
+
+    (75) function_2 -> tipo ID . function_3
+    (76) function_3 -> . COMA function_aux
+    (77) function_3 -> . empty
+    (1) empty -> .
+
+    COMA            shift and go to state 172
+    PARENTESIS_DER  reduce using rule 1 (empty -> .)
+
+    function_3                     shift and go to state 174
+    empty                          shift and go to state 173
+
+state 164
+
+>>>>>>> origin/branchAdriana
     (62) condicion_3 -> empty .
 
     ELSE            reduce using rule 62 (condicion_3 -> empty .)
@@ -3146,7 +5635,48 @@ state 163
     END_ELIF        reduce using rule 62 (condicion_3 -> empty .)
 
 
+<<<<<<< HEAD
 state 164
+=======
+state 165
+
+    (61) condicion_3 -> imprimeElif . condicion_2 imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3
+    (59) condicion_2 -> . exp
+    (60) condicion_2 -> . checkwall
+    (32) exp -> . expresion exp_2
+    (89) checkwall -> . CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+    (40) expresion -> . termino expresion_2
+    (44) termino -> . factor termino_2
+    (50) factor -> . imprimeParentesisIzq exp imprimeParentesisDer
+    (51) factor -> . var_cte
+    (101) imprimeParentesisIzq -> . PARENTESIS_IZQ
+    (52) var_cte -> . matchID
+    (53) var_cte -> . matchCteInt
+    (54) var_cte -> . matchCteFloat
+    (55) matchID -> . ID
+    (56) matchCteInt -> . CTE_INT
+    (57) matchCteFloat -> . CTE_FLOAT
+
+    CHECKWALL       shift and go to state 13
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    condicion_2                    shift and go to state 175
+    checkwall                      shift and go to state 56
+    expresion                      shift and go to state 59
+    termino                        shift and go to state 50
+    factor                         shift and go to state 48
+    imprimeParentesisIzq           shift and go to state 49
+    var_cte                        shift and go to state 58
+    matchCteInt                    shift and go to state 51
+    exp                            shift and go to state 52
+    matchCteFloat                  shift and go to state 60
+    matchID                        shift and go to state 61
+
+state 166
+>>>>>>> origin/branchAdriana
 
     (58) condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 . condicion_4
     (63) condicion_4 -> . imprimeElse imprimeDosPuntos estatuto_2 imprimeEndElse
@@ -3154,7 +5684,11 @@ state 164
     (103) imprimeElse -> . ELSE
     (1) empty -> .
 
+<<<<<<< HEAD
     ELSE            shift and go to state 172
+=======
+    ELSE            shift and go to state 179
+>>>>>>> origin/branchAdriana
     TURN_LEFT       reduce using rule 1 (empty -> .)
     TURN_RIGHT      reduce using rule 1 (empty -> .)
     MOVE            reduce using rule 1 (empty -> .)
@@ -3174,6 +5708,7 @@ state 164
     END_ELSE        reduce using rule 1 (empty -> .)
     END_ELIF        reduce using rule 1 (empty -> .)
 
+<<<<<<< HEAD
     empty                          shift and go to state 171
     imprimeElse                    shift and go to state 173
     condicion_4                    shift and go to state 174
@@ -3236,12 +5771,17 @@ state 167
     imprimeDosPuntos               shift and go to state 176
 
 state 168
+=======
+    condicion_4                    shift and go to state 176
+    imprimeElse                    shift and go to state 177
+    empty                          shift and go to state 178
 
-    (75) function_2 -> tipo ID . function_3
-    (76) function_3 -> . COMA function_aux
-    (77) function_3 -> . empty
-    (1) empty -> .
+state 167
+>>>>>>> origin/branchAdriana
 
+    (105) imprimeElif -> ELIF .
+
+<<<<<<< HEAD
     COMA            shift and go to state 177
     PARENTESIS_DER  reduce using rule 1 (empty -> .)
 
@@ -3249,12 +5789,23 @@ state 168
     function_3                     shift and go to state 179
 
 state 169
+=======
+    CHECKWALL       reduce using rule 105 (imprimeElif -> ELIF .)
+    PARENTESIS_IZQ  reduce using rule 105 (imprimeElif -> ELIF .)
+    ID              reduce using rule 105 (imprimeElif -> ELIF .)
+    CTE_INT         reduce using rule 105 (imprimeElif -> ELIF .)
+    CTE_FLOAT       reduce using rule 105 (imprimeElif -> ELIF .)
+
+
+state 168
+>>>>>>> origin/branchAdriana
 
     (87) functionUsuario_aux2 -> COMA functionUsuario_aux1 .
 
     PARENTESIS_DER  reduce using rule 87 (functionUsuario_aux2 -> COMA functionUsuario_aux1 .)
 
 
+<<<<<<< HEAD
 state 170
 
     (68) ciclo -> imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 . imprimeEndWhile
@@ -3289,12 +5840,33 @@ state 171
 
 
 state 172
+=======
+state 169
+>>>>>>> origin/branchAdriana
 
-    (103) imprimeElse -> ELSE .
+    (99) imprimeEndWhile -> END_WHILE .
 
-    DOS_PUNTOS      reduce using rule 103 (imprimeElse -> ELSE .)
+    TURN_LEFT       reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    TURN_RIGHT      reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    MOVE            reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    CHECKWALL       reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    PICK_BEEPER     reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    PUT_BEEPER      reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    ID              reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    DEF             reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    IF              reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    PRINT           reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    WHILE           reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    $end            reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    RETURN          reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    END_DEF         reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    END_IF          reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    END_WHILE       reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    END_ELIF        reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+    END_ELSE        reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
 
 
+<<<<<<< HEAD
 state 173
 
     (63) condicion_4 -> imprimeElse . imprimeDosPuntos estatuto_2 imprimeEndElse
@@ -3305,9 +5877,13 @@ state 173
     imprimeDosPuntos               shift and go to state 182
 
 state 174
+=======
+state 170
+>>>>>>> origin/branchAdriana
 
-    (58) condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .
+    (68) ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .
 
+<<<<<<< HEAD
     TURN_LEFT       reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
     TURN_RIGHT      reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
     MOVE            reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
@@ -3334,10 +5910,30 @@ state 175
     (108) imprimeDosPuntos -> . DOS_PUNTOS
 
     DOS_PUNTOS      shift and go to state 89
+=======
+    TURN_LEFT       reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    TURN_RIGHT      reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    MOVE            reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    CHECKWALL       reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    PICK_BEEPER     reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    PUT_BEEPER      reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    ID              reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    DEF             reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    IF              reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    PRINT           reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    WHILE           reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    $end            reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    END_WHILE       reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    END_IF          reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    RETURN          reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    END_DEF         reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    END_ELIF        reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+    END_ELSE        reduce using rule 68 (ciclo -> imprimeWhile exp imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
+>>>>>>> origin/branchAdriana
 
     imprimeDosPuntos               shift and go to state 183
 
-state 176
+state 171
 
     (70) function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos . estatuto function_4 imprimeEndDef
     (2) estatuto -> . declaracion estatuto_2
@@ -3379,6 +5975,7 @@ state 176
     (100) imprimePrint -> . PRINT
     (98) imprimeWhile -> . WHILE
 
+<<<<<<< HEAD
     INT             shift and go to state 13
     FLOAT           shift and go to state 6
     STRING          shift and go to state 5
@@ -3421,6 +6018,50 @@ state 176
     imprimePrint                   shift and go to state 36
 
 state 177
+=======
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
+    RETURN          reduce using rule 1 (empty -> .)
+    END_DEF         reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    opciones                       shift and go to state 3
+    funcionUsuario                 shift and go to state 5
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    asignacion                     shift and go to state 10
+    declaracion                    shift and go to state 7
+    matchID                        shift and go to state 15
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    tipo                           shift and go to state 20
+    estatuto                       shift and go to state 180
+    estatuto_2                     shift and go to state 23
+    checkwall                      shift and go to state 28
+    function                       shift and go to state 29
+    imprimeDef                     shift and go to state 14
+    turnleft                       shift and go to state 32
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    condicion                      shift and go to state 34
+    imprimeWhile                   shift and go to state 36
+    imprimePrint                   shift and go to state 37
+
+state 172
+>>>>>>> origin/branchAdriana
 
     (76) function_3 -> COMA . function_aux
     (73) function_aux -> . function_2
@@ -3432,6 +6073,7 @@ state 177
     (28) tipo -> . STRING
 
     PARENTESIS_DER  reduce using rule 1 (empty -> .)
+<<<<<<< HEAD
     INT             shift and go to state 13
     FLOAT           shift and go to state 6
     STRING          shift and go to state 5
@@ -3447,16 +6089,107 @@ state 178
 
     PARENTESIS_DER  reduce using rule 77 (function_3 -> empty .)
 
+=======
+    INT             shift and go to state 12
+    FLOAT           shift and go to state 31
+    STRING          shift and go to state 17
 
-state 179
+    function_aux                   shift and go to state 181
+    tipo                           shift and go to state 145
+    function_2                     shift and go to state 146
+    empty                          shift and go to state 147
+>>>>>>> origin/branchAdriana
+
+state 173
+
+    (77) function_3 -> empty .
+
+    PARENTESIS_DER  reduce using rule 77 (function_3 -> empty .)
+
+
+state 174
 
     (75) function_2 -> tipo ID function_3 .
 
     PARENTESIS_DER  reduce using rule 75 (function_2 -> tipo ID function_3 .)
 
 
+state 175
+
+    (61) condicion_3 -> imprimeElif condicion_2 . imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3
+    (108) imprimeDosPuntos -> . DOS_PUNTOS
+
+    DOS_PUNTOS      shift and go to state 91
+
+    imprimeDosPuntos               shift and go to state 182
+
+state 176
+
+    (58) condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .
+
+    TURN_LEFT       reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    TURN_RIGHT      reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    MOVE            reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    CHECKWALL       reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    PICK_BEEPER     reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    PUT_BEEPER      reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    ID              reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    DEF             reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    IF              reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    PRINT           reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    WHILE           reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    $end            reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    RETURN          reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    END_DEF         reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    END_IF          reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    END_WHILE       reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    END_ELIF        reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+    END_ELSE        reduce using rule 58 (condicion -> imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4 .)
+
+
+state 177
+
+    (63) condicion_4 -> imprimeElse . imprimeDosPuntos estatuto_2 imprimeEndElse
+    (108) imprimeDosPuntos -> . DOS_PUNTOS
+
+    DOS_PUNTOS      shift and go to state 91
+
+    imprimeDosPuntos               shift and go to state 183
+
+state 178
+
+    (64) condicion_4 -> empty .
+
+    TURN_LEFT       reduce using rule 64 (condicion_4 -> empty .)
+    TURN_RIGHT      reduce using rule 64 (condicion_4 -> empty .)
+    MOVE            reduce using rule 64 (condicion_4 -> empty .)
+    CHECKWALL       reduce using rule 64 (condicion_4 -> empty .)
+    PICK_BEEPER     reduce using rule 64 (condicion_4 -> empty .)
+    PUT_BEEPER      reduce using rule 64 (condicion_4 -> empty .)
+    ID              reduce using rule 64 (condicion_4 -> empty .)
+    DEF             reduce using rule 64 (condicion_4 -> empty .)
+    IF              reduce using rule 64 (condicion_4 -> empty .)
+    PRINT           reduce using rule 64 (condicion_4 -> empty .)
+    WHILE           reduce using rule 64 (condicion_4 -> empty .)
+    $end            reduce using rule 64 (condicion_4 -> empty .)
+    RETURN          reduce using rule 64 (condicion_4 -> empty .)
+    END_DEF         reduce using rule 64 (condicion_4 -> empty .)
+    END_IF          reduce using rule 64 (condicion_4 -> empty .)
+    END_WHILE       reduce using rule 64 (condicion_4 -> empty .)
+    END_ELIF        reduce using rule 64 (condicion_4 -> empty .)
+    END_ELSE        reduce using rule 64 (condicion_4 -> empty .)
+
+
+state 179
+
+    (103) imprimeElse -> ELSE .
+
+    DOS_PUNTOS      reduce using rule 103 (imprimeElse -> ELSE .)
+
+
 state 180
 
+<<<<<<< HEAD
     (68) ciclo -> imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .
 
     TURN_LEFT       reduce using rule 68 (ciclo -> imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile .)
@@ -3501,11 +6234,35 @@ state 181
     END_WHILE       reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
     END_ELSE        reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
     END_ELIF        reduce using rule 99 (imprimeEndWhile -> END_WHILE .)
+=======
+    (70) function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto . function_4 imprimeEndDef
+    (78) function_4 -> . imprimeReturn function_5 imprimePuntoYComa
+    (79) function_4 -> . empty
+    (95) imprimeReturn -> . RETURN
+    (1) empty -> .
+
+    RETURN          shift and go to state 184
+    END_DEF         reduce using rule 1 (empty -> .)
+
+    function_4                     shift and go to state 185
+    empty                          shift and go to state 186
+    imprimeReturn                  shift and go to state 187
+
+state 181
+
+    (76) function_3 -> COMA function_aux .
+
+    PARENTESIS_DER  reduce using rule 76 (function_3 -> COMA function_aux .)
+>>>>>>> origin/branchAdriana
 
 
 state 182
 
+<<<<<<< HEAD
     (63) condicion_4 -> imprimeElse imprimeDosPuntos . estatuto_2 imprimeEndElse
+=======
+    (61) condicion_3 -> imprimeElif condicion_2 imprimeDosPuntos . estatuto_2 imprimeEndElif condicion_3
+>>>>>>> origin/branchAdriana
     (4) estatuto_2 -> . opciones estatuto_2
     (5) estatuto_2 -> . empty
     (6) opciones -> . asignacion
@@ -3539,6 +6296,7 @@ state 182
     (100) imprimePrint -> . PRINT
     (98) imprimeWhile -> . WHILE
 
+<<<<<<< HEAD
     END_ELSE        reduce using rule 1 (empty -> .)
     TURN_LEFT       shift and go to state 26
     TURN_RIGHT      shift and go to state 24
@@ -3572,6 +6330,41 @@ state 182
     turnleft                       shift and go to state 18
     imprimeWhile                   shift and go to state 11
     imprimeIf                      shift and go to state 19
+=======
+    END_ELIF        reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    opciones                       shift and go to state 3
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    funcionUsuario                 shift and go to state 5
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    asignacion                     shift and go to state 10
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    checkwall                      shift and go to state 28
+    function                       shift and go to state 29
+    imprimeDef                     shift and go to state 14
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 188
+    imprimeWhile                   shift and go to state 36
+    imprimePrint                   shift and go to state 37
+    matchID                        shift and go to state 15
+    condicion                      shift and go to state 34
+>>>>>>> origin/branchAdriana
 
 state 183
 
@@ -3609,6 +6402,7 @@ state 183
     (100) imprimePrint -> . PRINT
     (98) imprimeWhile -> . WHILE
 
+<<<<<<< HEAD
     END_ELIF        reduce using rule 1 (empty -> .)
     TURN_LEFT       shift and go to state 26
     TURN_RIGHT      shift and go to state 24
@@ -3675,6 +6469,63 @@ state 186
     imprimeEndElse                 shift and go to state 193
 
 state 187
+=======
+    END_ELSE        reduce using rule 1 (empty -> .)
+    TURN_LEFT       shift and go to state 11
+    TURN_RIGHT      shift and go to state 27
+    MOVE            shift and go to state 26
+    CHECKWALL       shift and go to state 13
+    PICK_BEEPER     shift and go to state 35
+    PUT_BEEPER      shift and go to state 16
+    ID              shift and go to state 21
+    DEF             shift and go to state 4
+    IF              shift and go to state 2
+    PRINT           shift and go to state 30
+    WHILE           shift and go to state 24
+
+    pickbeeper                     shift and go to state 1
+    escritura                      shift and go to state 18
+    imprimeIf                      shift and go to state 19
+    funcionUsuario                 shift and go to state 5
+    checkwall                      shift and go to state 28
+    move                           shift and go to state 33
+    empty                          shift and go to state 25
+    ciclo                          shift and go to state 6
+    putbeeper                      shift and go to state 8
+    turnright                      shift and go to state 9
+    asignacion                     shift and go to state 10
+    function                       shift and go to state 29
+    opciones                       shift and go to state 3
+    imprimeDef                     shift and go to state 14
+    turnleft                       shift and go to state 32
+    estatuto_2                     shift and go to state 189
+    imprimePrint                   shift and go to state 37
+    imprimeWhile                   shift and go to state 36
+    matchID                        shift and go to state 15
+    condicion                      shift and go to state 34
+
+state 184
+
+    (95) imprimeReturn -> RETURN .
+
+    PARENTESIS_IZQ  reduce using rule 95 (imprimeReturn -> RETURN .)
+    ID              reduce using rule 95 (imprimeReturn -> RETURN .)
+    CTE_INT         reduce using rule 95 (imprimeReturn -> RETURN .)
+    CTE_FLOAT       reduce using rule 95 (imprimeReturn -> RETURN .)
+    PUNTO_Y_COMA    reduce using rule 95 (imprimeReturn -> RETURN .)
+
+
+state 185
+
+    (70) function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 . imprimeEndDef
+    (97) imprimeEndDef -> . END_DEF
+
+    END_DEF         shift and go to state 191
+
+    imprimeEndDef                  shift and go to state 190
+
+state 186
+>>>>>>> origin/branchAdriana
 
     (61) condicion_3 -> imprimeElif condicion_2 imprimeDosPuntos estatuto_2 . imprimeEndElif condicion_3
     (106) imprimeEndElif -> . END_ELIF
@@ -3683,7 +6534,11 @@ state 187
 
     imprimeEndElif                 shift and go to state 195
 
+<<<<<<< HEAD
 state 188
+=======
+state 187
+>>>>>>> origin/branchAdriana
 
     (78) function_4 -> imprimeReturn . function_5 imprimePuntoYComa
     (80) function_5 -> . exp
@@ -3703,6 +6558,7 @@ state 188
     (57) matchCteFloat -> . CTE_FLOAT
 
     PUNTO_Y_COMA    reduce using rule 1 (empty -> .)
+<<<<<<< HEAD
     PARENTESIS_IZQ  shift and go to state 39
     ID              shift and go to state 49
     CTE_INT         shift and go to state 57
@@ -3819,6 +6675,112 @@ state 194
     END_WHILE       reduce using rule 106 (imprimeEndElif -> END_ELIF .)
     END_ELSE        reduce using rule 106 (imprimeEndElif -> END_ELIF .)
     END_ELIF        reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+=======
+    PARENTESIS_IZQ  shift and go to state 40
+    ID              shift and go to state 53
+    CTE_INT         shift and go to state 55
+    CTE_FLOAT       shift and go to state 57
+
+    exp                            shift and go to state 192
+    matchCteFloat                  shift and go to state 60
+    imprimeParentesisIzq           shift and go to state 49
+    function_5                     shift and go to state 193
+    var_cte                        shift and go to state 58
+    factor                         shift and go to state 48
+    termino                        shift and go to state 50
+    empty                          shift and go to state 194
+    matchCteInt                    shift and go to state 51
+    expresion                      shift and go to state 59
+    matchID                        shift and go to state 61
+
+state 188
+
+    (61) condicion_3 -> imprimeElif condicion_2 imprimeDosPuntos estatuto_2 . imprimeEndElif condicion_3
+    (106) imprimeEndElif -> . END_ELIF
+
+    END_ELIF        shift and go to state 196
+
+    imprimeEndElif                 shift and go to state 195
+
+state 189
+
+    (63) condicion_4 -> imprimeElse imprimeDosPuntos estatuto_2 . imprimeEndElse
+    (104) imprimeEndElse -> . END_ELSE
+
+    END_ELSE        shift and go to state 197
+
+    imprimeEndElse                 shift and go to state 198
+
+state 190
+
+    (70) function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .
+
+    TURN_LEFT       reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    TURN_RIGHT      reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    MOVE            reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    CHECKWALL       reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    PICK_BEEPER     reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    PUT_BEEPER      reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    ID              reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    DEF             reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    IF              reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    PRINT           reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    WHILE           reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    END_WHILE       reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    $end            reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    RETURN          reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    END_DEF         reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    END_IF          reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    END_ELIF        reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+    END_ELSE        reduce using rule 70 (function -> imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef .)
+>>>>>>> origin/branchAdriana
+
+
+state 195
+
+    (97) imprimeEndDef -> END_DEF .
+
+    TURN_LEFT       reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    TURN_RIGHT      reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    MOVE            reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    CHECKWALL       reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    PICK_BEEPER     reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    PUT_BEEPER      reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    ID              reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    DEF             reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    IF              reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    PRINT           reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    WHILE           reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    $end            reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    RETURN          reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    END_DEF         reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    END_IF          reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    END_WHILE       reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    END_ELIF        reduce using rule 97 (imprimeEndDef -> END_DEF .)
+    END_ELSE        reduce using rule 97 (imprimeEndDef -> END_DEF .)
+
+
+state 192
+
+    (80) function_5 -> exp .
+
+    PUNTO_Y_COMA    reduce using rule 80 (function_5 -> exp .)
+
+
+state 193
+
+    (78) function_4 -> imprimeReturn function_5 . imprimePuntoYComa
+    (110) imprimePuntoYComa -> . PUNTO_Y_COMA
+
+    PUNTO_Y_COMA    shift and go to state 116
+
+    imprimePuntoYComa              shift and go to state 199
+
+state 194
+
+    (81) function_5 -> empty .
+
+    PUNTO_Y_COMA    reduce using rule 81 (function_5 -> empty .)
 
 
 state 195
@@ -3829,7 +6791,11 @@ state 195
     (105) imprimeElif -> . ELIF
     (1) empty -> .
 
+<<<<<<< HEAD
     ELIF            shift and go to state 166
+=======
+    ELIF            shift and go to state 167
+>>>>>>> origin/branchAdriana
     ELSE            reduce using rule 1 (empty -> .)
     TURN_LEFT       reduce using rule 1 (empty -> .)
     TURN_RIGHT      reduce using rule 1 (empty -> .)
@@ -3851,17 +6817,54 @@ state 195
     END_ELIF        reduce using rule 1 (empty -> .)
 
     imprimeElif                    shift and go to state 165
+<<<<<<< HEAD
     empty                          shift and go to state 163
     condicion_3                    shift and go to state 201
 
 state 196
+=======
+    empty                          shift and go to state 164
+    condicion_3                    shift and go to state 200
+
+state 196
+
+    (106) imprimeEndElif -> END_ELIF .
+
+    ELIF            reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    ELSE            reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    TURN_LEFT       reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    TURN_RIGHT      reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    MOVE            reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    CHECKWALL       reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    PICK_BEEPER     reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    PUT_BEEPER      reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    ID              reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    DEF             reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    IF              reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    PRINT           reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    WHILE           reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    $end            reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    RETURN          reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    END_DEF         reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    END_IF          reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    END_WHILE       reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    END_ELIF        reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+    END_ELSE        reduce using rule 106 (imprimeEndElif -> END_ELIF .)
+
+
+state 197
+>>>>>>> origin/branchAdriana
 
     (80) function_5 -> exp .
 
     PUNTO_Y_COMA    reduce using rule 80 (function_5 -> exp .)
 
 
+<<<<<<< HEAD
 state 197
+=======
+state 198
+>>>>>>> origin/branchAdriana
 
     (78) function_4 -> imprimeReturn function_5 . imprimePuntoYComa
     (110) imprimePuntoYComa -> . PUNTO_Y_COMA
@@ -3870,6 +6873,7 @@ state 197
 
     imprimePuntoYComa              shift and go to state 202
 
+<<<<<<< HEAD
 state 198
 
     (81) function_5 -> empty .
@@ -3926,6 +6930,16 @@ state 200
 
 
 state 201
+=======
+state 199
+
+    (78) function_4 -> imprimeReturn function_5 imprimePuntoYComa .
+
+    END_DEF         reduce using rule 78 (function_4 -> imprimeReturn function_5 imprimePuntoYComa .)
+
+
+state 200
+>>>>>>> origin/branchAdriana
 
     (61) condicion_3 -> imprimeElif condicion_2 imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3 .
 
@@ -3949,6 +6963,7 @@ state 201
     END_ELSE        reduce using rule 61 (condicion_3 -> imprimeElif condicion_2 imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3 .)
     END_ELIF        reduce using rule 61 (condicion_3 -> imprimeElif condicion_2 imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3 .)
 
+<<<<<<< HEAD
 
 state 202
 
@@ -3956,3 +6971,5 @@ state 202
 
     END_DEF         reduce using rule 78 (function_4 -> imprimeReturn function_5 imprimePuntoYComa .)
 
+=======
+>>>>>>> origin/branchAdriana

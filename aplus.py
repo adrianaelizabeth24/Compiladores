@@ -10,8 +10,6 @@ from errorSintactico import errorSintactico
 from errorLexico import errorLexico
 from errorSemantico import errorSemantico
 from cuadruplo import cuadruplo
-from Queue import Queue
-from Stack import Stack
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
@@ -584,6 +582,7 @@ def p_exp_2(p):
   global resultado
   global iContadorTemporal
 
+<<<<<<< HEAD
   # no se puede hacer p[1] por que pertenece a otra función
   operador = p[1]
   print("op asignado")
@@ -593,6 +592,17 @@ def p_exp_2(p):
   arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorTemporal]))
   PilaO.append(resultado[iContadorTemporal])
   iContadorTemporal += 1
+=======
+  if((p[1] == "<>") or (p[1] == ">") or (p[1] == "<") or (p[1] == "==") or (p[1] == "<=") or (p[1] == ">=")):
+    # no se puede hacer p[1] por que pertenece a otra función
+    operador = p[1]
+    operando2 = PilaO.pop()
+    operando1 = PilaO.pop()
+    resultado.append(iContadorTemporal + 1)
+    arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorTemporal]))
+    PilaO.append(resultado[iContadorTemporal])
+    iContadorTemporal += 1
+>>>>>>> origin/branchAdriana
 
 def p_expresion(p):
   '''
@@ -819,23 +829,25 @@ def p_ciclo(p):
   '''
 
 def p_cuaciclo1(p):
-	'''
-	cuaciclo1 : empty
-	'''
-	global operador
-	global operando1
-	global operando2
-	global resultado
-	global iContadorTemporal
-	global PSaltos
-	global arregloCuadruplos
-	global PSaltos
-	operador = "GotoF"
-	operando1 = iContadorTemporal - 1
-	PSaltos.append(iContadorTemporal)
-	resultado = -2
-	arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado))
-	iContadorTemporal += 1
+  '''
+  cuaciclo1 : empty
+  '''
+  print("llegué aqui")
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  global PSaltos
+  global arregloCuadruplos
+  global PSaltos
+  operador = "GotoF"
+  operando2 = iContadorTemporal - 1
+
+  PSaltos.append(iContadorTemporal)
+  resultado = -2
+  arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado))
+  iContadorTemporal += 1
 
 
 def p_function(p):
