@@ -4,4 +4,6 @@ float c;
 float j;
 float k;
 
-a = c * b + c;
+while( a < b):
+	j = j + 1;
+end_while

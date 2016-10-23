@@ -10,24 +10,22 @@ from errorSintactico import errorSintactico
 from errorLexico import errorLexico
 from errorSemantico import errorSemantico
 from cuadruplo import cuadruplo
-from Queue import Queue
-from Stack import Stack
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
 #variables globales
-bscope = 0;
-iContadorDiccionarioVar = 1;
-iContadorDiccionarioFuncion = 1;
-iContadorInicioLocal = 0;
+bscope = 0
+iContadorDiccionarioVar = 1
+iContadorDiccionarioFuncion = 1
+iContadorInicioLocal = 0
 iAux = 0
-arregloVar = [];
-arregloFuncion = [];
-dV = {};
-dF = {};
+arregloVar = []
+arregloFuncion = []
+dV = {}
+dF = {}
 tipoDeclaracion = ""
-tmptipo = "";
+tmptipo = ""
 op = -2
 op1 = -2
 op2 = -2
@@ -39,7 +37,10 @@ resultado = []
 iContadorTemporal = 0
 PilaO = []
 POper = []
+PSaltos = []
 arregloCuadruplos = []
+bCiclo = 0
+
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
 #Cubo [OP1][OP2][OPERACION] = TIPO
@@ -542,17 +543,6 @@ def p_asignacion(p):
   global resultado
   global iContadorTemporal
   varAux = 0;
-  #auxTipoStr = ""
-  #auxTipo = -2
-  #for x in range(0,iContadorDiccionarioVar - 1):
-   # if(p[1] != arregloVar[x].getNombre()):
-    #  varAux += 1
-    #else:
-     # auxTipoStr = arregloVar[x].getTipo()
-      #auxTipo = dicTipos[auxTipoStr]
-      #if(auxTipo != tipo):
-       # raise errorSemantico("Tipos incompatibles de variables en :" + p[1])
-      #else:
   operador = "="
   operando2 = PilaO.pop()
   operando1 = PilaO.pop()
@@ -561,12 +551,9 @@ def p_asignacion(p):
   PilaO.append(resultado[iContadorTemporal])
   iContadorTemporal += 1
 
-  #if(varAux == iContadorDiccionarioVar - 1):
-  #	raise errorSemantico("Variable no declarada: " + str(p[1]))
-
 def p_asignacion_aux(p):
 	'''
-	asignacion_aux : exp imprimePuntoYComa
+	asignacion_aux : expresion imprimePuntoYComa
 					| funcionUsuario
 	'''
 
@@ -577,14 +564,32 @@ def p_exp(p):
 
 def p_exp_2(p):
   '''
-  exp_2 : imprimeDiferente expresion
-      | imprimeMayorQue expresion
-      | imprimeMenorQue expresion
-      | imprimeIgualA expresion
-      | imprimeMayorIgual expresion
-      | imprimeMenorIgual expresion
+  exp_2 : DIFERENTE expresion
+      | MAYOR_QUE expresion
+      | MENOR_QUE expresion
+      | IGUAL_A expresion
+      | MAYOR_IGUAL expresion
+      | MENOR_IGUAL expresion
       | empty
   '''
+  global arregloVar
+  global iContadorDiccionarioVar
+  global tipo
+  global PilaO
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+
+  # no se puede hacer p[1] por que pertenece a otra función
+  operador = p[1]
+  operando2 = PilaO.pop()
+  operando1 = PilaO.pop()
+  resultado.append(iContadorTemporal + 1)
+  arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorTemporal]))
+  PilaO.append(resultado[iContadorTemporal])
+  iContadorTemporal += 1
 
 def p_expresion(p):
   '''
@@ -599,6 +604,7 @@ def p_expresion(p):
       tipo = cubo[tipo][op2][op]
     if(tipo == -1):
       raise errorSemantico("Uso incorrecto de tipos ")
+
   global POper
   global PilaO
   global operador
@@ -606,26 +612,14 @@ def p_expresion(p):
   global operando2
   global resultado
   global iContadorTemporal
-  print("tamanio: ")
-  print(len(POper))
-  print("elementos")
-  print(POper)
-  print("fin de elementos")
+  #global bCiclo
+
+  if(bCiclo == 1):
+    PSaltos.append(iContadorTemporal)
   if(len(POper) > 0):
-    print("Debug")
-    print(POper)
-    print(PilaO)
-    print("Acabeé de imprimir")
     if(POper[-1] == "+" or POper[-1] == "-"):
       operador = POper.pop()
-      print("operador de mi cuadruplo")
-      print(operador)
       operando2 = PilaO.pop()
-      print("Primer elemento fuera")
-      print(operando2)
-      print(PilaO)
-      print("tam pila o")
-      print(len(PilaO))
       operando1 = PilaO.pop()
       resultado.append(iContadorTemporal + 1)
       arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
@@ -723,7 +717,7 @@ def p_MatchDivision(p):
 
 def p_factor(p):
   '''
-  factor : imprimeParentesisIzq exp imprimeParentesisDer
+  factor : imprimeParentesisIzq expresion imprimeParentesisDer
          | var_cte
   '''
 
@@ -801,7 +795,7 @@ def p_matchCteFloat(p):
 
 def p_condicion(p):
   '''
-  condicion : imprimeIf condicion_2 imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
+  condicion : imprimeIf imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
   '''
 
 def p_condicion_2(p):
@@ -812,7 +806,7 @@ def p_condicion_2(p):
 
 def p_condicion_3(p):
   '''
-  condicion_3 : imprimeElif condicion_2 imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3
+  condicion_3 : imprimeElif imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3
               | empty
   '''
 
@@ -830,13 +824,32 @@ def p_escritura(p):
 def p_escritura_2(p):
   '''
   escritura_2 : CTE_STRING
-              | exp
+              | expresion
   '''
 
 def p_ciclo(p):
   '''
-  ciclo : imprimeWhile exp imprimeDosPuntos estatuto_2 imprimeEndWhile
+  ciclo : imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
   '''
+def p_cuaciclo1(p):
+  '''
+  cuaciclo1 : empty
+  '''
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorTemporal
+  global PSaltos
+  global PilaO
+  global arregloCuadruplos
+  global PSaltos
+  operador = "GotoF"
+  operando1 = PilaO.pop()
+  PSaltos.append(iContadorTemporal)
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado))
+  iContadorTemporal += 1
 
 def p_function(p):
   '''
@@ -909,7 +922,7 @@ def p_function_4(p):
 
 def p_function_5(p):
   '''
-  function_5 : exp
+  function_5 : expresion
             | empty
   ''' 
 
@@ -1043,12 +1056,32 @@ def p_imprimeWhile(p):
   '''
   imprimeWhile : WHILE
   '''
+  global bCiclo
+  bCiclo = 1
   print(p[1])
 
 def p_imprimeEndWhile(p):
   '''
   imprimeEndWhile : END_WHILE
   '''
+  global PSaltos
+  global arregloCuadruplos
+  global iContadorTemporal
+  global bCiclo
+  global operador
+  global operando1
+  global resultado
+  
+
+  res = PSaltos.pop()
+  arregloCuadruplos[res-1].setResultado(iContadorTemporal)
+  auxresultado = PSaltos.pop()
+  operador = "Goto"
+  operando1 = PilaO.pop()
+  resultado[res-1] = auxresultado
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[res-1]))
+  iContadorTemporal+=1
+  bCiclo = 0
   print(p[1])
 
 def p_imprimePrint(p):

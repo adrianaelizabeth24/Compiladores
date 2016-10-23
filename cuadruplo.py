@@ -12,7 +12,7 @@ class cuadruplo(object):
               return self.operando2
        def getResultado(self):
               return self.resultado
-       def setResultad(self,resultado):
+       def setResultado(self,resultado):
               self.resultado = resultado
        def setOperador(self,operador):
               self.operador = operador
