@@ -4,6 +4,18 @@ float c;
 float j;
 float k;
 
-while( a < b):
-	j = j + 1;
+a = a + j;
+while(a > b):
+	if(j > k):
+		k = b + c;
+	end_if
+	elif(a < b):
+		j = j + 1;
+	end_elif
+	elif(c == k):
+		a = a * j;
+	end_elif
+	else:
+		a = a + b;
+	end_else
 end_while

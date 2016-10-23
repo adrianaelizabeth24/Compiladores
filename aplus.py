@@ -15,31 +15,46 @@ import ply.yacc as yacc
 import sys
 
 #variables globales
+#boleanas
 bscope = 0
+bCiclo = 0
+bIf = 0
+#enteros (contadores)
 iContadorDiccionarioVar = 1
 iContadorDiccionarioFuncion = 1
 iContadorInicioLocal = 0
+iContadorTemporal = 0
+iContadorCuadruplos = 0
 iAux = 0
-arregloVar = []
-arregloFuncion = []
-dV = {}
-dF = {}
-tipoDeclaracion = ""
-tmptipo = ""
+#enteros indicadores
 op = -2
 op1 = -2
 op2 = -2
 tipo = -2
+
+#strings
+tipoDeclaracion = ""
+tmptipo = ""
 operador = ""
 operando1 = ""
 operando2 = ""
+
+#arreglos, pilas y filas
+arregloVar = []
+arregloFuncion = []
 resultado = []
-iContadorTemporal = 0
 PilaO = []
 POper = []
 PSaltos = []
+PSaltosAux = []
 arregloCuadruplos = []
-bCiclo = 0
+
+#diccionarios
+dV = {}
+dF = {}
+
+
+
 
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
@@ -542,14 +557,15 @@ def p_asignacion(p):
   global operando2
   global resultado
   global iContadorTemporal
+  global iContadorCuadruplos
   varAux = 0;
   operador = "="
   operando2 = PilaO.pop()
   operando1 = PilaO.pop()
   resultado.append(operando1)
-  arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorTemporal]))
-  PilaO.append(resultado[iContadorTemporal])
-  iContadorTemporal += 1
+  arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorCuadruplos]))
+  PilaO.append(resultado[iContadorCuadruplos])
+  iContadorCuadruplos += 1
 
 def p_asignacion_aux(p):
 	'''
@@ -576,29 +592,27 @@ def p_exp_2(p):
   global iContadorDiccionarioVar
   global tipo
   global PilaO
-  global PSaltos
   global operador
   global operando1
   global operando2
   global resultado
   global iContadorTemporal
-  global bCiclo
+  global iContadorCuadruplos
 
-  #si está dentro de un ciclo agrega el contador temporal a la pila de saltos
-  if(bCiclo == 1):
-    PSaltos.append(iContadorTemporal)
   ## cuadruplos de condicion
   # toma el operador 1 y los operandos
   operador = p[1]
   operando2 = PilaO.pop()
   operando1 = PilaO.pop()
-  resultado.append(iContadorTemporal + 1)
-  #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorTemporal]))
-  #el temporal lo mete a la pila
-  PilaO.append(resultado[iContadorTemporal])
-  #suma uno al contador
   iContadorTemporal += 1
+  resultado.append(iContadorTemporal)
+  #genera el cuadruplo
+
+  arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
+  #el temporal lo mete a la pila
+  PilaO.append(iContadorTemporal)
+  #suma uno al contador
+  iContadorCuadruplos += 1
 
 def p_expresion(p):
   '''
@@ -621,16 +635,18 @@ def p_expresion(p):
   global operando2
   global resultado
   global iContadorTemporal
+  global iContadorCuadruplos
 
   if(len(POper) > 0):
     if(POper[-1] == "+" or POper[-1] == "-"):
       operador = POper.pop()
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
-      resultado.append(iContadorTemporal + 1)
-      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
-      PilaO.append(resultado[iContadorTemporal])
       iContadorTemporal += 1
+      resultado.append(iContadorTemporal)
+      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
+      PilaO.append(iContadorTemporal)
+      iContadorCuadruplos += 1
 
 def p_expresion_2(p):
   '''
@@ -646,7 +662,6 @@ def p_expresion_2(p):
   elif(p[1] == "-"):
     op = dicOperadores["-"]
   POper.append(p[1])
-
 
 def p_termino(p):
   '''
@@ -674,6 +689,7 @@ def p_termino(p):
   global operando2
   global resultado
   global iContadorTemporal
+  global iContadorCuadruplos
   #entra si ya entro una multiplicacion o division a la pila o suma o resta
   if(len(POper) > 0):
   	#pregunta si el tope es multiplicacion o division en caso de serlo prosigue
@@ -682,13 +698,14 @@ def p_termino(p):
       operador = POper.pop()
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
-      #al arreglo de resultados mete el numero de temporal
-      resultado.append(iContadorTemporal + 1)
-      #genera un nuevo cuadruplo
-      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorTemporal]))
-      #mete el temporal
-      PilaO.append(resultado[iContadorTemporal])
       iContadorTemporal += 1
+      #al arreglo de resultados mete el numero de temporal
+      resultado.append(iContadorTemporal)
+      #genera un nuevo cuadruplo
+      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
+      #mete el temporal
+      PilaO.append(iContadorTemporal)
+      iContadorCuadruplos += 1
 
 def p_termino_2(p):
   '''
@@ -708,7 +725,6 @@ def p_MatchMultiplicacion(p):
   op = dicOperadores["*"]
   POper.append(p[1])
 
-
 def p_MatchDivision(p):
   '''
   MatchDivision : DIVISION termino
@@ -719,7 +735,6 @@ def p_MatchDivision(p):
   global dicOperadores
   op = dicOperadores["/"]
   POper.append(p[1])
-
 
 def p_factor(p):
   '''
@@ -801,8 +816,33 @@ def p_matchCteFloat(p):
 
 def p_condicion(p):
   '''
-  condicion : imprimeIf imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos estatuto_2 imprimeEndIf condicion_3 condicion_4
+  condicion : imprimeIf imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
   '''
+def p_cuacondicion1(p):
+  '''
+  cuacondicion1 : empty
+  '''
+  global operador
+  global operando1
+  global operando2
+  global resultado
+  global iContadorCuadruplos
+  global PSaltos
+  global PilaO
+  global arregloCuadruplos
+  global PSaltos
+  #genera de operador gotof
+  operador = "GotoFIf"
+  #el operando 1 es el temporal o ultima variable localizada en pila o
+  operando1 = PilaO.pop()
+  #agrega la posición actual a la pila de saltos
+  PSaltos.append(iContadorCuadruplos)
+  #el resultado le asigna -2 para estandarizar que está vacio
+  resultado.append(-2)
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+  #suma uno al contador
+  iContadorCuadruplos += 1
 
 def p_condicion_2(p):
   '''
@@ -812,15 +852,22 @@ def p_condicion_2(p):
 
 def p_condicion_3(p):
   '''
-  condicion_3 : imprimeElif imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos estatuto_2 imprimeEndElif condicion_3
+  condicion_3 : ELIF imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndElif condicion_3
               | empty
   '''
 
 def p_condicion_4(p):
   '''
-  condicion_4 : imprimeElse imprimeDosPuntos estatuto_2 imprimeEndElse
+  condicion_4 : ELSE imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndElse
               | empty
   '''
+  global PSaltosAux
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  if(p[1] != "else"):
+    while(len(PSaltosAux)>0):
+      res = PSaltosAux.pop()
+      arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
 
 def p_escritura(p):
   '''
@@ -848,23 +895,23 @@ def p_cuaciclo1(p):
   global operando1
   global operando2
   global resultado
-  global iContadorTemporal
+  global iContadorCuadruplos
   global PSaltos
   global PilaO
   global arregloCuadruplos
   global PSaltos
   #genera de operador gotof
-  operador = "GotoF"
+  operador = "GotoFC"
   #el operando 1 es el temporal o ultima variable localizada en pila o
   operando1 = PilaO.pop()
   #agrega la posición actual a la pila de saltos
-  PSaltos.append(iContadorTemporal)
+  PSaltos.append(iContadorCuadruplos)
   #el resultado le asigna -2 para estandarizar que está vacio
   resultado.append(-2)
   #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorTemporal]))
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   #suma uno al contador
-  iContadorTemporal += 1
+  iContadorCuadruplos += 1
 
 def p_function(p):
   '''
@@ -1074,7 +1121,10 @@ def p_imprimeWhile(p):
   '''
   #cuando entra al while prende el boleano de ciclo
   global bCiclo
+  global PSaltos
+  global iContadorCuadruplos
   bCiclo = 1
+  PSaltos.append(iContadorCuadruplos)
   print(p[1])
 
 def p_imprimeEndWhile(p):
@@ -1083,7 +1133,7 @@ def p_imprimeEndWhile(p):
   '''
   global PSaltos
   global arregloCuadruplos
-  global iContadorTemporal
+  global iContadorCuadruplos
   global bCiclo
   global operador
   global resultado
@@ -1091,17 +1141,17 @@ def p_imprimeEndWhile(p):
   #saca el tope de Psaltos , que es el apuntador al "gotof"
   res = PSaltos.pop()
   #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorTemporal + 1)
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
   #saca el apuntador al inicio del while 
   auxresultado = PSaltos.pop()
   operador = "Goto"
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
-  resultado[iContadorTemporal] = auxresultado
+  resultado.append(auxresultado)
   #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,"nul","nul",auxresultado))
   #sigye la cuenta del contador y resetea la variable boleana
-  iContadorTemporal+=1
   bCiclo = 0
+  iContadorCuadruplos += 1
   print(p[1])
 
 def p_imprimePrint(p):
@@ -1132,6 +1182,13 @@ def p_imprimeEndElse(p):
   '''
   imprimeEndElse : END_ELSE
   '''
+  global PSaltosAux
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  if(p[1] != "else"):
+    while(len(PSaltosAux)>0):
+      res = PSaltosAux.pop()
+      arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
   print(p[1])
 
 def p_imprimeElif(p):
@@ -1144,12 +1201,36 @@ def p_imprimeEndElif(p):
   '''
   imprimeEndElif : END_ELIF
   '''
+  global PSaltos
+  global PSaltosAux
+  global arregloCuadruplos
+  global iContadorCuadruplos
+  global operador
+  global resultado
+  global bIf
+
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  
+  PSaltosAux.append(iContadorCuadruplos)
+  operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+  resultado.append(-2)
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
+  #sigye la cuenta del contador y resetea la variable boleana
+  iContadorCuadruplos+=1
+  bIf = 0
   print(p[1])
 
 def p_imprimeIf(p):
   '''
   imprimeIf : IF
   '''
+  global bIf
+  bIf = 1
   print(p[1])
 
 def p_imprimeDosPuntos(p):
@@ -1162,6 +1243,28 @@ def p_imprimeEndIf(p):
   '''
   imprimeEndIf : END_IF
   '''
+  global PSaltos
+  global PSaltosAux
+  global arregloCuadruplos
+  global iContadorCuadruplos
+  global operador
+  global resultado
+  global bIf
+
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  
+  PSaltosAux.append(iContadorCuadruplos)
+  operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+  resultado.append(-2)
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
+  #sigye la cuenta del contador y resetea la variable boleana
+  iContadorCuadruplos+=1
+  bIf = 0
   print(p[1])
 
 def p_imprimeDiferente(p):
@@ -1242,7 +1345,7 @@ for line in f:
   else:
     data = data + line
 result = parser.parse(data)
-for x in range(0,iContadorTemporal):
+for x in range(0,iContadorCuadruplos):
 	print("Cuadruplo num " + str(x))
 	print(arregloCuadruplos[x].getOperador())
 	print(arregloCuadruplos[x].getOperando1())
