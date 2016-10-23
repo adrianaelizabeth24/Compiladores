@@ -873,6 +873,18 @@ def p_escritura(p):
   '''
   escritura : imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
   '''
+  global operador
+  global operando1
+  global resultado
+  global PilaO
+  global arregloCuadruplos
+  global iContadorCuadruplos
+
+  operador = "print"
+  operando1 = PilaO.pop()
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos += 1
 
 def p_escritura_2(p):
   '''
