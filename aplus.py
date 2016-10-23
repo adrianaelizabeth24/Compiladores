@@ -858,7 +858,7 @@ def p_condicion_3(p):
 
 def p_condicion_4(p):
   '''
-  condicion_4 : ELSE imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndElse
+  condicion_4 : ELSE imprimeDosPuntos estatuto_2 imprimeEndElse
               | empty
   '''
   global PSaltosAux
