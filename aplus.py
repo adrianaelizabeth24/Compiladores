@@ -576,12 +576,21 @@ def p_exp_2(p):
   global iContadorDiccionarioVar
   global tipo
   global PilaO
+  global PSaltos
   global operador
   global operando1
   global operando2
   global resultado
   global iContadorTemporal
+  global bCiclo
 
+
+  if(bCiclo == 1):
+    PSaltos.append(iContadorTemporal)
+    print("icontador temporal es: ")
+    print(iContadorTemporal)
+    print("PSaltos es")
+    print(PSaltos)
   # no se puede hacer p[1] por que pertenece a otra función
   operador = p[1]
   operando2 = PilaO.pop()
@@ -612,10 +621,7 @@ def p_expresion(p):
   global operando2
   global resultado
   global iContadorTemporal
-  #global bCiclo
 
-  if(bCiclo == 1):
-    PSaltos.append(iContadorTemporal)
   if(len(POper) > 0):
     if(POper[-1] == "+" or POper[-1] == "-"):
       operador = POper.pop()
@@ -848,7 +854,7 @@ def p_cuaciclo1(p):
   operando1 = PilaO.pop()
   PSaltos.append(iContadorTemporal)
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado))
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorTemporal]))
   iContadorTemporal += 1
 
 def p_function(p):
@@ -1069,17 +1075,17 @@ def p_imprimeEndWhile(p):
   global iContadorTemporal
   global bCiclo
   global operador
-  global operando1
   global resultado
   
 
   res = PSaltos.pop()
-  arregloCuadruplos[res-1].setResultado(iContadorTemporal)
+  print("res es: ")
+  print(res)
+  arregloCuadruplos[res].setResultado(iContadorTemporal + 1)
   auxresultado = PSaltos.pop()
   operador = "Goto"
-  operando1 = PilaO.pop()
-  resultado[res-1] = auxresultado
-  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[res-1]))
+  resultado[iContadorTemporal] = auxresultado
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",auxresultado))
   iContadorTemporal+=1
   bCiclo = 0
   print(p[1])
