@@ -584,20 +584,20 @@ def p_exp_2(p):
   global iContadorTemporal
   global bCiclo
 
-
+  #si está dentro de un ciclo agrega el contador temporal a la pila de saltos
   if(bCiclo == 1):
     PSaltos.append(iContadorTemporal)
-    print("icontador temporal es: ")
-    print(iContadorTemporal)
-    print("PSaltos es")
-    print(PSaltos)
-  # no se puede hacer p[1] por que pertenece a otra función
+  ## cuadruplos de condicion
+  # toma el operador 1 y los operandos
   operador = p[1]
   operando2 = PilaO.pop()
   operando1 = PilaO.pop()
   resultado.append(iContadorTemporal + 1)
+  #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorTemporal]))
+  #el temporal lo mete a la pila
   PilaO.append(resultado[iContadorTemporal])
+  #suma uno al contador
   iContadorTemporal += 1
 
 def p_expresion(p):
@@ -833,10 +833,13 @@ def p_escritura_2(p):
               | expresion
   '''
 
+#funcion de sintaxis del ciclo --> estructura "while ( expresion ) : codigo end_while"
 def p_ciclo(p):
   '''
   ciclo : imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
   '''
+
+#funcion auxiliar para ayudar a generar el cuadruplo gotof
 def p_cuaciclo1(p):
   '''
   cuaciclo1 : empty
@@ -850,11 +853,17 @@ def p_cuaciclo1(p):
   global PilaO
   global arregloCuadruplos
   global PSaltos
+  #genera de operador gotof
   operador = "GotoF"
+  #el operando 1 es el temporal o ultima variable localizada en pila o
   operando1 = PilaO.pop()
+  #agrega la posición actual a la pila de saltos
   PSaltos.append(iContadorTemporal)
+  #el resultado le asigna -2 para estandarizar que está vacio
   resultado.append(-2)
+  #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorTemporal]))
+  #suma uno al contador
   iContadorTemporal += 1
 
 def p_function(p):
@@ -1048,6 +1057,7 @@ def p_imprimeDef(p):
   '''
   global bscope
   global iContadorInicioLocal
+  #prende el contador de locales e inicia el de locales
   bscope = 1
   iContadorInicioLocal = iContadorDiccionarioVar-1
   print(p[1])
@@ -1062,6 +1072,7 @@ def p_imprimeWhile(p):
   '''
   imprimeWhile : WHILE
   '''
+  #cuando entra al while prende el boleano de ciclo
   global bCiclo
   bCiclo = 1
   print(p[1])
@@ -1077,15 +1088,18 @@ def p_imprimeEndWhile(p):
   global operador
   global resultado
   
-
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
   res = PSaltos.pop()
-  print("res es: ")
-  print(res)
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
   arregloCuadruplos[res].setResultado(iContadorTemporal + 1)
+  #saca el apuntador al inicio del while 
   auxresultado = PSaltos.pop()
   operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
   resultado[iContadorTemporal] = auxresultado
+  #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,"nul","nul",auxresultado))
+  #sigye la cuenta del contador y resetea la variable boleana
   iContadorTemporal+=1
   bCiclo = 0
   print(p[1])
