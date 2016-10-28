@@ -47,14 +47,12 @@ PilaO = []
 POper = []
 PSaltos = []
 PSaltosAux = []
+PTipo = []
 arregloCuadruplos = []
 
 #diccionarios
 dV = {}
 dF = {}
-
-
-
 
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
@@ -64,7 +62,7 @@ cubo[0][0][0] = 0     # int + int = int
 cubo[0][1][0] = 1     # int + float = float
 cubo[0][2][0] = -1    # int + string = error
 cubo[0][3][0] = -1    # int + bool = error
-
+	
 cubo[0][0][1] = 0     # int - int = int
 cubo[0][1][1] = 1     # int - float = float
 cubo[0][2][1] = -1    # int - string = error
@@ -75,7 +73,7 @@ cubo[0][1][2] = 1     # int * float = float
 cubo[0][2][2] = -1    # int * string = error
 cubo[0][3][2] = -1    # int * bool = error
 
-cubo[0][0][3] = 1     # int / int = int
+cubo[0][0][3] = 1     # int / int = float
 cubo[0][1][3] = 1     # int / float = float
 cubo[0][2][3] = -1    # int / string = error
 cubo[0][3][3] = -1    # int / bool = error
@@ -91,7 +89,7 @@ cubo[0][2][5] = -1    # int > string = error
 cubo[0][3][5] = -1    # int > bool = error
 
 # ERROR
-cubo[0][0][6] = -1    # int = int = error
+cubo[0][0][6] = 0    # int = int = int (por que cuando asignas int a int el temporal te debe guardar int)
 cubo[0][1][6] = -1    # int = float = error
 cubo[0][2][6] = -1    # int = string = error
 cubo[0][3][6] = -1    # int = bool = error
@@ -149,7 +147,7 @@ cubo[1][3][5] = -1    # float > bool = error
 
 # ERROR
 cubo[1][0][6] = -1    # float = int = error
-cubo[1][1][6] = -1    # float = float = error
+cubo[1][1][6] = 1    # float = float = float (por que asignas)
 cubo[1][2][6] = -1    # float = string = error
 cubo[1][3][6] = -1    # float = bool = error
 
@@ -207,7 +205,7 @@ cubo[2][3][5] = -1    # string > bool = error
 # ERROR
 cubo[2][0][6] = -1    # string = int = error
 cubo[2][1][6] = -1    # string = float = error
-cubo[2][2][6] = -1    # string = string = error
+cubo[2][2][6] = 2    # string = string = string (asignas!)
 cubo[2][3][6] = -1    # string = bool = error
 
 cubo[2][0][7] = -1    # string <> int = error
@@ -265,7 +263,7 @@ cubo[3][3][5] = -1    # bool > bool = error
 cubo[3][0][6] = -1    # bool = int = error
 cubo[3][1][6] = -1    # bool = float = error
 cubo[3][2][6] = -1    # bool = string = error
-cubo[3][3][6] = -1    # bool = bool = error
+cubo[3][3][6] = 3    # bool = bool = bool (asignas!)
 
 cubo[3][0][7] = -1    # bool <> int = error
 cubo[3][1][7] = -1    # bool <> float = error
@@ -436,7 +434,7 @@ def p_empty(p):
 
 def p_estatuto(p):
     '''
-    estatuto : declaracion estatuto_2
+    estatuto : declaracion declaracion_3 estatuto_2
              | estatuto_2
     '''
 
@@ -464,16 +462,13 @@ def p_opciones(p):
 
 def p_declaracion(p):
   '''
-  declaracion : tipo ID declaracion_aux imprimePuntoYComa declaracion_3
+  declaracion : tipo ID declaracion_aux imprimePuntoYComa
   '''
   global bscope
   global arregloVar
   global iContadorDiccionarioVar
   global dV
-  global tmptipo;
   global tipoDeclaracion
-
-  tmptipo = tipoDeclaracion
 
   if(bscope == 0):
     arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global'))
@@ -489,6 +484,11 @@ def p_declaracion(p):
     dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]
 
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
+  for x in range(0,iContadorDiccionarioVar-1):
+    print(arregloVar[x].getNombre())
+    print(arregloVar[x].getTipo())
+    print(arregloVar[x].getScope())
+    print("--------------------")
   print(dV)
 
 def p_declaracion_aux(p):
@@ -501,17 +501,16 @@ def p_declaracion_2(p):
   '''
   declaracion_2 : imprimeComa ID a
   '''
-
   global bscope
   global arregloVar
   global iContadorDiccionarioVar
   global dV
-  global tmptipo
+  global tipoDeclaracion
 
   if(bscope == 0):
-    arregloVar.append(tablaVar(p[2],tmptipo,'global'))
+    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global'))
   else:
-    arregloVar.append(tablaVar(p[2],tmptipo,'local'))
+    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local'))
 
   for x in range(0,iContadorDiccionarioVar - 1):
     if(p[2] == arregloVar[x].getNombre()):
@@ -529,7 +528,7 @@ def p_a(p):
 
 def p_declaracion_3(p):
   '''
-  declaracion_3 : declaracion
+  declaracion_3 : declaracion declaracion_3
                 | empty
   '''
 
@@ -552,6 +551,11 @@ def p_asignacion(p):
   global iContadorDiccionarioVar
   global tipo
   global PilaO
+  global PTipo
+  global op
+  global op1
+  global op2
+  global tipo
   global operador
   global operando1
   global operando2
@@ -562,10 +566,25 @@ def p_asignacion(p):
   operador = "="
   operando2 = PilaO.pop()
   operando1 = PilaO.pop()
-  resultado.append(operando1)
-  arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorCuadruplos]))
-  PilaO.append(resultado[iContadorCuadruplos])
-  iContadorCuadruplos += 1
+  op2 = PTipo.pop()
+  op1 = PTipo.pop()
+  op = dicOperadores["="]
+  print("operador : ")
+  print(op)
+  print("op2 :")
+  print(op2)
+  print("op1 :")
+  print(op1)
+  tipo = cubo[op1][op2][op]
+
+  if(tipo == -1):
+  	raise errorSemantico("Uso incorrecto de tipos ")
+  else:
+  	PTipo.append(tipo)
+  	resultado.append(operando1)
+  	arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorCuadruplos]))
+  	PilaO.append(resultado[iContadorCuadruplos])
+  	iContadorCuadruplos += 1
 
 def p_asignacion_aux(p):
 	'''
@@ -618,18 +637,12 @@ def p_expresion(p):
   '''
   expresion : termino expresion_2
   '''
-  global op
-  global tipo
-  if(op != -2):
-    if(tipo == -2):
-      tipo = cubo[op1][op2][op]
-    else:
-      tipo = cubo[tipo][op2][op]
-    if(tipo == -1):
-      raise errorSemantico("Uso incorrecto de tipos ")
-
   global POper
   global PilaO
+  global PTipo
+  global op
+  global tipo
+  global dicOperadores
   global operador
   global operando1
   global operando2
@@ -643,10 +656,21 @@ def p_expresion(p):
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
       iContadorTemporal += 1
-      resultado.append(iContadorTemporal)
-      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
-      PilaO.append(iContadorTemporal)
-      iContadorCuadruplos += 1
+      op2 = PTipo.pop()
+      op1 = PTipo.pop()
+      if (operador == "+"):
+      	op = dicOperadores["+"]
+      else:
+      	op = dicOperadores["-"]
+      tipo = cubo[op1][op2][op]
+      if(tipo == -1):
+      	raise errorSemantico("uso incorrecto de tipos ")
+      else:
+      	PTipo.append(tipo)
+      	resultado.append(iContadorTemporal)
+      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
+      	PilaO.append(iContadorTemporal)
+      	iContadorCuadruplos += 1
 
 def p_expresion_2(p):
   '''
@@ -654,40 +678,29 @@ def p_expresion_2(p):
               | RESTA expresion
               | empty
   '''
-  global op
   global POper
   if(p[1] == "+"):
-    op = dicOperadores["+"]
     POper.append(p[1])
   elif(p[1] == "-"):
-    op = dicOperadores["-"]
-  POper.append(p[1])
+    POper.append(p[1])
 
 def p_termino(p):
   '''
   termino : factor termino_2
   '''
-  ##cubo semantico
+  ##generacion de cuadruplos
   global op
   global tipo
-  #toma el tipo resultante de una operación
-  if(op != -2):
-    if(tipo == -2):
-      tipo = cubo[op1][op2][op]
-    #si ya hay un tipo existente agarra ese tipo, el operador nuevo y genera un nuevo tipo de tipo
-    else:
-      tipo = cubo[tipo][op2][op]
-    #si el tipo resulta ser -1 significa que trata de usar dos tipos de variables no permitidas
-    if(tipo == -1):
-      raise errorSemantico("Uso incorrecto de tipos ")
-
-  ##generacion de cuadruplos
+  global op1
+  global op2
   global POper
   global PilaO
+  global PTipo
   global operador
   global operando1
   global operando2
   global resultado
+  global dicOperadores
   global iContadorTemporal
   global iContadorCuadruplos
   #entra si ya entro una multiplicacion o division a la pila o suma o resta
@@ -699,13 +712,24 @@ def p_termino(p):
       operando2 = PilaO.pop()
       operando1 = PilaO.pop()
       iContadorTemporal += 1
-      #al arreglo de resultados mete el numero de temporal
-      resultado.append(iContadorTemporal)
-      #genera un nuevo cuadruplo
-      arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
-      #mete el temporal
-      PilaO.append(iContadorTemporal)
-      iContadorCuadruplos += 1
+      op2 = PTipo.pop()
+      op1 = PTipo.pop()
+      if (operador == "*"):
+      	op = dicOperadores["*"]
+      else:
+      	op = dicOperadores["/"]
+      tipo = cubo[op1][op2][op]
+      if(tipo == -1):
+      	raise errorSemantico("uso incorrecto de tipos ")
+      else:
+      	PTipo.append(tipo)
+      	#al arreglo de resultados mete el numero de temporal
+      	resultado.append(iContadorTemporal)
+      	#genera un nuevo cuadruplo
+      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
+      	#mete el temporal
+      	PilaO.append(iContadorTemporal)
+      	iContadorCuadruplos += 1
 
 def p_termino_2(p):
   '''
@@ -719,10 +743,7 @@ def p_MatchMultiplicacion(p):
   MatchMultiplicacion : MULTIPLICACION termino
   '''
   #si llega una multiplicacion la mete dentro de la pila de operadores
-  global op
   global POper
-  global dicOperadores
-  op = dicOperadores["*"]
   POper.append(p[1])
 
 def p_MatchDivision(p):
@@ -730,10 +751,7 @@ def p_MatchDivision(p):
   MatchDivision : DIVISION termino
   '''
   #si llega una division la mete en la pila de operadores
-  global op
   global POper
-  global dicOperadores
-  op = dicOperadores["/"]
   POper.append(p[1])
 
 def p_factor(p):
@@ -758,26 +776,20 @@ def p_matchID(p):
   global op1
   global op2
   global PilaO
+  global PTipo
+  global dicTipos
   varAux = 0
-  auxTipo = ""
+  tipo = ""
+  auxTipo = -2
   #Checa si variable esta o no declarada
   for x in range(0,iContadorDiccionarioVar - 1):
     if(p[1] != arregloVar[x].getNombre()):
       varAux += 1
     else:
       #cubo semantico tipo de dato correcto
-      auxTipo = arregloVar[x].getTipo()
-      #-2 es cuando esta vacio
-      #si esta asignado el op1 lo guarda en op2
-      if(op1 != -2):
-        op2 = dicTipos[auxTipo]
-        print("op2 asignado")
-        print(p[1])
-      else:
-        #si no esta ninfuna guardar en op1
-        op1 = dicTipos[auxTipo]
-        print("op1 asignado")
-        print(p[1])
+      tipo = arregloVar[x].getTipo()
+      auxTipo = dicTipos[tipo]
+      PTipo.append(auxTipo)
       #Meter a pila operadores paso 1 del algoritmo
       PilaO.append(p[1])
   #No esta declarada
@@ -788,29 +800,30 @@ def p_matchCteInt(p):
   '''
   matchCteInt : CTE_INT
   '''
-  global op1
-  global op2
   global PilaO
-  #cubo semantico toma el valor int directo guardo en op2 si esta ocupado op1
-  if(op1 != -2):
-    op2 = dicTipos["int"]
-  else:
-    op1 = dicTipos["int"]
+  global PTipo
+  global dicTipos
+  auxTipo = -2
+
+  auxTipo = dicTipos["int"]
+  PTipo.append(auxTipo)
+
   #meter a pila de operadores
   PilaO.append(p[1])
+
 
 def p_matchCteFloat(p):
   '''
   matchCteFloat : CTE_FLOAT
   '''
-  global op1
-  global op2
   global PilaO
+  global PTipo
+  global dicTipos
+  auxTipo = -2
   #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
-  if(op1 != -2):
-    op2 = dicTipos["float"]
-  else:
-    op1 = dicTipos["float"]
+
+  auxTipo = dicTipos["float"]
+  PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(p[1])
 
@@ -818,6 +831,7 @@ def p_condicion(p):
   '''
   condicion : imprimeIf imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
   '''
+
 def p_cuacondicion1(p):
   '''
   cuacondicion1 : empty

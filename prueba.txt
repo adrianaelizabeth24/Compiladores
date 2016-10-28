@@ -1,23 +1,5 @@
 float a;
 float b;
-float c;
-float j;
-float k;
+int c;
 
-a = a + j;
-while(a > b):
-	if(j > k):
-		k = b + c;
-	end_if
-	elif(a < b):
-		j = j + 1;
-	end_elif
-	elif(c == k):
-		a = a * j;
-	end_elif
-	else:
-		a = a + b;
-	end_else
-end_while
-a = a + b;
-print(a);
+a = c * b;
