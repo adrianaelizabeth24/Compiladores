@@ -1,5 +1,11 @@
-float a;
+int a;
 float b;
 int c;
+int d;
 
-a = c * b;
+def void cosa():
+	a = c + d;
+end_def
+
+main:
+	move();

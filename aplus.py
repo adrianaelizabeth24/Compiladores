@@ -19,6 +19,7 @@ import sys
 bscope = 0
 bCiclo = 0
 bIf = 0
+bRetorna = 0
 #enteros (contadores)
 iContadorDiccionarioVar = 1
 iContadorDiccionarioFuncion = 1
@@ -297,6 +298,7 @@ tokens = (
   'FLOAT',
   'STRING',
   'BOOL',
+  'VOID',
   'PARENTESIS_IZQ',
   'PARENTESIS_DER',
   'RETURN',
@@ -316,6 +318,7 @@ tokens = (
   'ELSE',
   'END_ELSE',
   'PRINT',
+  'MAIN',
   'DEF',
   'END_DEF',
   'SUMA',
@@ -363,6 +366,7 @@ reserved = {
   'float'     : 'FLOAT',
   'string'    : 'STRING',
   'bool'    : 'BOOL',
+  'void'	: 'VOID',
   'return'    : 'RETURN',
   'while'     : 'WHILE',
   'end_while' : 'END_WHILE',
@@ -381,6 +385,7 @@ reserved = {
   'print'     : 'PRINT',
   'def'       : 'DEF',
   'end_def'   : 'END_DEF',
+  'main'	: 'MAIN'
 }
 
 #er de float se debe poner antes de int por que luego reconoce int . int
@@ -416,6 +421,7 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+#excepción de error léxico
 def t_error(t):
       raise errorLexico("Error de Lexico: " + t.value[0] + " en linea : " + t.lexer.lineno)
       sys.exit()
@@ -434,9 +440,46 @@ def p_empty(p):
 
 def p_estatuto(p):
     '''
-    estatuto : declaracion declaracion_3 estatuto_2
-             | estatuto_2
+    estatuto : start declaracion declaracion_3 function_declaration matchMain DOS_PUNTOS estatuto_2
+             | start function_declaration matchMain DOS_PUNTOS estatuto_2
     '''
+
+def p_start(p):
+	'''
+	start : empty
+	'''
+	global PSaltos
+	global iContadorCuadruplos
+	global arregloCuadruplos
+	global resultado
+	PSaltos.append(iContadorCuadruplos)
+	resultado.append(-2)
+	arregloCuadruplos.append(cuadruplo("GotoMain",-2,"nul","nul"))
+	iContadorCuadruplos+=1
+
+def p_matchMain(p):
+	'''
+	matchMain : MAIN
+	'''
+	global PSaltos
+	global arregloCuadruplos
+	global iContadorCuadruplos
+	global operador
+	global resultado
+
+	  #saca el tope de Psaltos , que es el apuntador al "gotof"
+	res = PSaltos.pop()
+	#al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+	arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
+	print(p[1])
+
+
+
+def p_function_declaration(p):
+	'''
+	function_declaration : function destroyVars function_declaration
+						| empty
+	'''
 
 def p_estatuto_2(p):
   '''
@@ -447,7 +490,6 @@ def p_estatuto_2(p):
 def p_opciones(p):
   '''
   opciones : asignacion
-          | function destroyVars
           | condicion
           | escritura
           | ciclo
@@ -941,7 +983,7 @@ def p_cuaciclo1(p):
 
 def p_function(p):
   '''
-  function : imprimeDef aux ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto function_4 imprimeEndDef
+  function : imprimeDef tipoFunction ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
   '''
   global bscope
   global arregloFuncion
@@ -962,11 +1004,19 @@ def p_function(p):
   print(dF)
   bscope = 0
 
-def p_aux(p):
+def p_tipoFunction(p):
   '''
-  aux : tipo
-    | empty
+  tipoFunction : INT
+       		   | FLOAT
+       		   | STRING
+       		   | VOID
   '''
+  global tipoDeclaracion
+  global bRetorna
+  tipoDeclaracion = p[1]
+  if(p[1] != "void"):
+  	bRetorna = 1
+  print(p[1]);
 
 def p_function_aux(p):
   '''
@@ -1004,15 +1054,25 @@ def p_function_3(p):
 
 def p_function_4(p):
   '''
-  function_4 : imprimeReturn function_5 imprimePuntoYComa
+  function_4 : RETURN expresion PUNTO_Y_COMA
               | empty
   '''
-
-def p_function_5(p):
-  '''
-  function_5 : expresion
-            | empty
-  ''' 
+  global PilaO
+  global arregloCuadruplos
+  global iContadorCuadruplos
+  global operando1
+  global operador
+  global resultado
+  global operando2
+  global bRetorna
+  if((bRetorna == 1) and (p[1] != 'return')):
+  	raise errorSemantico("Definiste una funcion que debe retornar un valor y no lo retorna ")
+  if(p[1] == 'return'):
+  	operando1 = PilaO.pop()
+  	operador = "Return"
+  	resultado.append(-2)
+  	arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+  	iContadorCuadruplos+=1
 
 def p_destroyVars(p):
   '''
@@ -1198,12 +1258,6 @@ def p_imprimeParentesisDer(p):
   '''
   print(p[1])
 
-def p_imprimeElse(p):
-  '''
-  imprimeElse : ELSE
-  '''
-  print(p[1])
-
 def p_imprimeEndElse(p):
   '''
   imprimeEndElse : END_ELSE
@@ -1217,11 +1271,6 @@ def p_imprimeEndElse(p):
       arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
   print(p[1])
 
-def p_imprimeElif(p):
-  '''
-  imprimeElif : ELIF
-  '''
-  print(p[1])
 
 def p_imprimeEndElif(p):
   '''
@@ -1292,54 +1341,6 @@ def p_imprimeEndIf(p):
   iContadorCuadruplos+=1
   bIf = 0
   print(p[1])
-
-def p_imprimeDiferente(p):
-  '''
-  imprimeDiferente : DIFERENTE
-  '''
-  print(p[1])
-
-def p_imprimeMayorQue(p):
-  '''
-  imprimeMayorQue : MAYOR_QUE
-  '''
-  print(p[1])
-
-def p_imprimeMenorQue(p):
-  '''
-  imprimeMenorQue : MENOR_QUE
-  '''
-  print(p[1])
-
-def p_imprimeIgualA(p):
-  '''
-  imprimeIgualA : IGUAL_A
-  '''
-  print(p[1])
-
-def p_imprimeMayorIgual(p):
-  '''
-  imprimeMayorIgual : MAYOR_IGUAL
-  '''
-  print(p[1])
-
-def p_imprimeMenorIgual(p):
-  '''
-  imprimeMenorIgual : MENOR_IGUAL
-  '''
-  print(p[1])
-
-def p_imprimeEquivale(p):
-  '''
-  imprimeEquivale : EQUIVALE
-  '''
-  print(p[1])
-
-def p_imprimeID(p):
-    '''
-    imprimeID : ID
-    '''
-    print("ID : {} ".format(p[1]))
 
 def p_imprimePuntoYComa(p):
   '''
