@@ -41,6 +41,7 @@ operador = ""
 operando1 = ""
 operando2 = ""
 nombreFuncion = ""
+memTipo = ""
 
 #arreglos, pilas y filas
 arregloVar = []
@@ -56,6 +57,41 @@ arregloCuadruplos = []
 #diccionarios
 dV = {}
 dF = {}
+
+#apuntadores a memoria
+vgi = 5000
+vli= 5300
+vgf = 6000
+vlf = 6300
+vgs = 7000
+vls = 7300
+vgb = 8000
+vlb = 8300
+tgi = 9000
+tgf = 10000
+tgs = 11000
+tgb = 12000
+ctei = 43000
+ctef = 44000
+ctes = 45000
+cteb = 46000
+
+arrGI = []
+arrLI = []
+arrGF = []
+arrLF = []
+arrGS = []
+arrLS = []
+arrGB = []
+arrLB = []
+arrTI = []
+arrTF = []
+arrTS = []
+arrTB = []
+arrCI = []
+arrCF = []
+arrCS = []
+arrCB = []
 
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
@@ -521,6 +557,26 @@ def p_declaracion(p):
 
   if(iContadorDiccionarioVar == 1):
     dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
+    if(tipoDeclaracion == "int" and bscope == 0):
+    	arrGI.append(p[2])
+    	vgi+=1
+    elif(tipoDeclaracion == "int" and bscope == 1):
+    	arrLI.append(p[2])
+    	vli+=1
+    elif(tipoDeclaracion == "float" and bscope == 0):
+    	arrGF.append(p[2])
+    	vgf+=1
+    elif(tipoDeclaracion == "float" and bscope == 1):
+    	arrLF.append(p[2])
+    	vlf+=1
+    elif(tipoDeclaracion == "string" and bscope == 0):
+    	arrGS.append(p[2])
+    	vgs+=1
+    elif(tipoDeclaracion == "string" and bscope == 1):
+    	arrLS.append(p[2])
+    	vls+=1
+
+
   else:
     for x in range(0,iContadorDiccionarioVar - 1):
       if(p[2] == arregloVar[x].getNombre()):
@@ -562,6 +618,24 @@ def p_declaracion_2(p):
 
   dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]   
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
+  if(tipoDeclaracion == "int" and bscope == 0):
+  	arrGI.append(p[2])
+  	vgi+=1
+  elif(tipoDeclaracion == "int" and bscope == 1):
+  	arrLI.append(p[2])
+  	vli+=1
+  elif(tipoDeclaracion == "float" and bscope == 0):
+  	arrGF.append(p[2])
+  	vgf+=1
+  elif(tipoDeclaracion == "float" and bscope == 1):
+   	arrLF.append(p[2])
+   	vlf+=1
+  elif(tipoDeclaracion == "string" and bscope == 0):
+   	arrGS.append(p[2])
+   	vgs+=1
+  elif(tipoDeclaracion == "string" and bscope == 1):
+   	arrLS.append(p[2])
+   	vls+=1
   print(dV)
 
 def p_a(p):
@@ -847,6 +921,8 @@ def p_matchCteInt(p):
   global PilaO
   global PTipo
   global dicTipos
+  global arrCI
+  global ctei
   auxTipo = -2
 
   auxTipo = dicTipos["int"]
@@ -854,6 +930,9 @@ def p_matchCteInt(p):
 
   #meter a pila de operadores
   PilaO.append(p[1])
+  arrCI.append(p[1])
+  ctei+=1
+
 
 
 def p_matchCteFloat(p):
@@ -863,6 +942,8 @@ def p_matchCteFloat(p):
   global PilaO
   global PTipo
   global dicTipos
+  global arrCF
+  global ctef
   auxTipo = -2
   #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
 
@@ -870,6 +951,8 @@ def p_matchCteFloat(p):
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(p[1])
+  arrCF.append(p[1])
+  ctef+=1
 
 def p_condicion(p):
   '''
