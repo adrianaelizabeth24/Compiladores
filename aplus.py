@@ -735,6 +735,8 @@ def p_exp_2(p):
   global resultado
   global iContadorTemporal
   global iContadorCuadruplos
+  global dicTipos
+  global PTipo
 
   ## cuadruplos de condicion
   # toma el operador 1 y los operandos
@@ -743,13 +745,22 @@ def p_exp_2(p):
   operando1 = PilaO.pop()
   iContadorTemporal += 1
   resultado.append(iContadorTemporal)
-  #genera el cuadruplo
+  op2 = PTipo.pop()
+  op1 = PTipo.pop()
+  op = dicTipos[operador]
+  tipo = cubo[op1][op2][op]
+  if(tipo != 3):
+    raise errorSemantico("uso incorrecto de tipos ")
+  else:
+	#genera el cuadruplo
+	arrTB.append(iContadorTemporal)
+	tgb+=1
 
-  arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
-  #el temporal lo mete a la pila
-  PilaO.append(iContadorTemporal)
-  #suma uno al contador
-  iContadorCuadruplos += 1
+	arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
+	#el temporal lo mete a la pila
+	PilaO.append(iContadorTemporal)
+	#suma uno al contador
+	iContadorCuadruplos += 1
 
 def p_expresion(p):
   '''
@@ -784,6 +795,12 @@ def p_expresion(p):
       if(tipo == -1):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
+      	if(tipo == 1):
+      		arrTI.append(iContadorTemporal)
+      		tgi+=1
+      	elif(tipo == 2):
+      		arrTF.append(iContadorTemporal)
+      		tgf+=2
       	PTipo.append(tipo)
       	resultado.append(iContadorTemporal)
       	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
@@ -840,6 +857,12 @@ def p_termino(p):
       if(tipo == -1):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
+      	if(tipo == 1):
+      		arrTI.append(iContadorTemporal)
+      		tgi+=1
+      	elif(tipo == 2):
+      		arrTF.append(iContadorTemporal)
+      		tgf+=2
       	PTipo.append(tipo)
       	#al arreglo de resultados mete el numero de temporal
       	resultado.append(iContadorTemporal)
@@ -1029,9 +1052,17 @@ def p_escritura(p):
 
 def p_escritura_2(p):
   '''
-  escritura_2 : CTE_STRING
+  escritura_2 : matchCteString
               | expresion
   '''
+def p_matchCteString(p):
+	'''
+	matchCteString : CTE_STRING
+	'''
+	global arrCS
+	global ctes
+	arrCS.append(p[1])
+    ctes+=1
 
 #funcion de sintaxis del ciclo --> estructura "while ( expresion ) : codigo end_while"
 def p_ciclo(p):
@@ -1177,6 +1208,15 @@ def p_destroyVars(p):
     del dV[x]
   iContadorDiccionarioVar = iAux + 1
   iContadorTemporal -= iContadorInicioLocal
+  vli= 5300
+  vlf = 6300
+  vls = 7300
+  vlb = 8300
+  tgi -= iContadorInicioLocal
+  tgf -= iContadorInicioLocal
+  tgs -= iContadorInicioLocal
+  tgb -= iContadorInicioLocal
+
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
 

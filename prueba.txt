@@ -3,7 +3,7 @@ float b;
 int c;
 int d;
 
-def void cosa():
+def void prueba():
 	a = c + d;
 end_def
 
