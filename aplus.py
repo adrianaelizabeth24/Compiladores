@@ -26,6 +26,7 @@ iContadorDiccionarioFuncion = 1
 iContadorInicioLocal = 0
 iContadorTemporal = 0
 iContadorCuadruplos = 0
+iContadorParametros = 0
 iAux = 0
 #enteros indicadores
 op = -2
@@ -39,6 +40,7 @@ tmptipo = ""
 operador = ""
 operando1 = ""
 operando2 = ""
+nombreFuncion = ""
 
 #arreglos, pilas y filas
 arregloVar = []
@@ -1083,24 +1085,32 @@ def p_destroyVars(p):
   global iContadorInicioLocal
   global iAux
   global iContadorDiccionarioVar
+  global resultado
+  global arregloCuadruplos
 
   iAux = iContadorInicioLocal
   del arregloVar[iContadorInicioLocal:iContadorDiccionarioVar - 1]
   for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
     del dV[x]
   iContadorDiccionarioVar = iAux + 1
+  iContadorTemporal -= iContadorInicioLocal
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
 
   print(len(dV))
 
 #define la sintaxixs de una función de usuario
 def p_funcionUsuario(p):
   '''
-  funcionUsuario : ID imprimeParentesisIzq functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa
+  funcionUsuario : matchID imprimeParentesisIzq era_func functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa go_sub
   '''
   #checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
   global arregloFuncion
   global iContadorDiccionarioFuncion
   global tipo
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global PilaO
   auxTipo
   varAux = 0
   for x in range(0,iContadorDiccionarioFuncion - 1):
@@ -1109,8 +1119,42 @@ def p_funcionUsuario(p):
     else:
       auxTipo = arregloFuncion[x].getTipo()
       tipo = dicTipos[auxTipo]
+      resultado.append(-2)
+  	  arregloCuadruplos.append(cuadruplo("gosub",p[1],"nul",resultado[iContadorCuadruplos]))
+  	  iContadorCuadruplos+=1
   if(varAux == iContadorDiccionarioFuncion - 1):
     raise errorSemantico("Función no definida: " + p[1] + "()")
+
+def p_era_func(p):
+	'''
+	era_func : empty
+	'''
+	global PilaO
+	global iContadorTemporal
+	global arregloCuadruplos
+	global resultado
+	global nombreFuncion
+	operando1 = PilaO.pop()
+	nombreFuncion = operando1
+  	resultado.append(-2)
+  	arregloCuadruplos.append(cuadruplo("era",operando1,"nul",resultado[iContadorCuadruplos]))
+  	iContadorCuadruplos+=1
+
+def p_go_sub(p):
+	'''
+	go_sub : empty
+	'''
+	global PilaO
+	global iContadorTemporal
+	global arregloCuadruplos
+	global resultado
+	global nombreFuncion
+	operando1 = nombreFuncion
+  	resultado.append(-2)
+  	arregloCuadruplos.append(cuadruplo("gosub",operando1,"nul",resultado[iContadorCuadruplos]))
+  	iContadorCuadruplos+=1
+  	PilaO.append(nombreFuncion)
+
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_parametros(p):
@@ -1119,11 +1163,21 @@ def p_functionUsuario_parametros(p):
                				| empty
   '''
 
+
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_aux1(p):
   '''
-  functionUsuario_aux1 : tipo ID functionUsuario_aux2
+  functionUsuario_aux1 : expresion
   '''
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global PilaO
+  global resultado
+  global iContadorParametros
+  operando1 = PilaO.pop()
+  resultado.append(iContadorParametros + 1)
+  arregloCuadruplos.append(cuadruplo("param",operando1,"nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_aux2(p):
@@ -1131,12 +1185,23 @@ def p_functionUsuario_aux2(p):
   functionUsuario_aux2 : COMA functionUsuario_aux1
             			| empty
   '''
+  global iContadorParametros
+  iContadorParametros +=1
 
 #función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):
   '''
   checkwall : CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global resultado
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("era","checkwall","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
   print("Encontré un checkwall\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de move();
@@ -1144,6 +1209,15 @@ def p_move(p):
   '''
   move : MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global resultado
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("era","move","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("gosub","move","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
   print("Encontré un move\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de turnRight();
@@ -1151,6 +1225,15 @@ def p_turnright(p):
   '''
   turnright : TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global resultado
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("era","turnRight","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
   print("Encontré un turnright\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de turnLeft();
@@ -1158,6 +1241,15 @@ def p_turnleft(p):
   '''
   turnleft : TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global resultado
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("era","turnLeft","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("gosub","turnLeft","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
   print("Encontré un turnleft\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de pickBeeper();
@@ -1165,6 +1257,16 @@ def p_pickbeeper(p):
   '''
   pickbeeper : PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
+
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global resultado
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("era","pickBeeper","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("gosub","pickBeeper","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
   print("Encontré un pickbeeper\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de putBeeper();
@@ -1172,6 +1274,15 @@ def p_putbeeper(p):
   '''
   putbeeper : PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
   '''
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  global resultado
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("era","putBeeper","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
+  resultado.append(-2)
+  arregloCuadruplos.append(cuadruplo("gosub","putBeeper","nul",resultado[iContadorCuadruplos]))
+  iContadorCuadruplos+=1
   print("Encontré un putbeeper")
 
 #########################################################################################################################################################################
