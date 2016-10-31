@@ -42,6 +42,7 @@ operando1 = ""
 operando2 = ""
 nombreFuncion = ""
 memTipo = ""
+funcionActiva = ""
 
 #arreglos, pilas y filas
 arregloVar = []
@@ -1069,8 +1070,9 @@ def p_function(p):
   global arregloFuncion
   global iContadorDiccionarioFuncion
   global dF
+  global tipoDeclaracion
 
-  arregloFuncion.append(tablaFunciones(p[3],p[2]))
+  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracion))
 
   if(iContadorDiccionarioFuncion == 1):
     dF = {iContadorDiccionarioFuncion : arregloFuncion[iContadorDiccionarioFuncion-1]}
@@ -1191,28 +1193,31 @@ def p_destroyVars(p):
 #define la sintaxixs de una función de usuario
 def p_funcionUsuario(p):
   '''
-  funcionUsuario : matchID imprimeParentesisIzq era_func functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa go_sub
+  funcionUsuario : matchFunction imprimeParentesisIzq era_func functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa go_sub
   '''
-  #checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
-  global arregloFuncion
-  global iContadorDiccionarioFuncion
-  global tipo
-  global iContadorCuadruplos
-  global arregloCuadruplos
-  global PilaO
-  auxTipo
-  varAux = 0
-  for x in range(0,iContadorDiccionarioFuncion - 1):
-    if(p[1] != arregloFuncion[x].getNombre()):
-      varAux += 1
-    else:
-      auxTipo = arregloFuncion[x].getTipo()
-      tipo = dicTipos[auxTipo]
-      resultado.append(-2)
-      arregloCuadruplos.append(cuadruplo("gosub",p[1],"nul",resultado[iContadorCuadruplos]))
-      iContadorCuadruplos+=1
-  if(varAux == iContadorDiccionarioFuncion - 1):
-    raise errorSemantico("Función no definida: " + p[1] + "()")
+
+def p_matchFunction(p):
+	'''
+	matchFunction : ID
+	'''
+	#checa si la función que tratas de usar existe o no, en caso de no existir levanata una excepción
+	global arregloFuncion
+	global iContadorDiccionarioFuncion
+	global funcionActiva
+	varAux = 0
+	auxTipo = ""
+	for x in range(0,iContadorDiccionarioFuncion - 1):
+		if(p[1] != arregloFuncion[x].getNombre()):
+			varAux += 1
+		if(varAux == iContadorDiccionarioFuncion - 1):
+			raise errorSemantico("Funcion no definida: " + p[1])
+		else:
+			funcionActiva = p[1]
+			auxTipo = arregloFuncion[x].getTipo()
+			if(auxTipo != "void"):
+				tipo = dicTipos[auxTipo]
+
+
 
 def p_era_func(p):
 	'''
@@ -1223,26 +1228,25 @@ def p_era_func(p):
 	global arregloCuadruplos
 	global resultado
 	global nombreFuncion
-	operando1 = PilaO.pop()
-	nombreFuncion = operando1
+	global iContadorCuadruplos
+	global funcionActiva
+
 	resultado.append(-2)
-	arregloCuadruplos.append(cuadruplo("era",operando1,"nul",resultado[iContadorCuadruplos]))
+	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 	iContadorCuadruplos+=1
 
 def p_go_sub(p):
 	'''
 	go_sub : empty
 	'''
-	global PilaO
 	global iContadorTemporal
 	global arregloCuadruplos
 	global resultado
-	global nombreFuncion
-	operando1 = nombreFuncion
+	global iContadorCuadruplos
+	global funcionActiva
 	resultado.append(-2)
-	arregloCuadruplos.append(cuadruplo("gosub",operando1,"nul",resultado[iContadorCuadruplos]))
+	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 	iContadorCuadruplos+=1
-	PilaO.append(nombreFuncion)
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_parametros(p):

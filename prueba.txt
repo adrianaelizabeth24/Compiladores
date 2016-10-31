@@ -2,10 +2,12 @@ int a;
 float b;
 int c;
 int d;
+int e;
 
-def void prueba():
+def int prueba():
 	a = c + d;
+	return a;
 end_def
 
 main:
-	c = d*d;
+	e = prueba();
