@@ -36,6 +36,7 @@ tipo = -2
 
 #strings
 tipoDeclaracion = ""
+tipoDeclaracionFuncion = ""
 tmptipo = ""
 operador = ""
 operando1 = ""
@@ -767,10 +768,8 @@ def p_expresion(p):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
       	if(tipo == 1):
-      		arrTI.append(iContadorTemporal)
       		tgi+=1
       	elif(tipo == 2):
-      		arrTF.append(iContadorTemporal)
       		tgf+=2
       	PTipo.append(tipo)
       	resultado.append(iContadorTemporal)
@@ -1071,9 +1070,9 @@ def p_function(p):
   global arregloFuncion
   global iContadorDiccionarioFuncion
   global dF
-  global tipoDeclaracion
+  global tipoDeclaracionFuncion
 
-  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracion))
+  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracionFuncion))
 
   if(iContadorDiccionarioFuncion == 1):
     dF = {iContadorDiccionarioFuncion : arregloFuncion[iContadorDiccionarioFuncion-1]}
@@ -1094,9 +1093,9 @@ def p_tipoFunction(p):
        		   | STRING
        		   | VOID
   '''
-  global tipoDeclaracion
+  global tipoDeclaracionFuncion
   global bRetorna
-  tipoDeclaracion = p[1]
+  tipoDeclaracionFuncion = p[1]
   if(p[1] != "void"):
   	bRetorna = 1
   print(p[1]);
@@ -1140,22 +1139,28 @@ def p_function_4(p):
   function_4 : RETURN expresion PUNTO_Y_COMA
               | empty
   '''
-  global PilaO
+  global PilaO, PTipo
   global arregloCuadruplos
   global iContadorCuadruplos
-  global operando1
-  global operador
-  global resultado
-  global operando2
+  global operando1, operador, resultado, operando2, op1,op2, op
+  global tipoDeclaracionFuncion
+  global dicOperadores,dicTipos
   global bRetorna
   if((bRetorna == 1) and (p[1] != 'return')):
-  	raise errorSemantico("Definiste una funcion que debe retornar un valor y no lo retorna ")
+    raise errorSemantico("Definiste una funcion que debe retornar un valor y no lo retorna ")
   if(p[1] == 'return'):
-  	operando1 = PilaO.pop()
-  	operador = "Return"
-  	resultado.append(-2)
-  	arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
-  	iContadorCuadruplos+=1
+  	op1 = PTipo.pop()
+  	op2 = dicTipos[tipoDeclaracionFuncion]
+  	op = dicOperadores["="]
+  	tipo = cubo[op1][op2][op]
+  	if(tipo == -1):
+  		raise errorSemantico("uso incorrecto de tipos ")
+  	else:
+  		operando1 = PilaO.pop()
+  		operador = "Return"
+  		resultado.append(-2)
+  		arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+  		iContadorCuadruplos+=1
 
 def p_destroyVars(p):
   '''
@@ -1246,8 +1251,10 @@ def p_go_sub(p):
 	global iContadorCuadruplos
 	global iContadorDiccionarioFuncion
 	global funcionActiva
-	global PilaO
+	global PTipo
+	global dicTipos
 	tipo = ""
+	tipoDic = -2
 	resultado.append(-2)
 	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 	iContadorCuadruplos+=1
@@ -1255,7 +1262,10 @@ def p_go_sub(p):
 		if(arregloFuncion[x].getNombre() == funcionActiva):
 			tipo = arregloFuncion[x].getTipo();
 	if(tipo != "void"):
-		#PTipo.append(tipo)
+		print("mi tipo es ")
+		print(tipo)
+		tipoDic = dicTipos[tipo]
+		PTipo.append(tipoDic)
 		resultado.append(iContadorTemporal)
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",iContadorTemporal))
 		iContadorTemporal += 1
