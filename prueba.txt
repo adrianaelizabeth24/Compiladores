@@ -8,4 +8,4 @@ def void prueba():
 end_def
 
 main:
-	move();
+	c = d*d;
