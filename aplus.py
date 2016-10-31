@@ -973,6 +973,7 @@ def p_cuacondicion1(p):
   #suma uno al contador
   iContadorCuadruplos += 1
 
+
 def p_condicion_2(p):
   '''
   condicion_2 : exp 
@@ -1175,7 +1176,7 @@ def p_destroyVars(p):
   for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
     del dV[x]
   iContadorDiccionarioVar = iAux + 1
-  iContadorTemporal -= iContadorInicioLocal
+  #iContadorTemporal -= iContadorInicioLocal
   vli= 5300
   vlf = 6300
   vls = 7300
@@ -1240,13 +1241,27 @@ def p_go_sub(p):
 	go_sub : empty
 	'''
 	global iContadorTemporal
-	global arregloCuadruplos
+	global arregloCuadruplos, arregloFuncion
 	global resultado
 	global iContadorCuadruplos
+	global iContadorDiccionarioFuncion
 	global funcionActiva
+	global PilaO
+	tipo = ""
 	resultado.append(-2)
 	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 	iContadorCuadruplos+=1
+	for x in range(0,iContadorDiccionarioFuncion - 1):
+		if(arregloFuncion[x].getNombre() == funcionActiva):
+			tipo = arregloFuncion[x].getTipo();
+	if(tipo != "void"):
+		#PTipo.append(tipo)
+		resultado.append(iContadorTemporal)
+		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",iContadorTemporal))
+		iContadorTemporal += 1
+		iContadorCuadruplos += 1
+
+
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_parametros(p):
