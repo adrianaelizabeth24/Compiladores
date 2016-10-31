@@ -8,11 +8,19 @@ def donothing():
    button = Button(filewin, text="Do nothing button")
    button.pack()
 
+'''
+def move():
+    canvas.move(imageFinal, 0, 22)  
+    canvas.update()
+    '''
+
 def animate():
     """ cycle through """
     img = next(pictures)
-    label["image"] = img
+    draw.delete("dog")
+    draw.create_image(200,210, anchor=NW, image=img, tags="dog")
     win.after(delay, animate)
+
 
 # Crear barra de menu
 win = Tk()
@@ -80,15 +88,13 @@ for x in range (0, 8):
 	x1 = 38
 	x2 = 51
 	for y in range (0, 15):
-		draw.create_rectangle(x1,y1,x2,y2, fill="blue")
+		draw.create_rectangle(x1,y1,x2,y2, fill="blue", tags="grid")
 		x1 = x1 + 50
 		x2 = x2 + 50
 
 	y1 = y1 + 50
 	y2 = y2 + 50
 
-label = tk.Label(win)
-label.pack(padx=10, pady=10)
 
 # this list created with the PIL program
 # it may be different in your case
@@ -101,12 +107,12 @@ fname_list = \
  './image/frame_5_delay-0.1s.gif',
  './image/frame_6_delay-0.1s.gif']
 
+
  # store as tk img_objects
 pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
 
 # milliseconds
 delay = 150
-
 animate()
 
 #draw.create_rectangle(50,50,150,150, fill="blue")
