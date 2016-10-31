@@ -1251,7 +1251,7 @@ def p_go_sub(p):
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_parametros(p):
   '''
-  functionUsuario_parametros : functionUsuario_aux1
+  functionUsuario_parametros : functionUsuario_aux1 functionUsuario_aux2
                				| empty
   '''
 
@@ -1267,8 +1267,9 @@ def p_functionUsuario_aux1(p):
   global iContadorParametros
   operando1 = PilaO.pop()
   resultado.append(iContadorParametros + 1)
-  arregloCuadruplos.append(cuadruplo("param",operando1,"nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("param",operando1,"nul",iContadorParametros + 1))
   iContadorCuadruplos+=1
+  iContadorParametros+=1
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_aux2(p):
@@ -1276,8 +1277,6 @@ def p_functionUsuario_aux2(p):
   functionUsuario_aux2 : COMA functionUsuario_aux1
             			| empty
   '''
-  global iContadorParametros
-  iContadorParametros +=1
 
 #función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):

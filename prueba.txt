@@ -4,10 +4,10 @@ int c;
 int d;
 int e;
 
-def int prueba():
+def int prueba(int i, int f):
 	a = c + d;
 	return a;
 end_def
 
 main:
-	e = prueba();
+	e = prueba(a,c);
