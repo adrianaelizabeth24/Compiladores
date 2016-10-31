@@ -1,11 +1,18 @@
 from Tkinter import *
 import tkMessageBox
-import Tkinter
+import Tkinter as tk
+import itertools as it
 
 def donothing():
    filewin = winlevel(win)
    button = Button(filewin, text="Do nothing button")
    button.pack()
+
+def animate():
+    """ cycle through """
+    img = next(pictures)
+    label["image"] = img
+    win.after(delay, animate)
 
 # Crear barra de menu
 win = Tk()
@@ -80,11 +87,27 @@ for x in range (0, 8):
 	y1 = y1 + 50
 	y2 = y2 + 50
 
-dog = PhotoImage(file = './puppy.gif', format="gif -index 2")
-dogDisplay = dog.subsample(3, 3)
-draw.create_image(200,210, anchor=NW, image=dogDisplay)
+label = tk.Label(win)
+label.pack(padx=10, pady=10)
 
+# this list created with the PIL program
+# it may be different in your case
+fname_list = \
+['./image/frame_0_delay-0.1s.gif',
+ './image/frame_1_delay-0.1s.gif',
+ './image/frame_2_delay-0.1s.gif',
+ './image/frame_3_delay-0.1s.gif',
+ './image/frame_4_delay-0.1s.gif',
+ './image/frame_5_delay-0.1s.gif',
+ './image/frame_6_delay-0.1s.gif']
 
+ # store as tk img_objects
+pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
+
+# milliseconds
+delay = 150
+
+animate()
 
 #draw.create_rectangle(50,50,150,150, fill="blue")
 
