@@ -27,7 +27,6 @@ iContadorInicioLocal = 0
 iContadorTemporal = 0
 iContadorCuadruplos = 0
 iContadorParametros = 0
-iAux = 0
 #enteros indicadores
 op = -2
 op1 = -2
@@ -55,6 +54,7 @@ PSaltos = []
 PSaltosAux = []
 PTipo = []
 arregloCuadruplos = []
+listaParamFuncion = []
 
 #diccionarios
 dV = {}
@@ -1077,12 +1077,12 @@ def p_function(p):
   function : imprimeDef tipoFunction ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
   '''
   global bscope
-  global arregloFuncion
+  global arregloFuncion, listaParamFuncion
   global iContadorDiccionarioFuncion
   global dF
   global tipoDeclaracionFuncion
 
-  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracionFuncion))
+  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracionFuncion,listaParamFuncion))
 
   if(iContadorDiccionarioFuncion == 1):
     dF = {iContadorDiccionarioFuncion : arregloFuncion[iContadorDiccionarioFuncion-1]}
@@ -1121,13 +1121,15 @@ def p_function_2(p):
   '''
   function_2 : tipo ID function_3
   '''
-  global arregloVar
+  global arregloVar, listaParamFuncion
   global iContadorDiccionarioVar
+  global tipoDeclaracion
   global dV
 
-  arregloVar.append(tablaVar(p[2],p[1],'local'))
+  arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local'))
 
   print(arregloVar)
+  listaParamFuncion.append(tipoDeclaracion)
 
   if(iContadorDiccionarioVar == 1):
     dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
@@ -1177,28 +1179,26 @@ def p_destroyVars(p):
   '''
   destroyVars : empty
   '''
-  global arregloVar
+  global arregloVar, arregloCuadruplos, listaParamFuncion
   global dV
-  global iContadorInicioLocal
-  global iAux
-  global iContadorDiccionarioVar
+  global iContadorInicioLocal, iContadorDiccionarioVar, iContadorTemporal
   global resultado
-  global arregloCuadruplos
-  global iContadorTemporal
   global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb
 
+  iAux = 0
   iAux = iContadorInicioLocal
   del arregloVar[iContadorInicioLocal:iContadorDiccionarioVar - 1]
   for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
     del dV[x]
   iContadorDiccionarioVar = iAux + 1
   iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
+  del listaParamFuncion[:]
   vli= 5300
   vlf = 6300
   vls = 7300
   vlb = 8300
-  tgi -= iContadorInicioLocal
-  tgf -= iContadorInicioLocal
+  tgi -= iContadorTemporal
+  tgf -= iContadorTemporal
   tgs -= iContadorInicioLocal
   tgb -= iContadorInicioLocal
 
