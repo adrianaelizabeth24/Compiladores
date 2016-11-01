@@ -1189,7 +1189,7 @@ def p_destroyVars(p):
   for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
     del dV[x]
   iContadorDiccionarioVar = iAux + 1
-  #iContadorTemporal -= iContadorInicioLocal
+  iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
   vli= 5300
   vlf = 6300
   vls = 7300
@@ -1244,7 +1244,7 @@ def p_era_func(p):
 	global funcionActiva
 
 	resultado.append(-2)
-	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul",resultado[iContadorCuadruplos]))
+	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul",-2))
 	iContadorCuadruplos+=1
 
 def p_go_sub(p):
@@ -1262,7 +1262,7 @@ def p_go_sub(p):
 	tipo = ""
 	tipoDic = -2
 	resultado.append(-2)
-	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",resultado[iContadorCuadruplos]))
+	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",-2))
 	iContadorCuadruplos+=1
 	for x in range(0,iContadorDiccionarioFuncion - 1):
 		if(arregloFuncion[x].getNombre() == funcionActiva):
