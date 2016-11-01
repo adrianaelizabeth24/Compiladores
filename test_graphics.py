@@ -1,4 +1,6 @@
 from graphics import *
+import Tkinter
+import tkMessageBox
 
 def main():
 	x1 = 8
@@ -10,6 +12,15 @@ def main():
 	win.setBackground(color_rgb(238, 238, 238));
 	#c = Circle(Point(100,100), 6)
 	#win.plotPixel(35, 128, "blue")
+
+	def helloCallBack():
+   		tkMessageBox.showinfo( "Hello Python", "Hello World")
+
+	B = Tkinter.Button(win, text ="Hello", command = helloCallBack)
+
+	B.pack()
+
+	
 
 
 	'''
