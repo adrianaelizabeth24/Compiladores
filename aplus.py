@@ -359,6 +359,8 @@ tokens = (
   'CTE_STRING',
   'CTE_FLOAT',
   'CTE_BOOL'
+  'TRUE'
+  'FALSE'
   )
 
 #expresiones regulares
@@ -405,7 +407,9 @@ reserved = {
   'print'     : 'PRINT',
   'def'       : 'DEF',
   'end_def'   : 'END_DEF',
-  'main'	: 'MAIN'
+  'main'	: 'MAIN',
+  'true'  : 'TRUE',
+  'false' : 'FALSE'
 }
 
 #er de float se debe poner antes de int por que luego reconoce int . int
@@ -430,6 +434,11 @@ def t_ID(t):
 def t_CTE_STRING(t):
     r'\"[A-Za-z0-9_\(\)\{\}\[\]\<\>\!]*\"'
     t.type = reserved.get(t.value,'CTE_STRING') 
+    return t;
+
+def t_CTE_BOOL(t):
+    r'\"[True|False]\"'
+    t.type = reserved.get(t.value,'CTE_BOOL') 
     return t;
 
 #ignora tabs y spaces
