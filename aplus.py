@@ -972,7 +972,6 @@ def p_cuacondicion1(p):
   #suma uno al contador
   iContadorCuadruplos += 1
 
-
 def p_condicion_2(p):
   '''
   condicion_2 : exp 
@@ -1223,8 +1222,6 @@ def p_matchFunction(p):
 			if(auxTipo != "void"):
 				tipo = dicTipos[auxTipo]
 
-
-
 def p_era_func(p):
 	'''
 	era_func : empty
@@ -1270,8 +1267,6 @@ def p_go_sub(p):
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",iContadorTemporal))
 		iContadorTemporal += 1
 		iContadorCuadruplos += 1
-
-
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_parametros(p):
@@ -1496,7 +1491,6 @@ def p_imprimeEndElse(p):
       res = PSaltosAux.pop()
       arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
   print(p[1])
-
 
 def p_imprimeEndElif(p):
   '''
