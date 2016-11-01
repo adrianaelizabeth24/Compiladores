@@ -1,5 +1,13 @@
 int a;
-int b;
+float b;
 int c;
+int d;
+int e;
 
-a = b < c;
+def int prueba(int i, int f):
+	a = c + d;
+	return a;
+end_def
+
+main:
+	e = prueba(d,c);
