@@ -424,6 +424,12 @@ def t_CTE_INT(t):
     t.value = int(t.value)
     return t
 
+#er de la cte bool, se pone antes que los identificadores y que los strings para que haga match
+def t_CTE_BOOL(t):
+    r'\"[True|False]\"'
+    t.type = reserved.get(t.value,'CTE_BOOL') 
+    return t;
+
 #er de identidicador, deben comenzar con una letra y oyeden ser seguidos por cualquier letra guión bajo o bien un dígito
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -434,11 +440,6 @@ def t_ID(t):
 def t_CTE_STRING(t):
     r'\"[A-Za-z0-9_\(\)\{\}\[\]\<\>\!]*\"'
     t.type = reserved.get(t.value,'CTE_STRING') 
-    return t;
-
-def t_CTE_BOOL(t):
-    r'\"[True|False]\"'
-    t.type = reserved.get(t.value,'CTE_BOOL') 
     return t;
 
 #ignora tabs y spaces
@@ -637,6 +638,7 @@ def p_tipo(p):
   tipo : INT
        | FLOAT
        | STRING
+       | BOOL
   '''
   global tipoDeclaracion
   tipoDeclaracion = p[1]
@@ -1099,6 +1101,7 @@ def p_tipoFunction(p):
   tipoFunction : INT
        		   | FLOAT
        		   | STRING
+       		   | BOOL
        		   | VOID
   '''
   global tipoDeclaracionFuncion
