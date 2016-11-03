@@ -55,6 +55,7 @@ PSaltosAux = []
 PTipo = []
 arregloCuadruplos = []
 listaParamFuncion = []
+listaAuxParamFuncion = []
 
 #diccionarios
 dV = {}
@@ -548,9 +549,9 @@ def p_declaracion(p):
   global arrGI, arrLI,arrGF,arrLF,arrGS,arrLS
 
   if(bscope == 0):
-    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global'))
+    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global',-2))
   else:
-    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local'))
+    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local', -2))
 
   if(iContadorDiccionarioVar == 1):
     dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
@@ -1072,6 +1073,9 @@ def p_cuaciclo1(p):
   #suma uno al contador
   iContadorCuadruplos += 1
 
+
+#################################################################
+#funciones
 def p_function(p):
   '''
   function : imprimeDef tipoFunction ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
@@ -1081,8 +1085,11 @@ def p_function(p):
   global iContadorDiccionarioFuncion
   global dF
   global tipoDeclaracionFuncion
-
-  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracionFuncion,listaParamFuncion))
+  listaAux = []
+  listaAux.extend(listaParamFuncion)
+  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracionFuncion,listaAux, -2))
+  print("hola acabo de crear una funcion")
+  print(arregloFuncion[iContadorDiccionarioFuncion-1].getParametros())
 
   if(iContadorDiccionarioFuncion == 1):
     dF = {iContadorDiccionarioFuncion : arregloFuncion[iContadorDiccionarioFuncion-1]}
@@ -1124,12 +1131,14 @@ def p_function_2(p):
   global arregloVar, listaParamFuncion
   global iContadorDiccionarioVar
   global tipoDeclaracion
-  global dV
+  global dV, dicTipos
+  aux = 0
 
-  arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local'))
+  arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local', -2))
 
   print(arregloVar)
-  listaParamFuncion.append(tipoDeclaracion)
+  aux = dicTipos[tipoDeclaracion]
+  listaParamFuncion.append(aux)
 
   if(iContadorDiccionarioVar == 1):
     dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
@@ -1192,6 +1201,8 @@ def p_destroyVars(p):
     del dV[x]
   iContadorDiccionarioVar = iAux + 1
   iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
+
+
   del listaParamFuncion[:]
   vli= 5300
   vlf = 6300
@@ -1206,6 +1217,8 @@ def p_destroyVars(p):
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
 
   print(len(dV))
+
+#################################################################
 
 #define la sintaxixs de una función de usuario
 def p_funcionUsuario(p):
@@ -1283,20 +1296,26 @@ def p_go_sub(p):
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_parametros(p):
   '''
-  functionUsuario_parametros : functionUsuario_aux1 functionUsuario_aux2
+  functionUsuario_parametros : functionUsuario_aux1 functionValidaParams
                				| empty
   '''
 
 #funcion auxiliar de p_funcionUsuario
 def p_functionUsuario_aux1(p):
   '''
-  functionUsuario_aux1 : expresion
+  functionUsuario_aux1 : expresion functionUsuario_aux2
   '''
   global iContadorCuadruplos
   global arregloCuadruplos
-  global PilaO
+  global PilaO, PTipo
   global resultado
   global iContadorParametros
+  global funcionActiva
+  global tipo
+
+  tipo = PTipo.pop()
+  listaAuxParamFuncion.append(tipo)
+
   operando1 = PilaO.pop()
   resultado.append(iContadorParametros + 1)
   arregloCuadruplos.append(cuadruplo("param",operando1,"nul",iContadorParametros + 1))
@@ -1309,6 +1328,25 @@ def p_functionUsuario_aux2(p):
   functionUsuario_aux2 : COMA functionUsuario_aux1
             			| empty
   '''
+
+def p_functionValidaParams(p):
+	'''
+	functionValidaParams : empty
+	'''
+	global arregloFuncion,listaAuxParamFuncion
+	global funcionActiva, iContadorDiccionarioFuncion
+	listaAux = []
+	for x in range(0,iContadorDiccionarioFuncion-1):
+		if(arregloFuncion[x].getNombre() == funcionActiva):
+			listaAux.extend(arregloFuncion[x].getParametros())
+
+	if(len(listaAuxParamFuncion) == len(listaAux)):
+		for x in range (0, len(listaAux)):
+			if(listaAuxParamFuncion[x] != listaAux[x]):
+				raise errorSemantico("Tipo de Parametros no concuerda con los parametros de la funcion")
+	else:
+		raise errorSemantico("La cantidad de parametros no concuerda con los parametros de la funcion")
+
 
 #función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):
