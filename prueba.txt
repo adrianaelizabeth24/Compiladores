@@ -10,4 +10,4 @@ def int prueba(int i, int f):
 end_def
 
 main:
-	e = prueba(d,c);
+	e = prueba(c,c);
