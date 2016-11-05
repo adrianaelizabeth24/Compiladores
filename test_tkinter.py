@@ -1,18 +1,12 @@
-from tkinter import *
+from Tkinter import *
 #import tkmessagebox
-import tkinter as tk
+import Tkinter as tk
 import itertools as it
 
 def donothing():
    filewin = winlevel(win)
    button = Button(filewin, text="Do nothing button")
    button.pack()
-
-'''
-def move():
-    canvas.move(imageFinal, 0, 22)  
-    canvas.update()
-    '''
 
 def animate():
     """ cycle through """
@@ -21,10 +15,17 @@ def animate():
     draw.create_image(200,210, anchor=NW, image=img, tags="dog")
     win.after(delay, animate)
 
+def retrieve_input():
+    input = CodeEntry.get("1.0",'end-1c')
+    print(input)
 
 # Crear barra de menu
 win = Tk()
 menubar = Menu(win)
+
+CodeEntry = Text (win, height=10, width = 30)
+CodeEntry.pack()
+CodeEntry.insert(END, "hi")
 
 # Seccion: File
 filemenu = Menu(menubar, tearoff=0)
@@ -55,7 +56,7 @@ helpmenu.add_command(label="About...", command=donothing)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
 win.config(menu=menubar)
-win.minsize(width=600, height=600)
+win.minsize(width=900, height=600)
 
 '''
 	Boton de menu
@@ -114,6 +115,7 @@ pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
 # milliseconds
 delay = 150
 animate()
+retrieve_input()
 
 #draw.create_rectangle(50,50,150,150, fill="blue")
 
