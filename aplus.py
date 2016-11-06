@@ -21,8 +21,8 @@ bCiclo = 0
 bIf = 0
 bRetorna = 0
 #enteros (contadores)
-iContadorDiccionarioVar = 1
-iContadorDiccionarioFuncion = 1
+iContadorDiccionarioVar = 0
+iContadorDiccionarioFuncion = 0
 iContadorInicioLocal = 0
 iContadorTemporal = 0
 iContadorCuadruplos = 0
@@ -459,9 +459,15 @@ def t_error(t):
 
 lexer = lex.lex()
 
-##################################################################################################################################################
-#################################################################################################################################################
-#################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+
+
+
+#seccion 1 del codigo
+#######################################################################################################
 
 start = "estatuto"
 
@@ -469,25 +475,36 @@ def p_empty(p):
     'empty :'
     pass
 
+#estructura general de a+
+#puede comenzar o no comenzar por la declaración de variables globales
+#es seguido por la declaración opcional de funciones de usuario
+#en la tercera parte es el programa principal que es identificado por la palabra MAIN y es seguido de una serie de estatutos
 def p_estatuto(p):
     '''
-    estatuto : start declaracion declaracion_3 function_declaration matchMain DOS_PUNTOS estatuto_2
-             | start function_declaration matchMain DOS_PUNTOS estatuto_2
+    estatuto : start declaracion_3 function_declaration matchMain DOS_PUNTOS estatuto_2
     '''
 
+#funcion auxiliar de estatuto
+#sirve para generar el cuadruplo goto : main
 def p_start(p):
 	'''
 	start : empty
 	'''
 	global PSaltos
 	global iContadorCuadruplos
-	global arregloCuadruplos
-	global resultado
+	global arregloCuadruplos , resultado
+	#mete a la pila de saltos el cuadruplo inicial para poder llenar despúes el cuadruplo donde se encuentre main
 	PSaltos.append(iContadorCuadruplos)
+	#agrega -2 a resultados para no perder la cuenta
 	resultado.append(-2)
+	#genera el cuadruplo y lo agrega al arreglo de cuádruplos
 	arregloCuadruplos.append(cuadruplo("GotoMain",-2,"nul","nul"))
+	#contador de cuadruplos
 	iContadorCuadruplos+=1
 
+#funcion auxiliar de estatuto
+#encuentra main
+#llena el cuadruplo gotomain
 def p_matchMain(p):
 	'''
 	matchMain : MAIN
@@ -495,27 +512,27 @@ def p_matchMain(p):
 	global PSaltos
 	global arregloCuadruplos
 	global iContadorCuadruplos
-	global operador
-	global resultado
 
-	  #saca el tope de Psaltos , que es el apuntador al "gotof"
+	#saca el tope de Psaltos , que es el apuntador al "gotof"
 	res = PSaltos.pop()
 	#al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
 	arregloCuadruplos[res].setOperando1(iContadorCuadruplos + 1)
-	print(p[1])
 
+#funcion auxiliar de estatuto sirve para la declaracion de 0 a n funciones
 def p_function_declaration(p):
 	'''
 	function_declaration : function destroyVars function_declaration
 						| empty
 	'''
 
+#estatuto se compone de 0 a n opciones
 def p_estatuto_2(p):
   '''
   estatuto_2 : opciones estatuto_2
             | empty
   '''
 
+#toda la serie de posibles estatutos
 def p_opciones(p):
   '''
   opciones : asignacion
@@ -531,109 +548,151 @@ def p_opciones(p):
           | funcionUsuario
   '''
 
-def p_declaracion(p):
-  '''
-  declaracion : tipo ID declaracion_aux imprimePuntoYComa
-  '''
-  global bscope
-  global arregloVar
-  global iContadorDiccionarioVar
-  global dV
-  global tipoDeclaracion
-  global vgi
-  global vli
-  global vgf
-  global vlf
-  global vgs
-  global vls
-  global arrGI, arrLI,arrGF,arrLF,arrGS,arrLS
+###################################################################################################
 
-  if(bscope == 0):
-    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global',-2))
-  else:
-    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local', -2))
+#seccion 2 de codigo
+###################################################################################################
 
-  if(iContadorDiccionarioVar == 1):
-    dV = {iContadorDiccionarioVar : arregloVar[iContadorDiccionarioVar-1]}
-    if(tipoDeclaracion == "int" and bscope == 0):
-    	vgi+=1
-    elif(tipoDeclaracion == "int" and bscope == 1):
-    	vli+=1
-    elif(tipoDeclaracion == "float" and bscope == 0):
-    	vgf+=1
-    elif(tipoDeclaracion == "float" and bscope == 1):
-    	vlf+=1
-    elif(tipoDeclaracion == "string" and bscope == 0):
-    	vgs+=1
-    elif(tipoDeclaracion == "string" and bscope == 1):
-    	vls+=1
-  else:
-    for x in range(0,iContadorDiccionarioVar - 1):
-      if(p[2] == arregloVar[x].getNombre()):
-        raise errorSemantico("Variable ya definida: " + p[2])
-    dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]
-
-  iContadorDiccionarioVar = iContadorDiccionarioVar + 1
-  for x in range(0,iContadorDiccionarioVar-1):
-    print(arregloVar[x].getNombre())
-    print(arregloVar[x].getTipo())
-    print(arregloVar[x].getScope())
-    print("--------------------")
-  print(dV)
-
-def p_declaracion_aux(p):
-  '''
-  declaracion_aux : declaracion_2
-          | empty
-  '''
-
-def p_declaracion_2(p):
-  '''
-  declaracion_2 : imprimeComa ID a
-  '''
-  global bscope
-  global arregloVar
-  global iContadorDiccionarioVar
-  global dV
-  global tipoDeclaracion
-
-  if(bscope == 0):
-    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'global'))
-  else:
-    arregloVar.append(tablaVar(p[2],tipoDeclaracion,'local'))
-
-  for x in range(0,iContadorDiccionarioVar - 1):
-    if(p[2] == arregloVar[x].getNombre()):
-      raise errorSemantico("Variable ya definida: " + p[2])
-
-  dV[iContadorDiccionarioVar] = arregloVar[iContadorDiccionarioVar - 1]   
-  iContadorDiccionarioVar = iContadorDiccionarioVar + 1
-  if(tipoDeclaracion == "int" and bscope == 0):
-  	vgi+=1
-  elif(tipoDeclaracion == "int" and bscope == 1):
-  	vli+=1
-  elif(tipoDeclaracion == "float" and bscope == 0):
-  	vgf+=1
-  elif(tipoDeclaracion == "float" and bscope == 1):
-   	vlf+=1
-  elif(tipoDeclaracion == "string" and bscope == 0):
-   	vgs+=1
-  elif(tipoDeclaracion == "string" and bscope == 1):
-   	vls+=1
-  print(dV)
-
-def p_a(p):
-  '''
-  a : declaracion_2
-   | empty
-  '''
-
+#funcion para declarar de 0 a n veces variables
 def p_declaracion_3(p):
   '''
   declaracion_3 : declaracion declaracion_3
                 | empty
   '''
 
+#funcion para declarar variables
+def p_declaracion(p):
+  '''
+  declaracion : tipo ID declaracion_aux imprimePuntoYComa
+  '''
+  global bscope
+  global iContadorDiccionarioVar
+  global dV
+  global tipoDeclaracion
+  global vgi, vli, vgf, vlf, vgs, vls
+  #vars locales
+  obj = ""
+  objAux = ""
+  var = 0
+
+  #si no es la primera variable a guardar checa si no se repite el nombre
+  if(iContadorDiccionarioVar != 0):
+    for x in range(0,iContadorDiccionarioVar - 1):
+      objAux = dV[x]
+      #compara los nombres
+      if(p[2] == objAux.getNombre()):
+        raise errorSemantico("Variable ya definida: " + p[2])
+
+
+  #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
+  if(tipoDeclaracion == "int" and bscope == 0):
+    var = vgi
+    vgi += 1
+  elif(tipoDeclaracion == "int" and bscope == 1):
+    var = vli
+    vli+=1
+  elif(tipoDeclaracion == "float" and bscope == 0):
+    var = vgf
+    vgf+=1
+  elif(tipoDeclaracion == "float" and bscope == 1):
+    var = vgf
+    vlf+=1
+  elif(tipoDeclaracion == "string" and bscope == 0):
+    var = vgs
+    vgs+=1
+  elif(tipoDeclaracion == "string" and bscope == 1):
+    var = vls
+    vls+=1
+
+  #crea el objeto tablaVar con : nombre, tipo, scope, direccion
+  if(bscope == 0):
+    obj = tablaVar(p[2],tipoDeclaracion,'global',var)
+  else:
+    obj = tablaVar(p[2],tipoDeclaracion,'local',var)
+
+  #en caso de agregarla la guarda en el diccionario
+  if(iContadorDiccionarioVar == 0):
+  	dV = {iContadorDiccionarioVar : obj}
+  else:
+  	dV[iContadorDiccionarioVar] = obj
+
+  #incrementa contador
+  iContadorDiccionarioVar = iContadorDiccionarioVar + 1
+  #funcion para imprimir
+  for x in range(0,iContadorDiccionarioVar-1):
+    print(arregloVar[x].getNombre())
+    print(arregloVar[x].getTipo())
+    print(arregloVar[x].getScope())
+    print("--------------------")
+
+#esta funcion ayuda en caso de que se quieran declarar variables variables del mismo tipo en el mismo renglon
+def p_declaracion_aux(p):
+  '''
+  declaracion_aux : declaracion_2
+          | empty
+  '''
+
+#coma id <<a>>
+def p_declaracion_2(p):
+  '''
+  declaracion_2 : imprimeComa ID a
+  '''
+  global bscope
+  global iContadorDiccionarioVar
+  global dV
+  global tipoDeclaracion
+  global vgi, vli, vgf, vlf, vgs, vls
+  #vars locales
+  obj = ""
+  objAux = ""
+  var = 0
+
+  #checa que no exista
+  for x in range(0,iContadorDiccionarioVar - 1):
+    objAux = dV[x]
+    #compara los nombres
+    if(p[2] == objAux.getNombre()):
+      raise errorSemantico("Variable ya definida: " + p[2])
+
+  #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
+  if(tipoDeclaracion == "int" and bscope == 0):
+    var = vgi
+    vgi += 1
+  elif(tipoDeclaracion == "int" and bscope == 1):
+    var = vli
+    vli+=1
+  elif(tipoDeclaracion == "float" and bscope == 0):
+    var = vgf
+    vgf+=1
+  elif(tipoDeclaracion == "float" and bscope == 1):
+    var = vgf
+    vlf+=1
+  elif(tipoDeclaracion == "string" and bscope == 0):
+    var = vgs
+    vgs+=1
+  elif(tipoDeclaracion == "string" and bscope == 1):
+    var = vls
+    vls+=1
+
+  #crea el objeto tablaVar con : nombre, tipo, scope, direccion
+  if(bscope == 0):
+    obj = tablaVar(p[2],tipoDeclaracion,'global',var)
+  else:
+    obj = tablaVar(p[2],tipoDeclaracion,'local',var)
+
+   #lo agrega al diccionario
+  dV[iContadorDiccionarioVar] = obj
+  #incrementa el contador
+  iContadorDiccionarioVar = iContadorDiccionarioVar + 1
+
+#funcion auxiliar recursiva que ayuda a seguir declrando variables dentro del mismo renglon
+def p_a(p):
+  '''
+  a : declaracion_2
+   | empty
+  '''
+
+#define los distintos tipos de variables pueden ser int, float, string y bool
 def p_tipo(p):
   '''
   tipo : INT
@@ -642,64 +701,65 @@ def p_tipo(p):
        | BOOL
   '''
   global tipoDeclaracion
+  #guarda el tipo en tipo de declaracion
+  #ayuda a que no se revuelva el tipo de dato por el lalr de las funciones
   tipoDeclaracion = p[1]
-  print(p[1]);
+  print(p[1])
 
+###################################################################################################
+
+#seccion 3 de codigo
+###################################################################################################
+
+#funcion que asigna a un id algo
 def p_asignacion(p):
   '''
   asignacion : matchID EQUIVALE asignacion_aux
-
   '''
-  global arregloVar
-  global iContadorDiccionarioVar
-  global tipo
-  global PilaO
-  global PTipo
-  global op
-  global op1
-  global op2
-  global tipo
-  global operador
-  global operando1
-  global operando2
-  global resultado
-  global iContadorTemporal
-  global iContadorCuadruplos
+
+  global arregloCuadruplos
+  global PilaO, PTipo
+  global op, op1, op2, tipo
+  global operador, operando1, operando2, resultado
+  global iContadorTemporal, iContadorCuadruplos, iContadorDiccionarioVar
   varAux = 0;
-  operador = "="
-  operando2 = PilaO.pop()
-  operando1 = PilaO.pop()
+
+  #saca el tipo de datos de los operandos qye esten en la pila de tipos
   op2 = PTipo.pop()
   op1 = PTipo.pop()
+  #convierte = a numero
   op = dicOperadores["="]
-  print("operador : ")
-  print(op)
-  print("op2 :")
-  print(op2)
-  print("op1 :")
-  print(op1)
+  #calcula el tipo con el cubo de datos
   tipo = cubo[op1][op2][op]
-
+  #si el tipo es -1 (error)--> erros semantico
   if(tipo == -1):
   	raise errorSemantico("Uso incorrecto de tipos ")
   else:
-  	PTipo.append(tipo)
-  	resultado.append(operando1)
-  	arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorCuadruplos]))
-  	PilaO.append(resultado[iContadorCuadruplos])
-  	iContadorCuadruplos += 1
+    #saca operador y operandos de la pila para hacer el cuadruplo
+    operador = "="
+    operando2 = PilaO.pop()
+    operando1 = PilaO.pop()
+    #mete el nuevo tipo a la pila de tipos
+    PTipo.append(tipo)
+    resultado.append(operando1)
+    arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorCuadruplos]))
+    PilaO.append(resultado[iContadorCuadruplos])
+    iContadorCuadruplos += 1
 
+#funcion auxiliar que decide si asignar una expresion aritmetica o bien una fincion de usuario 
 def p_asignacion_aux(p):
 	'''
 	asignacion_aux : expresion imprimePuntoYComa
 					| funcionUsuario
 	'''
 
+#funcion para hacer expresiones booleanas 
 def p_exp(p):
   '''
   exp : expresion exp_2
   '''
 
+#expresion boleana 
 def p_exp_2(p):
   '''
   exp_2 : DIFERENTE expresion
@@ -710,26 +770,14 @@ def p_exp_2(p):
       | MENOR_IGUAL expresion
       | empty
   '''
-  global arregloVar
-  global iContadorDiccionarioVar
+  global arregloCuadruplos
   global tipo
-  global PilaO
-  global operador
-  global operando1
-  global operando2
-  global resultado
-  global iContadorTemporal
-  global iContadorCuadruplos
+  global operador, operando1, operando2, resultado
+  global iContadorTemporal, iContadorDiccionarioVar, iContadorCuadruplos
   global dicTipos
-  global PTipo
-
-  ## cuadruplos de condicion
-  # toma el operador 1 y los operandos
-  operador = p[1]
-  operando2 = PilaO.pop()
-  operando1 = PilaO.pop()
-  iContadorTemporal += 1
-  resultado.append(iContadorTemporal)
+  global PTipo,PilaO
+  
+  #checa el tipo de dato
   op2 = PTipo.pop()
   op1 = PTipo.pop()
   op = dicTipos[operador]
@@ -737,98 +785,99 @@ def p_exp_2(p):
   if(tipo != 3):
     raise errorSemantico("uso incorrecto de tipos ")
   else:
-  	#genera el cuadruplo
-  	arrTB.append(iContadorTemporal)
-  	tgb+=1
-  	arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
-  	#el temporal lo mete a la pila
-  	PilaO.append(iContadorTemporal)
-  	#suma uno al contador
-  	iContadorCuadruplos += 1
+    ## cuadruplos de condicion
+	# toma el operador 1 y los operandos
+	operador = p[1]
+	operando2 = PilaO.pop()
+	operando1 = PilaO.pop()
+	#incrementa el contador y lo agrega al arreglo de resultados
+	iContadorTemporal += 1
+	resultado.append(iContadorTemporal)
+	#genera el cuadruplo
+	tgb+=1
+	arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
+	#el temporal lo mete a la pila
+	PilaO.append(iContadorTemporal)
+	#suma uno al contador
+	iContadorCuadruplos += 1
 
+#para hacer sumas
 def p_expresion(p):
   '''
   expresion : termino expresion_2
   '''
-  global POper
-  global PilaO
-  global PTipo
-  global op
+  global POper, PilaO, PTipo
+  global op, op1, op2
   global tipo
   global dicOperadores
-  global operador
-  global operando1
-  global operando2
-  global resultado
-  global iContadorTemporal
-  global iContadorCuadruplos
+  global operador, operando1, operando2, resultado
+  global iContadorTemporal, iContadorCuadruplos
 
+  #si la lisra tiene más de 1 elemento
   if(len(POper) > 0):
+    # y su top es + o - 
     if(POper[-1] == "+" or POper[-1] == "-"):
-      operador = POper.pop()
-      operando2 = PilaO.pop()
-      operando1 = PilaO.pop()
-      iContadorTemporal += 1
+      #checa que los tipos sean validos con la operacion
       op2 = PTipo.pop()
       op1 = PTipo.pop()
       if (operador == "+"):
       	op = dicOperadores["+"]
       else:
       	op = dicOperadores["-"]
+      #checa el tipo
       tipo = cubo[op1][op2][op]
+      #si es invalido erroe semantico
       if(tipo == -1):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
+      	#hace cuadruplo
+      	#saca d epila
+      	operador = POper.pop()
+      	operando2 = PilaO.pop()
+      	operando1 = PilaO.pop()
+      	iContadorTemporal += 1
       	if(tipo == 1):
       		tgi+=1
       	elif(tipo == 2):
       		tgf+=2
+      	#agrega a la pila
       	PTipo.append(tipo)
       	resultado.append(iContadorTemporal)
+      	#agrega al cuadruplo
       	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
       	PilaO.append(iContadorTemporal)
+      	#incrementa el contador de cuadruplos
       	iContadorCuadruplos += 1
 
+#funcion que reconoce suma o resta
 def p_expresion_2(p):
   '''
   expresion_2 : SUMA expresion
               | RESTA expresion
               | empty
   '''
+  #agrega la suma o resta a la pila
   global POper
   if(p[1] == "+"):
     POper.append(p[1])
   elif(p[1] == "-"):
     POper.append(p[1])
 
+#expresion que me deja multiplicar y dividir
 def p_termino(p):
   '''
   termino : factor termino_2
   '''
   ##generacion de cuadruplos
-  global op
-  global tipo
-  global op1
-  global op2
-  global POper
-  global PilaO
-  global PTipo
-  global operador
-  global operando1
-  global operando2
-  global resultado
+  global op, op1, op2, tipo
+  global POper, PilaO, PTipo
+  global operador, operando1, operando2, resultado
   global dicOperadores
-  global iContadorTemporal
-  global iContadorCuadruplos
+  global iContadorTemporal, iContadorCuadruplos
   #entra si ya entro una multiplicacion o division a la pila o suma o resta
   if(len(POper) > 0):
   	#pregunta si el tope es multiplicacion o division en caso de serlo prosigue
     if(POper[-1] == "*" or POper[-1] == "/"):
-      #saca el operador y ambos operandos
-      operador = POper.pop()
-      operando2 = PilaO.pop()
-      operando1 = PilaO.pop()
-      iContadorTemporal += 1
       op2 = PTipo.pop()
       op1 = PTipo.pop()
       if (operador == "*"):
@@ -843,6 +892,11 @@ def p_termino(p):
       		tgi+=1
       	elif(tipo == 2):
       		tgf+=2
+      #saca el operador y ambos operandos
+        operador = POper.pop()
+        operando2 = PilaO.pop()
+        operando1 = PilaO.pop()
+        iContadorTemporal += 1
       	PTipo.append(tipo)
       	#al arreglo de resultados mete el numero de temporal
       	resultado.append(iContadorTemporal)
@@ -852,6 +906,7 @@ def p_termino(p):
       	PilaO.append(iContadorTemporal)
       	iContadorCuadruplos += 1
 
+#hace match de multiplicacion o division
 def p_termino_2(p):
   '''
   termino_2 : MatchMultiplicacion
@@ -859,6 +914,7 @@ def p_termino_2(p):
             | empty
   '''
 
+#mete la multiplicacion a la pila
 def p_MatchMultiplicacion(p):
   '''
   MatchMultiplicacion : MULTIPLICACION termino
@@ -867,6 +923,7 @@ def p_MatchMultiplicacion(p):
   global POper
   POper.append(p[1])
 
+#mete la division a la pila
 def p_MatchDivision(p):
   '''
   MatchDivision : DIVISION termino
@@ -875,12 +932,14 @@ def p_MatchDivision(p):
   global POper
   POper.append(p[1])
 
+#deja meter un id o una expresion en parentesis
 def p_factor(p):
   '''
   factor : imprimeParentesisIzq expresion imprimeParentesisDer
          | var_cte
   '''
 
+#match de id , enteros o flotantes
 def p_var_cte(p):
   '''
   var_cte : matchID
@@ -888,6 +947,7 @@ def p_var_cte(p):
           | matchCteFloat
   '''
 
+#match de id checa que exista y guarda el tipo en la pila de tipo
 def p_matchID(p):
   '''
   matchID : ID
@@ -917,14 +977,13 @@ def p_matchID(p):
   if(varAux == iContadorDiccionarioVar - 1):
     raise errorSemantico("Variable no declarada: " + p[1])
 
+#match una constante numerica entera
 def p_matchCteInt(p):
   '''
   matchCteInt : CTE_INT
   '''
-  global PilaO
-  global PTipo
+  global PilaO, PTipo
   global dicTipos
-  global arrCI
   global ctei
   auxTipo = -2
 
@@ -935,6 +994,7 @@ def p_matchCteInt(p):
   PilaO.append(p[1])
   ctei+=1
 
+#match una constante numerica flotante
 def p_matchCteFloat(p):
   '''
   matchCteFloat : CTE_FLOAT
@@ -953,24 +1013,26 @@ def p_matchCteFloat(p):
   PilaO.append(p[1])
   ctef+=1
 
+###################################################################################################
+
+#seccion 4 de codigo
+###################################################################################################
+
+#funcion para aceptar condiciones s
 def p_condicion(p):
   '''
   condicion : imprimeIf imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
   '''
 
+#genera el cuadruplo de condicion
 def p_cuacondicion1(p):
   '''
   cuacondicion1 : empty
   '''
-  global operador
-  global operando1
-  global operando2
-  global resultado
+  global operador, operando1, operando2, resultado
   global iContadorCuadruplos
-  global PSaltos
-  global PilaO
+  global PSaltos, PilaO
   global arregloCuadruplos
-  global PSaltos
   #genera de operador gotof
   operador = "GotoFIf"
   #el operando 1 es el temporal o ultima variable localizada en pila o
@@ -984,18 +1046,21 @@ def p_cuacondicion1(p):
   #suma uno al contador
   iContadorCuadruplos += 1
 
+#la condicion puede checar una expresion o un checkwall
 def p_condicion_2(p):
   '''
   condicion_2 : exp 
             | checkwall
   '''
 
+#condicion permite un elif
 def p_condicion_3(p):
   '''
   condicion_3 : ELIF imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndElif condicion_3
               | empty
   '''
 
+#permite un else
 def p_condicion_4(p):
   '''
   condicion_4 : ELSE imprimeDosPuntos estatuto_2 imprimeEndElse
@@ -1008,6 +1073,12 @@ def p_condicion_4(p):
     while(len(PSaltosAux)>0):
       res = PSaltosAux.pop()
       arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+
+###################################################################################################
+
+#seccion 5 de codigo
+###################################################################################################
+
 
 def p_escritura(p):
   '''
@@ -1039,6 +1110,11 @@ def p_matchCteString(p):
 	global arrCS
 	global ctes
 	ctes+=1
+
+###################################################################################################
+
+#seccion 6 de codigo
+###################################################################################################
 
 #funcion de sintaxis del ciclo --> estructura "while ( expresion ) : codigo end_while"
 def p_ciclo(p):
@@ -1074,34 +1150,71 @@ def p_cuaciclo1(p):
   iContadorCuadruplos += 1
 
 
-#################################################################
+###################################################################################################
+
+#seccion 7 de codigo
+###################################################################################################
 #funciones
 def p_function(p):
   '''
   function : imprimeDef tipoFunction ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
   '''
   global bscope
-  global arregloFuncion, listaParamFuncion
-  global iContadorDiccionarioFuncion
-  global dF
+  global listaParamFuncion
+  global iContadorDiccionarioFuncion, iContadorDiccionarioVar
+  global dF,dV
   global tipoDeclaracionFuncion
+  global vgi, vli, vgf, vlf, vgs, vls
+
+  for x in range(0,iContadorDiccionarioFuncion - 1):
+  	varFunc = dF[x]
+  	if(p[3] == varFunc).getNombre():
+  		raise errorSemantico("Función previamente definida: " + p[3])
+
   listaAux = []
   listaAux.extend(listaParamFuncion)
-  arregloFuncion.append(tablaFunciones(p[3],tipoDeclaracionFuncion,listaAux, -2))
-  print("hola acabo de crear una funcion")
-  print(arregloFuncion[iContadorDiccionarioFuncion-1].getParametros())
+  varAux = tablaFunciones(p[3],tipoDeclaracionFuncion,listaAux, -2)
 
-  if(iContadorDiccionarioFuncion == 1):
-    dF = {iContadorDiccionarioFuncion : arregloFuncion[iContadorDiccionarioFuncion-1]}
+  if(iContadorDiccionarioFuncion == 0):
+    dF = {iContadorDiccionarioFuncion : varAux}
   else:
-    for x in range(0,iContadorDiccionarioFuncion - 1):
-      if(p[3] == arregloFuncion[x].getNombre()):
-        raise errorSemantico("Función previamente definida: " + p[3])
-    dF[iContadorDiccionarioFuncion] = arregloFuncion[iContadorDiccionarioFuncion - 1]
+    dF[iContadorDiccionarioFuncion] = varAux
     
   iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
   print(dF)
   bscope = 0
+
+#si no es void crea una variable global coon el mismo nombre
+  if(tipoDeclaracionFuncion == "void"): 
+	  #vars locales
+	  obj = ""
+	  objAux = ""
+	  var = 0
+	  #checa que no exista
+	  for x in range(0,iContadorDiccionarioVar - 1):
+	    objAux = dV[x]
+	    #compara los nombres
+	    if(p[3] == objAux.getNombre()):
+	      raise errorSemantico("Variable ya definida: " + p[2])
+
+	  #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
+	  if(tipoDeclaracionFuncion == "int"):
+	    var = vgi
+	    vgi += 1
+	  elif(tipoDeclaracionFuncion == "float"):
+	    var = vgf
+	    vgf+=1
+	  elif(tipoDeclaracionFuncion == "string"):
+	    var = vgs
+	    vgs+=1
+
+	  #crea el objeto tablaVar con : nombre, tipo, scope, direccion
+	  obj = tablaVar(p[2],tipoDeclaracion,'global',var)
+
+	   #lo agrega al diccionario
+	  dV[iContadorDiccionarioVar] = obj
+	  #incrementa el contador
+	  iContadorDiccionarioVar = iContadorDiccionarioVar + 1
 
 def p_tipoFunction(p):
   '''
@@ -1218,7 +1331,10 @@ def p_destroyVars(p):
 
   print(len(dV))
 
-#################################################################
+###################################################################################################
+
+#seccion 8 de codigo
+###################################################################################################
 
 #define la sintaxixs de una función de usuario
 def p_funcionUsuario(p):
@@ -1347,7 +1463,10 @@ def p_functionValidaParams(p):
 	else:
 		raise errorSemantico("La cantidad de parametros no concuerda con los parametros de la funcion")
 
+###################################################################################################
 
+#seccion 9 de codigo
+###################################################################################################
 #función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):
   '''
