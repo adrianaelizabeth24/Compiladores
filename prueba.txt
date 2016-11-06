@@ -4,7 +4,7 @@ int c;
 int d;
 int e;
 
-def int prueba(int i, int f):
+def int prueba(int i, int k):
 	a = c + d;
 	return a;
 end_def
