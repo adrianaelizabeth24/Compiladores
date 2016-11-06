@@ -77,7 +77,7 @@ def Operacion(op,op1,op2,res):
 		Multiplicacion(op1,op2,res)
 	elif(op == 3):
 		Division(op1,op2,res)
-	elif(op == 11)
+	elif(op == 11):
 		Print(res)
 
 def getValor(memoriaVirtual):
