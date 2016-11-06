@@ -37,13 +37,24 @@ B = tk.Button(bottom, text="Compile", command = compileCode)
 B.pack()
 left.add(bottom)
 
-right = Label(win, text="Doggo", width=500, height = 500)
+right = PanedWindow(win, orient=VERTICAL)
 win.add(right)
+
+draw = Canvas (right, width=550, height=300)
+draw.pack()
+right.add(draw)
+
+outText = Text (right, height=2)
+outText.insert(END, 'Hello, world')
+right.add(outText)
+
 '''
   Dibujar cuadricula
 '''
-draw = Canvas (right, width=550, height=500)
-draw.pack()
+
+#draw = Canvas (right, width=550, height=300)
+#draw.pack()
+
 
 x1 = 0
 x2 = 13
