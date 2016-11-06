@@ -61,21 +61,21 @@ dF = {}
 
 #apuntadores a memoria
 vgi = 5000
-vli= 5300
 vgf = 6000
-vlf = 6300
 vgs = 7000
-vls = 7300
 vgb = 8000
-vlb = 8300
-tgi = 9000
-tgf = 10000
-tgs = 11000
-tgb = 12000
-ctei = 43000
-ctef = 44000
-ctes = 45000
-cteb = 46000
+vli= 10000
+vlf = 11000
+vlb = 12000
+vls = 13000
+tgi = 20000
+tgf = 21000
+tgs = 22000
+tgb = 23000
+ctei = 30000
+ctef = 31000
+ctes = 32000
+cteb = 33000
 
 cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
 #Cubo [OP1][OP2][OPERACION] = TIPO
@@ -307,7 +307,7 @@ cubo[3][1][10] = -1     # bool | float = error
 cubo[3][2][10] = -1     # bool | string = error
 cubo[3][3][10] = 3    # bool | bool = bool
 
-dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10}
+dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "print" : 11}
 
 dicTipos = {"int" : 0, "float" : 1, "string" : 2, "bool" : 3, "error" : -1}
 
@@ -1335,14 +1335,17 @@ def p_destroyVars(p):
 
 
   del listaParamFuncion[:]
-  vli= 5300
-  vlf = 6300
-  vls = 7300
-  vlb = 8300
+
+
+  vli= 10000
+  vlf = 11000
+  vlb = 12000
+  vls = 13000
   tgi -= iContadorTemporal
   tgf -= iContadorTemporal
   tgs -= iContadorInicioLocal
   tgb -= iContadorInicioLocal
+
 
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
@@ -1449,7 +1452,6 @@ def p_functionUsuario_aux1(p):
 
   tipo = PTipo.pop()
   listaAuxParamFuncion.append(tipo)
-
   operando1 = PilaO.pop()
   resultado.append(iContadorParametros + 1)
   arregloCuadruplos.append(cuadruplo("param",operando1,"nul",iContadorParametros + 1))
