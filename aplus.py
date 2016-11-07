@@ -788,7 +788,12 @@ def p_exp_2(p):
 #para hacer sumas
 def p_expresion(p):
   '''
-  expresion : termino expresion_2
+  expresion : termino cuaTermino expresion_2
+  '''
+
+def p_cuaTermino(p):
+  '''
+  cuaTermino : empty
   '''
   global POper, PilaO, PTipo
   global tgi, tgf
@@ -835,23 +840,37 @@ def p_expresion(p):
 #funcion que reconoce suma o resta
 def p_expresion_2(p):
   '''
-  expresion_2 : SUMA expresion
-              | RESTA expresion
+  expresion_2 : matchSuma expresion
+              | matchResta expresion
               | empty
   '''
-  #agrega la suma o resta a la pila
+
+def p_matchSuma(p):
+  '''
+  matchSuma : SUMA
+  '''
   global POper
-  if(p[1] == "+"):
-    POper.append(p[1])
-  elif(p[1] == "-"):
-    POper.append(p[1])
+  POper.append(p[1])
+
+def p_matchResta(p):
+  '''
+  matchResta : RESTA
+  '''
+  global POper
+  POper.append(p[1])
 
 #expresion que me deja multiplicar y dividir
 def p_termino(p):
   '''
-  termino : factor termino_2
+  termino : factor cuaFactor termino_2
   '''
-  ##generacion de cuadruplos
+
+#funcion para cuadruplo de factor
+def p_cuaFactor(p):
+  '''
+  cuaFactor : empty
+  '''
+  #generacion de cuadruplos
   global POper, PilaO, PTipo
   global tgi, tgf
   global resultado
@@ -895,15 +914,15 @@ def p_termino(p):
 #hace match de multiplicacion o division
 def p_termino_2(p):
   '''
-  termino_2 : MatchMultiplicacion
-            | MatchDivision
+  termino_2 : MatchMultiplicacion termino
+            | MatchDivision termino
             | empty
   '''
 
 #mete la multiplicacion a la pila
 def p_MatchMultiplicacion(p):
   '''
-  MatchMultiplicacion : MULTIPLICACION termino
+  MatchMultiplicacion : MULTIPLICACION
   '''
   #si llega una multiplicacion la mete dentro de la pila de operadores
   global POper
@@ -912,7 +931,7 @@ def p_MatchMultiplicacion(p):
 #mete la division a la pila
 def p_MatchDivision(p):
   '''
-  MatchDivision : DIVISION termino
+  MatchDivision : DIVISION
   '''
   #si llega una division la mete en la pila de operadores
   global POper
@@ -921,9 +940,22 @@ def p_MatchDivision(p):
 #deja meter un id o una expresion en parentesis
 def p_factor(p):
   '''
-  factor : imprimeParentesisIzq expresion imprimeParentesisDer
+  factor : cuaFondoFalsoPI expresion cuaFondoFalsoPD
          | var_cte
   '''
+def p_cuaFondoFalsoPI(p):
+  '''
+  cuaFondoFalsoPI : PARENTESIS_IZQ
+  '''
+  global POper
+  POper.append(p[1])
+
+def p_cuaFondoFalsoPD(p):
+  '''
+  cuaFondoFalsoPD : PARENTESIS_DER
+  '''
+  global POper
+  POper.pop()
 
 #match de id , enteros o flotantes
 def p_var_cte(p):

@@ -1,6 +1,11 @@
-int a , b;
-bool c;
+float A;
+float B;
+float C;
+float D;
+float E;
+float J;
+
 
 main:
 
-c = true;
+A = B + C * (D - E) + J;
