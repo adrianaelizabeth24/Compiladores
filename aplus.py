@@ -791,6 +791,7 @@ def p_expresion(p):
   expresion : termino cuaTermino expresion_2
   '''
 
+#funcion que hace las operaciones de cuadruplos desúes del "termino"
 def p_cuaTermino(p):
   '''
   cuaTermino : empty
@@ -845,6 +846,7 @@ def p_expresion_2(p):
               | empty
   '''
 
+#funcion que mete el "+" adentro de la pila de operadores
 def p_matchSuma(p):
   '''
   matchSuma : SUMA
@@ -852,6 +854,7 @@ def p_matchSuma(p):
   global POper
   POper.append(p[1])
 
+#función que mete el "-" adentro de la pila de operadores
 def p_matchResta(p):
   '''
   matchResta : RESTA
@@ -943,6 +946,8 @@ def p_factor(p):
   factor : cuaFondoFalsoPI expresion cuaFondoFalsoPD
          | var_cte
   '''
+
+#funcion que crea fondo falso cuando llega el parentesis
 def p_cuaFondoFalsoPI(p):
   '''
   cuaFondoFalsoPI : PARENTESIS_IZQ
@@ -950,6 +955,7 @@ def p_cuaFondoFalsoPI(p):
   global POper
   POper.append(p[1])
 
+#funcion que saca el fondo flaso cuando se cierra el parentesis
 def p_cuaFondoFalsoPD(p):
   '''
   cuaFondoFalsoPD : PARENTESIS_DER
@@ -1030,6 +1036,7 @@ def p_matchCteFloat(p):
   PilaO.append(p[1])
   ctef+=1
 
+#hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
   '''
   matchCteBool : TRUE
@@ -1109,7 +1116,7 @@ def p_condicion_4(p):
 #seccion 5 de codigo
 ###################################################################################################
 
-
+#genera el cuadruplo para imprimir
 def p_escritura(p):
   '''
   escritura : imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
@@ -1127,18 +1134,24 @@ def p_escritura(p):
   arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   iContadorCuadruplos += 1
 
+#hace match de un string o bien de una expresion
 def p_escritura_2(p):
   '''
   escritura_2 : matchCteString
               | expresion
   '''
 
+#imprime string
 def p_matchCteString(p):
 	'''
 	matchCteString : CTE_STRING
 	'''
-	global arrCS
 	global ctes
+	global dicTipos,PTipo,PilaO
+	auxTipo = dicTipos["string"]
+	PTipo.append(auxTipo)
+	#mete la constante a la pila de operandos
+	PilaO.append(p[1])
 	ctes+=1
 
 ###################################################################################################
@@ -1189,6 +1202,32 @@ def p_function(p):
   '''
   function : imprimeDef tipoFunction matchIDFunction imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
   '''
+  global bscope
+  global listaParamFuncion
+  global iContadorDiccionarioFuncion, iContadorDiccionarioVar
+  global dF,dV
+  global tipoDeclaracionFuncion
+  global vgi, vli, vgf, vlf, vgs, vls
+
+  for x in range(0,iContadorDiccionarioFuncion):
+    varFunc = dF[x]
+    if(p[1] == varFunc.getNombre()):
+      raise errorSemantico("Función previamente definida: " + p[1])
+
+  listaAux = []
+  listaAux.extend(listaParamFuncion)
+  varAux = tablaFunciones(p[1],tipoDeclaracionFuncion,listaAux, -2)
+
+  if(iContadorDiccionarioFuncion == 0):
+    dF = {iContadorDiccionarioFuncion : varAux}
+  else:
+    dF[iContadorDiccionarioFuncion] = varAux
+    
+  iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
+  print(dF)
+  bscope = 0
+
+
 def p_matchIDFunction(p):
   '''
   matchIDFunction : ID

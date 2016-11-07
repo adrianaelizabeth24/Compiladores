@@ -8,4 +8,4 @@ float J;
 
 main:
 
-A = B + C * (D - E) + J;
+print("hola");
