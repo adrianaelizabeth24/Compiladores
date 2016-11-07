@@ -357,8 +357,8 @@ tokens = (
   'CTE_INT',
   'CTE_STRING',
   'CTE_FLOAT',
-  'CTE_BOOL'
-  'TRUE'
+  'CTE_BOOL',
+  'TRUE',
   'FALSE'
   )
 
@@ -422,12 +422,6 @@ def t_CTE_INT(t):
     r'\d+'
     t.value = int(t.value)
     return t
-
-#er de la cte bool, se pone antes que los identificadores y que los strings para que haga match
-def t_CTE_BOOL(t):
-    r'\"[True|False]\"'
-    t.type = reserved.get(t.value,'CTE_BOOL') 
-    return t;
 
 #er de identidicador, deben comenzar con una letra y oyeden ser seguidos por cualquier letra guión bajo o bien un dígito
 def t_ID(t):
@@ -1006,8 +1000,16 @@ def p_matchCteFloat(p):
 
 def p_matchCteBool(p):
   '''
-  matchCteBool : CTE_BOOL
+  matchCteBool : TRUE
+  				| FALSE
   '''
+  global cteb
+  global dicTipos,PTipo,PilaO
+  auxTipo = dicTipos["bool"]
+  PTipo.append(auxTipo)
+  #mete la constante a la pila de operandos
+  PilaO.append(p[1])
+  cteb+=1
 
 ###################################################################################################
 

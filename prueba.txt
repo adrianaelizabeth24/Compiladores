@@ -3,4 +3,4 @@ bool c;
 
 main:
 
-c = "True";
+c = true;
