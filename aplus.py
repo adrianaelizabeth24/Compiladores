@@ -514,7 +514,7 @@ def p_matchMain(p):
 	#saca el tope de Psaltos , que es el apuntador al "gotof"
 	res = PSaltos.pop()
 	#al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-	arregloCuadruplos[res].setOperando1(iContadorCuadruplos + 1)
+	arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
 
 #funcion auxiliar de estatuto sirve para la declaracion de 0 a n funciones
 def p_function_declaration(p):
@@ -616,12 +616,6 @@ def p_declaracion(p):
 
   #incrementa contador
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
-  #funcion para imprimir
-  for x in range(0,iContadorDiccionarioVar):
-    print(dV[x].getNombre())
-    print(dV[x].getTipo())
-    print(dV[x].getScope())
-    print("--------------------")
 
 #esta funcion ayuda en caso de que se quieran declarar variables variables del mismo tipo en el mismo renglon
 def p_declaracion_aux(p):
@@ -702,7 +696,6 @@ def p_tipo(p):
   #guarda el tipo en tipo de declaracion
   #ayuda a que no se revuelva el tipo de dato por el lalr de las funciones
   tipoDeclaracion = p[1]
-  print(p[1])
 
 ###################################################################################################
 
@@ -714,15 +707,13 @@ def p_asignacion(p):
   '''
   asignacion : matchID EQUIVALE asignacion_aux
   '''
-
   global arregloCuadruplos
   global PilaO, PTipo
-  global op, op1, op2, tipo
-  global operador, operando1, operando2, resultado
+  global resultado
   global iContadorTemporal, iContadorCuadruplos, iContadorDiccionarioVar
   varAux = 0;
 
-  #saca el tipo de datos de los operandos qye esten en la pila de tipos
+  #saca el tipo de datos de los operandos que esten en la pila de tipos
   op2 = PTipo.pop()
   op1 = PTipo.pop()
   #convierte = a numero
@@ -770,15 +761,16 @@ def p_exp_2(p):
   '''
   global arregloCuadruplos
   global tipo
-  global operador, operando1, operando2, resultado
+  global resultado
   global iContadorTemporal, iContadorDiccionarioVar, iContadorCuadruplos
-  global dicTipos
+  global dicOperadores
   global PTipo,PilaO
+  global tgb
   
   #checa el tipo de dato
   op2 = PTipo.pop()
   op1 = PTipo.pop()
-  op = dicTipos[operador]
+  op = dicOperadores[p[1]]
   tipo = cubo[op1][op2][op]
   if(tipo != 3):
     raise errorSemantico("uso incorrecto de tipos ")
@@ -805,10 +797,9 @@ def p_expresion(p):
   expresion : termino expresion_2
   '''
   global POper, PilaO, PTipo
-  global op, op1, op2
-  global tipo
+  global tgi, tgf
   global dicOperadores
-  global operador, operando1, operando2, resultado
+  global resultado
   global iContadorTemporal, iContadorCuadruplos
 
   #si la lisra tiene más de 1 elemento
@@ -818,7 +809,7 @@ def p_expresion(p):
       #checa que los tipos sean validos con la operacion
       op2 = PTipo.pop()
       op1 = PTipo.pop()
-      if (operador == "+"):
+      if (POper[-1] == "+"):
       	op = dicOperadores["+"]
       else:
       	op = dicOperadores["-"]
@@ -834,15 +825,15 @@ def p_expresion(p):
       	operando2 = PilaO.pop()
       	operando1 = PilaO.pop()
       	iContadorTemporal += 1
-      	if(tipo == 1):
+      	if(tipo == 0):
       		tgi+=1
-      	elif(tipo == 2):
+      	elif(tipo == 1):
       		tgf+=2
       	#agrega a la pila
       	PTipo.append(tipo)
       	resultado.append(iContadorTemporal)
       	#agrega al cuadruplo
-      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
+      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,iContadorTemporal))
       	PilaO.append(iContadorTemporal)
       	#incrementa el contador de cuadruplos
       	iContadorCuadruplos += 1
@@ -867,9 +858,9 @@ def p_termino(p):
   termino : factor termino_2
   '''
   ##generacion de cuadruplos
-  global op, op1, op2, tipo
   global POper, PilaO, PTipo
-  global operador, operando1, operando2, resultado
+  global tgi, tgf
+  global resultado
   global dicOperadores
   global iContadorTemporal, iContadorCuadruplos
   #entra si ya entro una multiplicacion o division a la pila o suma o resta
@@ -878,11 +869,14 @@ def p_termino(p):
     if(POper[-1] == "*" or POper[-1] == "/"):
       op2 = PTipo.pop()
       op1 = PTipo.pop()
-      if (operador == "*"):
+
+      if(POper[-1] == "*"):
       	op = dicOperadores["*"]
       else:
       	op = dicOperadores["/"]
+
       tipo = cubo[op1][op2][op]
+
       if(tipo == -1):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
@@ -950,30 +944,28 @@ def p_matchID(p):
   '''
   matchID : ID
   '''
-  global dV
+  global dV, dicTipos
   global iContadorDiccionarioVar
-  global op1
-  global op2
-  global PilaO
-  global PTipo
-  global dicTipos
+  global PilaO, PTipo
   varAux = 0
   tipo = ""
   auxTipo = -2
   #Checa si variable esta o no declarada
   for x in range(0,iContadorDiccionarioVar):
-    if(p[1] != dV[x].getNombre()):
-      varAux += 1
-    else:
-      #cubo semantico tipo de dato correcto
-      tipo = dV[x].getTipo()
-      auxTipo = dicTipos[tipo]
-      PTipo.append(auxTipo)
-      #Meter a pila operadores paso 1 del algoritmo
-      PilaO.append(p[1])
+  	if(p[1] != dV[x].getNombre()):
+  		varAux += 1
+  	else:
+  		#cubo semantico tipo de dato correcto
+  		tipo = dV[x].getTipo()
+  		auxTipo = dicTipos[tipo]
+  		PTipo.append(auxTipo)
+  		#Meter a pila operadores paso 1 del algoritmo
+  		PilaO.append(p[1])
   #No esta declarada
   if(varAux == iContadorDiccionarioVar):
     raise errorSemantico("Variable no declarada: " + p[1])
+
+  print(p[1])
 
 #match una constante numerica entera
 def p_matchCteInt(p):
@@ -1155,7 +1147,11 @@ def p_cuaciclo1(p):
 #funciones
 def p_function(p):
   '''
-  function : imprimeDef tipoFunction ID imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
+  function : imprimeDef tipoFunction matchIDFunction imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
+  '''
+def p_matchIDFunction(p):
+  '''
+  matchIDFunction : ID
   '''
   global bscope
   global listaParamFuncion
@@ -1165,13 +1161,13 @@ def p_function(p):
   global vgi, vli, vgf, vlf, vgs, vls
 
   for x in range(0,iContadorDiccionarioFuncion):
-  	varFunc = dF[x]
-  	if(p[3] == varFunc).getNombre():
-  		raise errorSemantico("Función previamente definida: " + p[3])
+    varFunc = dF[x]
+    if(p[1] == varFunc.getNombre()):
+      raise errorSemantico("Función previamente definida: " + p[1])
 
   listaAux = []
   listaAux.extend(listaParamFuncion)
-  varAux = tablaFunciones(p[3],tipoDeclaracionFuncion,listaAux, -2)
+  varAux = tablaFunciones(p[1],tipoDeclaracionFuncion,listaAux, -2)
 
   if(iContadorDiccionarioFuncion == 0):
     dF = {iContadorDiccionarioFuncion : varAux}
@@ -1183,35 +1179,33 @@ def p_function(p):
   bscope = 0
   #si no es void crea una variable global coon el mismo nombre
   if(tipoDeclaracionFuncion != "void"): 
-	  #vars locales
-	  obj = ""
-	  objAux = ""
-	  var = 0
-	  #checa que no exista
-	  for x in range(0,iContadorDiccionarioVar):
-	    objAux = dV[x]
-	    #compara los nombres
-	    if(p[3] == objAux.getNombre()):
-	      raise errorSemantico("Variable ya definida: " + p[2])
+    #vars locales
+    obj = ""
+    objAux = ""
+    var = 0
+    #checa que no exista
+    for x in range(0,iContadorDiccionarioVar):
+      #compara los nombre
+      if(p[1] == dV[x].getNombre()):
+        raise errorSemantico("Variable ya definida: " + p[1])
 
-	  #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
-	  if(tipoDeclaracionFuncion == "int"):
-	    var = vgi
-	    vgi += 1
-	  elif(tipoDeclaracionFuncion == "float"):
-	    var = vgf
-	    vgf+=1
-	  elif(tipoDeclaracionFuncion == "string"):
-	    var = vgs
-	    vgs+=1
+    #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
+    if(tipoDeclaracionFuncion == "int"):
+      var = vgi
+      vgi += 1
+    elif(tipoDeclaracionFuncion == "float"):
+      var = vgf
+      vgf+=1
+    elif(tipoDeclaracionFuncion == "string"):
+      var = vgs
+      vgs+=1
 
-	  #crea el objeto tablaVar con : nombre, tipo, scope, direccion
-	  obj = tablaVar(p[2],tipoDeclaracion,'global',var)
-
-	   #lo agrega al diccionario
-	  dV[iContadorDiccionarioVar] = obj
-	  #incrementa el contador
-	  iContadorDiccionarioVar = iContadorDiccionarioVar + 1
+    #crea el objeto tablaVar con : nombre, tipo, scope, direccion
+    obj = tablaVar(p[1],tipoDeclaracionFuncion,"global",var)
+     #lo agrega al diccionario
+    dV[iContadorDiccionarioVar] = obj
+    #incrementa el contador
+    iContadorDiccionarioVar = iContadorDiccionarioVar + 1
 
 def p_tipoFunction(p):
   '''
@@ -1226,7 +1220,6 @@ def p_tipoFunction(p):
   tipoDeclaracionFuncion = p[1]
   if(p[1] != "void"):
   	bRetorna = 1
-  print(p[1]);
 
 def p_function_aux(p):
   '''
@@ -1281,7 +1274,6 @@ def p_function_2(p):
   #incrementa contador
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
 
-
 def p_function_3(p):
   '''
   function_3 : COMA function_aux
@@ -1322,20 +1314,24 @@ def p_destroyVars(p):
   '''
   global arregloCuadruplos, listaParamFuncion
   global dV
-  global iContadorInicioLocal, iContadorDiccionarioVar, iContadorTemporal
+  global iContadorInicioLocal, iContadorDiccionarioVar, iContadorTemporal, iContadorCuadruplos
   global resultado
   global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb
+  global bRetorna
 
   iAux = 0
   iAux = iContadorInicioLocal
-  for x in range(iContadorInicioLocal + 1 , iContadorDiccionarioVar):
-    del dV[x]
-  iContadorDiccionarioVar = iAux + 1
+  for x in range(iContadorInicioLocal , iContadorDiccionarioVar):
+    if(dV[x].getScope() == "local"):
+      del dV[x]
+
+  if(bRetorna == 1):
+    iContadorDiccionarioVar = iAux + 1
+  else:
+    iContadorDiccionarioVar = iAux
+
   iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
-
-
   del listaParamFuncion[:]
-
 
   vli= 10000
   vlf = 11000
@@ -1345,12 +1341,10 @@ def p_destroyVars(p):
   tgf -= iContadorTemporal
   tgs -= iContadorInicioLocal
   tgb -= iContadorInicioLocal
-
-
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
-
-  print(len(dV))
+  iContadorCuadruplos+=1
+  bRetorna = 0
 
 ###################################################################################################
 
@@ -1421,12 +1415,10 @@ def p_go_sub(p):
 		if(dF[x].getNombre() == funcionActiva):
 			tipo = dF[x].getTipo();
 	if(tipo != "void"):
-		print("mi tipo es ")
-		print(tipo)
 		tipoDic = dicTipos[tipo]
 		PTipo.append(tipoDic)
 		resultado.append(iContadorTemporal)
-		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",iContadorTemporal))
+		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 		iContadorTemporal += 1
 		iContadorCuadruplos += 1
 
@@ -1454,7 +1446,7 @@ def p_functionUsuario_aux1(p):
   listaAuxParamFuncion.append(tipo)
   operando1 = PilaO.pop()
   resultado.append(iContadorParametros + 1)
-  arregloCuadruplos.append(cuadruplo("param",operando1,"nul",iContadorParametros + 1))
+  arregloCuadruplos.append(cuadruplo("param",operando1,"nul",resultado[iContadorCuadruplos]))
   iContadorCuadruplos+=1
   iContadorParametros+=1
 
@@ -1497,10 +1489,10 @@ def p_checkwall(p):
   global arregloCuadruplos
   global resultado
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","checkwall","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("era","checkwall","nul",-2))
   iContadorCuadruplos+=1
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul",-2))
   iContadorCuadruplos+=1
   print("Encontré un checkwall\n")
 
@@ -1513,10 +1505,10 @@ def p_move(p):
   global arregloCuadruplos
   global resultado
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","move","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("era","move","nul",-2))
   iContadorCuadruplos+=1
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","move","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("gosub","move","nul",-2))
   iContadorCuadruplos+=1
   print("Encontré un move\n")
 
@@ -1529,10 +1521,10 @@ def p_turnright(p):
   global arregloCuadruplos
   global resultado
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","turnRight","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("era","turnRight","nul",-2))
   iContadorCuadruplos+=1
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul",-2))
   iContadorCuadruplos+=1
   print("Encontré un turnright\n")
 
@@ -1545,10 +1537,10 @@ def p_turnleft(p):
   global arregloCuadruplos
   global resultado
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","turnLeft","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("era","turnLeft","nul",-2))
   iContadorCuadruplos+=1
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","turnLeft","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("gosub","turnLeft","nul",-2))
   iContadorCuadruplos+=1
   print("Encontré un turnleft\n")
 
@@ -1562,10 +1554,10 @@ def p_pickbeeper(p):
   global arregloCuadruplos
   global resultado
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","pickBeeper","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("era","pickBeeper","nul",-2))
   iContadorCuadruplos+=1
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","pickBeeper","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("gosub","pickBeeper","nul",-2))
   iContadorCuadruplos+=1
   print("Encontré un pickbeeper\n")
 
@@ -1578,10 +1570,10 @@ def p_putbeeper(p):
   global arregloCuadruplos
   global resultado
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","putBeeper","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("era","putBeeper","nul",-2))
   iContadorCuadruplos+=1
   resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","putBeeper","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo("gosub","putBeeper","nul",-2))
   iContadorCuadruplos+=1
   print("Encontré un putbeeper")
 
@@ -1593,7 +1585,6 @@ def p_imprimeReturn(p):
   '''
   imprimeReturn : RETURN
   '''
-  print(p[1])
 
 def p_imprimeDef(p):
   '''
@@ -1604,13 +1595,11 @@ def p_imprimeDef(p):
   #prende el contador de locales e inicia el de locales
   bscope = 1
   iContadorInicioLocal = iContadorDiccionarioVar
-  print(p[1])
 
 def p_imprimeEndDef(p):
   '''
   imprimeEndDef : END_DEF
   '''
-  print(p[1])
 
 def p_imprimeWhile(p):
   '''
@@ -1622,7 +1611,6 @@ def p_imprimeWhile(p):
   global iContadorCuadruplos
   bCiclo = 1
   PSaltos.append(iContadorCuadruplos)
-  print(p[1])
 
 def p_imprimeEndWhile(p):
   '''
@@ -1645,29 +1633,25 @@ def p_imprimeEndWhile(p):
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
   resultado.append(auxresultado)
   #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",auxresultado))
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
   #sigye la cuenta del contador y resetea la variable boleana
   bCiclo = 0
   iContadorCuadruplos += 1
-  print(p[1])
 
 def p_imprimePrint(p):
   '''
   imprimePrint : PRINT
   '''
-  print(p[1])
 
 def p_imprimeParentesisIzq(p):
   '''
   imprimeParentesisIzq : PARENTESIS_IZQ
   '''
-  print(p[1])
 
 def p_imprimeParentesisDer(p):
   '''
   imprimeParentesisDer : PARENTESIS_DER
   '''
-  print(p[1])
 
 def p_imprimeEndElse(p):
   '''
@@ -1704,7 +1688,7 @@ def p_imprimeEndElif(p):
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
   resultado.append(-2)
   #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
   #sigye la cuenta del contador y resetea la variable boleana
   iContadorCuadruplos+=1
   bIf = 0
@@ -1716,13 +1700,11 @@ def p_imprimeIf(p):
   '''
   global bIf
   bIf = 1
-  print(p[1])
 
 def p_imprimeDosPuntos(p):
   '''
   imprimeDosPuntos : DOS_PUNTOS
   '''
-  print(p[1])
 
 def p_imprimeEndIf(p):
   '''
@@ -1746,23 +1728,21 @@ def p_imprimeEndIf(p):
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
   resultado.append(-2)
   #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
   #sigye la cuenta del contador y resetea la variable boleana
   iContadorCuadruplos+=1
   bIf = 0
-  print(p[1])
+
 
 def p_imprimePuntoYComa(p):
   '''
   imprimePuntoYComa : PUNTO_Y_COMA
   '''
-  print(p[1])
 
 def p_imprimeComa(p):
   '''
   imprimeComa : COMA
   '''
-  print(p[1])
 
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -1782,7 +1762,19 @@ for line in f:
   else:
     data = data + line
 result = parser.parse(data)
-for x in range(0,iContadorCuadruplos + 1):
+
+print("\n")
+
+for x in range(0,iContadorDiccionarioVar):
+  print("variable numero " + str(x))
+  print(dV[x].getNombre())
+  print(dV[x].getTipo())
+  print(dV[x].getDireccion())
+  print("--------------------")
+
+print("\n")
+
+for x in range(0,iContadorCuadruplos):
 	print("Cuadruplo num " + str(x))
 	print(arregloCuadruplos[x].getOperador())
 	print(arregloCuadruplos[x].getOperando1())

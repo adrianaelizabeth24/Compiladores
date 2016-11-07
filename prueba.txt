@@ -1,13 +1,12 @@
-int a;
-float b;
-int c;
-int d;
-int e;
+int narutouzumakithebestninja;
+int sayhellotomylittlefriend;
 
-def int prueba(int i, int k):
-	a = c + d;
+def int cosa(int a):
+	a = a + 2;
+	sayhellotomylittlefriend = a;
 	return a;
 end_def
 
+
+
 main:
-	e = prueba(c,c);
