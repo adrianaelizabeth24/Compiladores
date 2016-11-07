@@ -19,7 +19,15 @@ def compileCode():
     input = codeText.get("1.0",'end-1c')
     print(input)
 
-# Crear barra de menu
+def onObjectClick(event):
+  #tags = draw.itemcget(item, "tags")
+  print('Got rec', event.x, event.y)
+  '''if "grid" in tags:
+    # this item has the "grid" tag
+  else:
+    # this item does NOT have the "grid" tag'''
+
+'''Crear divisiones de pantallas'''
 win = PanedWindow()
 win.pack(fill= BOTH, expand=1)
 
@@ -52,10 +60,6 @@ right.add(outText)
   Dibujar cuadricula
 '''
 
-#draw = Canvas (right, width=550, height=300)
-#draw.pack()
-
-
 x1 = 0
 x2 = 13
 y1 = 10
@@ -70,6 +74,8 @@ for x in range (0, 8):
 
   y1 = y1 + 50
   y2 = y2 + 50
+
+draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
 
 # every gif's frame
 fname_list = \
@@ -89,7 +95,5 @@ pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
 delay = 150
 animate()
 compileCode()
-
-
 
 win.mainloop()
