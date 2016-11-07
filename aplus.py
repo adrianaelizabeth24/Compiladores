@@ -937,6 +937,7 @@ def p_var_cte(p):
   var_cte : matchID
           | matchCteInt
           | matchCteFloat
+          | matchCteBool
   '''
 
 #match de id checa que exista y guarda el tipo en la pila de tipo
@@ -1002,6 +1003,11 @@ def p_matchCteFloat(p):
   #mete la constante a la pila de operandos
   PilaO.append(p[1])
   ctef+=1
+
+def p_matchCteBool(p):
+  '''
+  matchCteBool : CTE_BOOL
+  '''
 
 ###################################################################################################
 

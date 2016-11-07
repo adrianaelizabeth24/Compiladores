@@ -1,12 +1,6 @@
-int narutouzumakithebestninja;
-int sayhellotomylittlefriend;
-
-def int cosa(int a):
-	a = a + 2;
-	sayhellotomylittlefriend = a;
-	return a;
-end_def
-
-
+int a , b;
+bool c;
 
 main:
+
+c = "True";
