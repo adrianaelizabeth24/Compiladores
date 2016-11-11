@@ -555,7 +555,7 @@ def p_declaracion_3(p):
 #funcion para declarar variables
 def p_declaracion(p):
   '''
-  declaracion : tipo ID declaracion_aux imprimePuntoYComa
+  declaracion : tipo ID declaracion_aux PUNTO_Y_COMA
   '''
   global bscope
   global iContadorDiccionarioVar
@@ -621,7 +621,7 @@ def p_declaracion_aux(p):
 #coma id <<a>>
 def p_declaracion_2(p):
   '''
-  declaracion_2 : imprimeComa ID a
+  declaracion_2 : COMA ID a
   '''
   global bscope
   global iContadorDiccionarioVar
@@ -732,7 +732,7 @@ def p_asignacion(p):
 #funcion auxiliar que decide si asignar una expresion aritmetica o bien una fincion de usuario 
 def p_asignacion_aux(p):
 	'''
-	asignacion_aux : expresion imprimePuntoYComa
+	asignacion_aux : expresion PUNTO_Y_COMA
 					| funcionUsuario
 	'''
 
@@ -1009,7 +1009,7 @@ def p_matchCteInt(p):
   global dicTipos
   global ctei
   auxTipo = -2
-
+  #calcula el numero de diccionario
   auxTipo = dicTipos["int"]
   PTipo.append(auxTipo)
 
@@ -1044,10 +1044,12 @@ def p_matchCteBool(p):
   '''
   global cteb
   global dicTipos,PTipo,PilaO
+  #calcula diccionario
   auxTipo = dicTipos["bool"]
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(p[1])
+  #memoria
   cteb+=1
 
 ###################################################################################################
@@ -1058,7 +1060,7 @@ def p_matchCteBool(p):
 #funcion para aceptar condiciones s
 def p_condicion(p):
   '''
-  condicion : imprimeIf imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
+  condicion : imprimeIf PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
   '''
 
 #genera el cuadruplo de condicion
@@ -1093,23 +1095,102 @@ def p_condicion_2(p):
 #condicion permite un elif
 def p_condicion_3(p):
   '''
-  condicion_3 : ELIF imprimeParentesisIzq condicion_2 imprimeParentesisDer imprimeDosPuntos cuacondicion1 estatuto_2 imprimeEndElif condicion_3
+  condicion_3 : ELIF PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndElif condicion_3
               | empty
   '''
 
 #permite un else
 def p_condicion_4(p):
   '''
-  condicion_4 : ELSE imprimeDosPuntos estatuto_2 imprimeEndElse
+  condicion_4 : ELSE DOS_PUNTOS estatuto_2 imprimeEndElse
               | empty
   '''
   global PSaltosAux
   global iContadorCuadruplos
   global arregloCuadruplos
+  #cuadruplo de else para que se salte a esto
   if(p[1] != "else"):
     while(len(PSaltosAux)>0):
       res = PSaltosAux.pop()
       arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+
+def p_imprimeEndElse(p):
+  '''
+  imprimeEndElse : END_ELSE
+  '''
+  global PSaltosAux
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  #llenas en donde se regresa cuando acabe el else
+  if(p[1] != "else"):
+    while(len(PSaltosAux)>0):
+      res = PSaltosAux.pop()
+      arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  print(p[1])
+
+def p_imprimeEndElif(p):
+  '''
+  imprimeEndElif : END_ELIF
+  '''
+  global PSaltos
+  global PSaltosAux
+  global arregloCuadruplos
+  global iContadorCuadruplos
+  global operador
+  global resultado
+  global bIf
+
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  
+  PSaltosAux.append(iContadorCuadruplos)
+  operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+  resultado.append(-2)
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
+  #sigye la cuenta del contador y resetea la variable boleana
+  iContadorCuadruplos+=1
+  bIf = 0
+  print(p[1])
+
+def p_imprimeIf(p):
+  '''
+  imprimeIf : IF
+  '''
+  global bIf
+  #enciende if
+  bIf = 1
+
+def p_imprimeEndIf(p):
+  '''
+  imprimeEndIf : END_IF
+  '''
+  global PSaltos
+  global PSaltosAux
+  global arregloCuadruplos
+  global iContadorCuadruplos
+  global operador
+  global resultado
+  global bIf
+
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  
+  PSaltosAux.append(iContadorCuadruplos)
+  operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+  resultado.append(-2)
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
+  #sigye la cuenta del contador y resetea la variable boleana
+  iContadorCuadruplos+=1
+  bIf = 0
+
 
 ###################################################################################################
 
@@ -1119,7 +1200,7 @@ def p_condicion_4(p):
 #genera el cuadruplo para imprimir
 def p_escritura(p):
   '''
-  escritura : imprimePrint imprimeParentesisIzq escritura_2 imprimeParentesisDer imprimePuntoYComa
+  escritura : PRINT PARENTESIS_IZQ escritura_2 PARENTESIS_DER PUNTO_Y_COMA
   '''
   global operador
   global operando1
@@ -1127,7 +1208,7 @@ def p_escritura(p):
   global PilaO
   global arregloCuadruplos
   global iContadorCuadruplos
-
+  #genera cuadriplo print
   operador = "print"
   operando1 = PilaO.pop()
   resultado.append("nul")
@@ -1162,7 +1243,7 @@ def p_matchCteString(p):
 #funcion de sintaxis del ciclo --> estructura "while ( expresion ) : codigo end_while"
 def p_ciclo(p):
   '''
-  ciclo : imprimeWhile imprimeParentesisIzq exp imprimeParentesisDer imprimeDosPuntos cuaciclo1 estatuto_2 imprimeEndWhile
+  ciclo : imprimeWhile PARENTESIS_IZQ exp PARENTESIS_DER DOS_PUNTOS cuaciclo1 estatuto_2 imprimeEndWhile
   '''
 
 #funcion auxiliar para ayudar a generar el cuadruplo gotof
@@ -1192,6 +1273,43 @@ def p_cuaciclo1(p):
   #suma uno al contador
   iContadorCuadruplos += 1
 
+def p_imprimeWhile(p):
+  '''
+  imprimeWhile : WHILE
+  '''
+  #cuando entra al while prende el boleano de ciclo
+  global bCiclo
+  global PSaltos
+  global iContadorCuadruplos
+  bCiclo = 1
+  #para saber donde regresar cuando se haga el ciclo
+  PSaltos.append(iContadorCuadruplos)
+
+def p_imprimeEndWhile(p):
+  '''
+  imprimeEndWhile : END_WHILE
+  '''
+  global PSaltos
+  global arregloCuadruplos
+  global iContadorCuadruplos
+  global bCiclo
+  global operador
+  global resultado
+  
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  #saca el apuntador al inicio del while 
+  auxresultado = PSaltos.pop()
+  operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+  resultado.append(auxresultado)
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
+  #sigye la cuenta del contador y resetea la variable boleana
+  bCiclo = 0
+  iContadorCuadruplos += 1
 
 ###################################################################################################
 
@@ -1199,12 +1317,16 @@ def p_cuaciclo1(p):
 ###################################################################################################
 #funciones
 
-#estatuto se compone de 0 a n opciones
+#para definir funciones
+#recibe un tipo --> int float string void
+#puede o no tener parametros
+#en caso de retornar un tipo esta obligada a tner return
 def p_function(p):
   '''
-  function : imprimeDef tipoFunction matchNomFunction imprimeParentesisIzq function_aux imprimeParentesisDer agregaFunc imprimeDosPuntos declaracion_3 estatuto_2 function_4 imprimeEndDef
+  function : imprimeDef tipoFunction matchNomFunction PARENTESIS_IZQ function_aux PARENTESIS_DER agregaFunc DOS_PUNTOS declaracion_3 estatuto_2 function_4 imprimeEndDef
   '''
 
+#funcion auxiliar que agrega la funcion a la tabla de funciones
 def p_agregaFunc(p):
 	'''
 	agregaFunc : empty
@@ -1240,6 +1362,8 @@ def p_agregaFunc(p):
 	bscope = 0
 	#si no es void crea una variable global coon el mismo nombre
 
+#funcion auxiliar que en caso de que la funcion retorne valor la guarda como var global
+#sirve para el parche ^
 def p_matchNomFunction(p):
 	'''
 	matchNomFunction : ID
@@ -1293,16 +1417,20 @@ def p_tipoFunction(p):
   '''
   global tipoDeclaracionFuncion
   global bRetorna
+  #lo guarda en tipo declaracion
   tipoDeclaracionFuncion = p[1]
+  #boleano de retorna ayuda a funcion_4
   if(p[1] != "void"):
   	bRetorna = 1
 
+#auxiliar para declaracion de parametros
 def p_function_aux(p):
   '''
   function_aux : function_2
                | empty
   '''
 
+#declara parametros
 def p_function_2(p):
   '''
   function_2 : tipo ID function_3
@@ -1337,7 +1465,8 @@ def p_function_2(p):
   elif(tipoDeclaracion == "string"):
     var = vls
     vls+=1
-
+  
+  #se genera el objeto y se agrega a la listaParam
   obj = tablaVar(p[2],tipoDeclaracion,'local',var)
   aux = dicTipos[tipoDeclaracion]
   listaParamFuncion.append(aux)
@@ -1351,12 +1480,14 @@ def p_function_2(p):
   #incrementa contador
   iContadorDiccionarioVar = iContadorDiccionarioVar + 1
 
+#para declaar más parametros
 def p_function_3(p):
   '''
   function_3 : COMA function_2
             | empty
   '''
 
+#return expresion;
 def p_function_4(p):
   '''
   function_4 : RETURN expresion PUNTO_Y_COMA
@@ -1369,15 +1500,20 @@ def p_function_4(p):
   global tipoDeclaracionFuncion
   global dicOperadores,dicTipos
   global bRetorna
+  #verifica que si está boleana haya un return si no termina
   if((bRetorna == 1) and (p[1] != 'return')):
     raise errorSemantico("Definiste una funcion que debe retornar un valor y no lo retorna ")
+  #hace el return cuadruplo
   if(p[1] == 'return'):
+  	#checa que regrese el mismo tipo de dato que la exp
   	op1 = PTipo.pop()
   	op2 = dicTipos[tipoDeclaracionFuncion]
   	op = dicOperadores["="]
   	tipo = cubo[op1][op2][op]
+  	#error si no
   	if(tipo == -1):
   		raise errorSemantico("uso incorrecto de tipos ")
+  	#si esta bien hace el cuadruplo
   	else:
   		operando1 = PilaO.pop()
   		operador = "Return"
@@ -1385,6 +1521,7 @@ def p_function_4(p):
   		arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   		iContadorCuadruplos+=1
 
+#destruye variables de lista paramfuncion y del Dic.de vars
 def p_destroyVars(p):
   '''
   destroyVars : empty
@@ -1399,18 +1536,21 @@ def p_destroyVars(p):
 
   iAux = 0
   iAux = iContadorInicioLocal
+  #borra todas las declaradas desde inicio local-->actual si son locales
   for x in range(iContadorInicioLocal , iContadorDiccionarioVar):
     if(dV[x].getScope() == "local"):
       del dV[x]
   del listaParamFuncion[:]
-
+ 
+  #para que se resetee bien el diccionario en caso de que haya una var/funcion
   if(bRetorna == 1):
     iContadorDiccionarioVar = iAux + 1
   else:
     iContadorDiccionarioVar = iAux
 
+  #resetea temporal
   iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
-
+  #resetea memoria
   vli= 10000
   vlf = 11000
   vlb = 12000
@@ -1419,10 +1559,28 @@ def p_destroyVars(p):
   tgf -= iContadorTemporal
   tgs -= iContadorInicioLocal
   tgb -= iContadorInicioLocal
+  #genera cuadruplo ret
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
   iContadorCuadruplos+=1
+  #elimina bRetorna
   bRetorna = 0
+
+def p_imprimeDef(p):
+  '''
+  imprimeDef : DEF
+  '''
+  global bscope
+  global iContadorInicioLocal
+  #prende el contador de locales e inicia el de locales
+  bscope = 1
+  #guarda pos donde inicia el diccionario local
+  iContadorInicioLocal = iContadorDiccionarioVar
+
+def p_imprimeEndDef(p):
+  '''
+  imprimeEndDef : END_DEF
+  '''
 
 ###################################################################################################
 
@@ -1432,9 +1590,10 @@ def p_destroyVars(p):
 #define la sintaxixs de una función de usuario
 def p_funcionUsuario(p):
   '''
-  funcionUsuario : matchFunction imprimeParentesisIzq era_func functionUsuario_parametros imprimeParentesisDer imprimePuntoYComa go_sub
+  funcionUsuario : matchFunction PARENTESIS_IZQ era_func functionUsuario_parametros PARENTESIS_DER PUNTO_Y_COMA go_sub
   '''
 
+#hace match con el nombre de la funcion y verifica si existe
 def p_matchFunction(p):
 	'''
 	matchFunction : ID
@@ -1450,8 +1609,10 @@ def p_matchFunction(p):
 		if(varAux == iContadorDiccionarioFuncion):
 			raise errorSemantico("Funcion no definida: " + p[1])
 		else:
+			#si no la almacena en funcionActiva
 			funcionActiva = p[1]
 
+#cuadruplo era
 def p_era_func(p):
 	'''
 	era_func : empty
@@ -1462,11 +1623,12 @@ def p_era_func(p):
 	global resultado
 	global iContadorCuadruplos
 	global funcionActiva
-
+	#era de funcionActiva
 	resultado.append(-2)
 	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul",-2))
 	iContadorCuadruplos+=1
 
+#cuadruplo gosub + parche guadalupano
 def p_go_sub(p):
 	'''
 	go_sub : empty
@@ -1481,29 +1643,37 @@ def p_go_sub(p):
 	global dicTipos
 	tipo = ""
 	tipoDic = -2
+	#cuadruplo gosub
 	resultado.append(-2)
 	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",-2))
 	iContadorCuadruplos+=1
+	#parche guadalupano
+	#checa el tipo
 	for x in range(0,iContadorDiccionarioFuncion):
 		if(dF[x].getNombre() == funcionActiva):
 			tipo = dF[x].getTipo();
+	#si no es void DEBE haber parche
 	if(tipo != "void"):
+		#agrega el tipo de funcion a la pila de tipos
 		tipoDic = dicTipos[tipo]
 		PTipo.append(tipoDic)
+		#agrega la funcion a la pila de operadores
 		PilaO.append(funcionActiva)
 		resultado.append(iContadorTemporal)
+		#genera parche
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 		iContadorTemporal += 1
 		iContadorCuadruplos += 1
 
-#funcion auxiliar de p_funcionUsuario
+#funcion auxiliar que checa parametros en caso de recibirlos
 def p_functionUsuario_parametros(p):
   '''
   functionUsuario_parametros : functionUsuario_aux1 functionValidaParams
                				| empty
   '''
 
-#funcion auxiliar de p_funcionUsuario
+#funcion auxiliar de p_funcionUsuario (recibes parametros)
+#cuadruplo de parametros
 def p_functionUsuario_aux1(p):
   '''
   functionUsuario_aux1 : expresion functionUsuario_aux2
@@ -1515,22 +1685,24 @@ def p_functionUsuario_aux1(p):
   global iContadorParametros
   global funcionActiva
   global tipo
-
+  #checa tipo de parametro de la funcion y los agrgea a auxiliar de parametros
   tipo = PTipo.pop()
   listaAuxParamFuncion.append(tipo)
+  #genera cuadruplo de param
   operando1 = PilaO.pop()
   resultado.append(iContadorParametros + 1)
   arregloCuadruplos.append(cuadruplo("param",operando1,"nul",resultado[iContadorCuadruplos]))
   iContadorCuadruplos+=1
   iContadorParametros+=1
 
-#funcion auxiliar de p_funcionUsuario
+#funcion auxiliar de p_funcionUsuario (, mas parametros)
 def p_functionUsuario_aux2(p):
   '''
   functionUsuario_aux2 : COMA functionUsuario_aux1
             			| empty
   '''
 
+#valida que numero y tipo de params sean correctos(igual que como se definió)
 def p_functionValidaParams(p):
 	'''
 	functionValidaParams : empty
@@ -1538,15 +1710,18 @@ def p_functionValidaParams(p):
 	global dF,listaAuxParamFuncion
 	global funcionActiva, iContadorDiccionarioFuncion
 	listaAux = []
+	#guarda los parametros de la funcion qe se declaró
 	for x in range(0,iContadorDiccionarioFuncion):
 		objAux = dF[x]
 		if(objAux.getNombre() == funcionActiva):
 			listaAux.extend(objAux.getParametros())
-
+	#compara tamaños de listas
 	if(len(listaAuxParamFuncion) == len(listaAux)):
+		#compara tipos de parametrso sean iguales(está asi por que usé directamente el tipo del diccionario de tipos)
 		for x in range (0, len(listaAux)):
 			if(listaAuxParamFuncion[x] != listaAux[x]):
 				raise errorSemantico("Tipo de Parametros no concuerda con los parametros de la funcion")
+	#tamaño no igual --> error
 	else:
 		raise errorSemantico("La cantidad de parametros no concuerda con los parametros de la funcion")
 
@@ -1554,17 +1729,20 @@ def p_functionValidaParams(p):
 
 #seccion 9 de codigo
 ###################################################################################################
+
 #función de sintaxis que revisa si se recive la función predeinida de checkWall();
 def p_checkwall(p):
   '''
-  checkwall : CHECKWALL imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+  checkwall : CHECKWALL PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
   global arregloCuadruplos
   global resultado
+  #cuadruplo era
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("era","checkwall","nul",-2))
   iContadorCuadruplos+=1
+  #cuadruplo gosub
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul",-2))
   iContadorCuadruplos+=1
@@ -1573,14 +1751,16 @@ def p_checkwall(p):
 #función de sintaxis que revisa si se recive la función predeinida de move();
 def p_move(p):
   '''
-  move : MOVE imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+  move : MOVE PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
   global arregloCuadruplos
   global resultado
+  #era
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("era","move","nul",-2))
   iContadorCuadruplos+=1
+  #gosub
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("gosub","move","nul",-2))
   iContadorCuadruplos+=1
@@ -1589,14 +1769,16 @@ def p_move(p):
 #función de sintaxis que revisa si se recive la función predeinida de turnRight();
 def p_turnright(p):
   '''
-  turnright : TURN_RIGHT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+  turnright : TURN_RIGHT PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
   global arregloCuadruplos
   global resultado
+  #era
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("era","turnRight","nul",-2))
   iContadorCuadruplos+=1
+  #gosub
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul",-2))
   iContadorCuadruplos+=1
@@ -1605,7 +1787,7 @@ def p_turnright(p):
 #función de sintaxis que revisa si se recive la función predeinida de turnLeft();
 def p_turnleft(p):
   '''
-  turnleft : TURN_LEFT imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+  turnleft : TURN_LEFT PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
   global arregloCuadruplos
@@ -1621,7 +1803,7 @@ def p_turnleft(p):
 #función de sintaxis que revisa si se recive la función predeinida de pickBeeper();
 def p_pickbeeper(p):
   '''
-  pickbeeper : PICK_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+  pickbeeper : PICK_BEEPER PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
 
   global iContadorCuadruplos
@@ -1638,7 +1820,7 @@ def p_pickbeeper(p):
 #función de sintaxis que revisa si se recive la función predeinida de putBeeper();
 def p_putbeeper(p):
   '''
-  putbeeper : PUT_BEEPER imprimeParentesisIzq imprimeParentesisDer imprimePuntoYComa
+  putbeeper : PUT_BEEPER PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
   global arregloCuadruplos
@@ -1654,165 +1836,6 @@ def p_putbeeper(p):
 #########################################################################################################################################################################
 ########################################################################################################################################################################
 #########################################################################################################################################################################
-
-def p_imprimeDef(p):
-  '''
-  imprimeDef : DEF
-  '''
-  global bscope
-  global iContadorInicioLocal
-  #prende el contador de locales e inicia el de locales
-  bscope = 1
-  iContadorInicioLocal = iContadorDiccionarioVar
-
-def p_imprimeEndDef(p):
-  '''
-  imprimeEndDef : END_DEF
-  '''
-
-def p_imprimeWhile(p):
-  '''
-  imprimeWhile : WHILE
-  '''
-  #cuando entra al while prende el boleano de ciclo
-  global bCiclo
-  global PSaltos
-  global iContadorCuadruplos
-  bCiclo = 1
-  PSaltos.append(iContadorCuadruplos)
-
-def p_imprimeEndWhile(p):
-  '''
-  imprimeEndWhile : END_WHILE
-  '''
-  global PSaltos
-  global arregloCuadruplos
-  global iContadorCuadruplos
-  global bCiclo
-  global operador
-  global resultado
-  
-  #saca el tope de Psaltos , que es el apuntador al "gotof"
-  res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  #saca el apuntador al inicio del while 
-  auxresultado = PSaltos.pop()
-  operador = "Goto"
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-  resultado.append(auxresultado)
-  #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",resultado[iContadorCuadruplos]))
-  #sigye la cuenta del contador y resetea la variable boleana
-  bCiclo = 0
-  iContadorCuadruplos += 1
-
-def p_imprimePrint(p):
-  '''
-  imprimePrint : PRINT
-  '''
-
-def p_imprimeParentesisIzq(p):
-  '''
-  imprimeParentesisIzq : PARENTESIS_IZQ
-  '''
-
-def p_imprimeParentesisDer(p):
-  '''
-  imprimeParentesisDer : PARENTESIS_DER
-  '''
-
-def p_imprimeEndElse(p):
-  '''
-  imprimeEndElse : END_ELSE
-  '''
-  global PSaltosAux
-  global iContadorCuadruplos
-  global arregloCuadruplos
-  if(p[1] != "else"):
-    while(len(PSaltosAux)>0):
-      res = PSaltosAux.pop()
-      arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  print(p[1])
-
-def p_imprimeEndElif(p):
-  '''
-  imprimeEndElif : END_ELIF
-  '''
-  global PSaltos
-  global PSaltosAux
-  global arregloCuadruplos
-  global iContadorCuadruplos
-  global operador
-  global resultado
-  global bIf
-
-  #saca el tope de Psaltos , que es el apuntador al "gotof"
-  res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  
-  PSaltosAux.append(iContadorCuadruplos)
-  operador = "Goto"
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-  resultado.append(-2)
-  #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
-  #sigye la cuenta del contador y resetea la variable boleana
-  iContadorCuadruplos+=1
-  bIf = 0
-  print(p[1])
-
-def p_imprimeIf(p):
-  '''
-  imprimeIf : IF
-  '''
-  global bIf
-  bIf = 1
-
-def p_imprimeDosPuntos(p):
-  '''
-  imprimeDosPuntos : DOS_PUNTOS
-  '''
-
-def p_imprimeEndIf(p):
-  '''
-  imprimeEndIf : END_IF
-  '''
-  global PSaltos
-  global PSaltosAux
-  global arregloCuadruplos
-  global iContadorCuadruplos
-  global operador
-  global resultado
-  global bIf
-
-  #saca el tope de Psaltos , que es el apuntador al "gotof"
-  res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  
-  PSaltosAux.append(iContadorCuadruplos)
-  operador = "Goto"
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-  resultado.append(-2)
-  #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
-  #sigye la cuenta del contador y resetea la variable boleana
-  iContadorCuadruplos+=1
-  bIf = 0
-
-
-def p_imprimePuntoYComa(p):
-  '''
-  imprimePuntoYComa : PUNTO_Y_COMA
-  '''
-
-def p_imprimeComa(p):
-  '''
-  imprimeComa : COMA
-  '''
-
 ############################################################################################################################################################
 ############################################################################################################################################################
 ###########################################################################################################################################################
