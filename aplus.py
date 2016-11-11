@@ -985,15 +985,15 @@ def p_matchID(p):
   auxTipo = -2
   #Checa si variable esta o no declarada
   for x in range(0,iContadorDiccionarioVar):
-  	if(p[1] != dV[x].getNombre()):
-  		varAux += 1
-  	else:
-  		#cubo semantico tipo de dato correcto
-  		tipo = dV[x].getTipo()
-  		auxTipo = dicTipos[tipo]
-  		PTipo.append(auxTipo)
-  		#Meter a pila operadores paso 1 del algoritmo
-  		PilaO.append(p[1])
+    if(p[1] != dV[x].getNombre()):
+      varAux += 1
+    else:
+      #cubo semantico tipo de dato correcto
+      tipo = dV[x].getTipo()
+      auxTipo = dicTipos[tipo]
+      PTipo.append(auxTipo)
+      #Meter a pila operadores paso 1 del algoritmo
+      PilaO.append(p[1])
   #No esta declarada
   if(varAux == iContadorDiccionarioVar):
     raise errorSemantico("Variable no declarada: " + p[1])
@@ -1198,94 +1198,91 @@ def p_cuaciclo1(p):
 #seccion 7 de codigo
 ###################################################################################################
 #funciones
+
+#estatuto se compone de 0 a n opciones
 def p_function(p):
   '''
-  function : imprimeDef tipoFunction matchIDFunction imprimeParentesisIzq function_aux imprimeParentesisDer imprimeDosPuntos estatuto_2 function_4 imprimeEndDef
+  function : imprimeDef tipoFunction matchNomFunction imprimeParentesisIzq function_aux imprimeParentesisDer agregaFunc imprimeDosPuntos declaracion_3 estatuto_2 function_4 imprimeEndDef
   '''
-  global bscope
-  global listaParamFuncion
-  global iContadorDiccionarioFuncion, iContadorDiccionarioVar
-  global dF,dV
-  global tipoDeclaracionFuncion
-  global vgi, vli, vgf, vlf, vgs, vls
 
-  for x in range(0,iContadorDiccionarioFuncion):
-    varFunc = dF[x]
-    if(p[1] == varFunc.getNombre()):
-      raise errorSemantico("Función previamente definida: " + p[1])
+def p_agregaFunc(p):
+	'''
+	agregaFunc : empty
+	'''
+	global bscope
+	global listaParamFuncion
+	global iContadorDiccionarioFuncion, iContadorDiccionarioVar
+	global dF,dV
+	global tipoDeclaracionFuncion
+	global vgi, vli, vgf, vlf, vgs, vls
+	global nombreFuncion
 
-  listaAux = []
-  listaAux.extend(listaParamFuncion)
-  varAux = tablaFunciones(p[1],tipoDeclaracionFuncion,listaAux, -2)
+	#checa que no exista una funcion que se llame igual
+	for x in range(0,iContadorDiccionarioFuncion):
+		varFunc = dF[x]
+		if(nombreFuncion == varFunc.getNombre()):
+			raise errorSemantico("Función previamente definida: " + p[1])
 
-  if(iContadorDiccionarioFuncion == 0):
-    dF = {iContadorDiccionarioFuncion : varAux}
-  else:
-    dF[iContadorDiccionarioFuncion] = varAux
-    
-  iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
-  print(dF)
-  bscope = 0
+	#agrega los parametros de la funcion
+	listaAux = []
+	listaAux.extend(listaParamFuncion)
+	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux, -2)
 
+	#la agrega al diccionario
+	if(iContadorDiccionarioFuncion == 0):
+		dF = {iContadorDiccionarioFuncion : varAux}
+	else:
+		dF[iContadorDiccionarioFuncion] = varAux
 
-def p_matchIDFunction(p):
-  '''
-  matchIDFunction : ID
-  '''
-  global bscope
-  global listaParamFuncion
-  global iContadorDiccionarioFuncion, iContadorDiccionarioVar
-  global dF,dV
-  global tipoDeclaracionFuncion
-  global vgi, vli, vgf, vlf, vgs, vls
+	#incrementa el contadoe
+	iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
+	print(dF)
+	bscope = 0
+	#si no es void crea una variable global coon el mismo nombre
 
-  for x in range(0,iContadorDiccionarioFuncion):
-    varFunc = dF[x]
-    if(p[1] == varFunc.getNombre()):
-      raise errorSemantico("Función previamente definida: " + p[1])
+def p_matchNomFunction(p):
+	'''
+	matchNomFunction : ID
+	'''
+	global nombreFuncion
+	global bscope
+	global listaParamFuncion
+	global iContadorDiccionarioFuncion, iContadorDiccionarioVar
+	global dF,dV
+	global tipoDeclaracionFuncion
+	global vgi, vli, vgf, vlf, vgs, vls
 
-  listaAux = []
-  listaAux.extend(listaParamFuncion)
-  varAux = tablaFunciones(p[1],tipoDeclaracionFuncion,listaAux, -2)
+	nombreFuncion = p[1]
+	if(tipoDeclaracionFuncion != "void"): 
+	#vars locales
+		obj = ""
+		objAux = ""
+		var = 0
+		#checa que no exista
+		for x in range(0,iContadorDiccionarioVar):
+			#compara los nombre
+			if(p[1] == dV[x].getNombre()):
+				raise errorSemantico("Variable ya definida: " + p[1])
 
-  if(iContadorDiccionarioFuncion == 0):
-    dF = {iContadorDiccionarioFuncion : varAux}
-  else:
-    dF[iContadorDiccionarioFuncion] = varAux
-    
-  iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
-  print(dF)
-  bscope = 0
-  #si no es void crea una variable global coon el mismo nombre
-  if(tipoDeclaracionFuncion != "void"): 
-    #vars locales
-    obj = ""
-    objAux = ""
-    var = 0
-    #checa que no exista
-    for x in range(0,iContadorDiccionarioVar):
-      #compara los nombre
-      if(p[1] == dV[x].getNombre()):
-        raise errorSemantico("Variable ya definida: " + p[1])
+		#checa el tipo de variable y su scope y guarda esa direccion de memoria en var
+		if(tipoDeclaracionFuncion == "int"):
+			var = vgi
+			vgi += 1
+		elif(tipoDeclaracionFuncion == "float"):
+			var = vgf
+			vgf+=1
+		elif(tipoDeclaracionFuncion == "string"):
+			var = vgs
+			vgs+=1
 
-    #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
-    if(tipoDeclaracionFuncion == "int"):
-      var = vgi
-      vgi += 1
-    elif(tipoDeclaracionFuncion == "float"):
-      var = vgf
-      vgf+=1
-    elif(tipoDeclaracionFuncion == "string"):
-      var = vgs
-      vgs+=1
+		#crea el objeto tablaVar con : nombre, tipo, scope, direccion
+		obj = tablaVar(nombreFuncion,tipoDeclaracionFuncion,"global",var)
+		#lo agrega al diccionario
+		dV[iContadorDiccionarioVar] = obj
+		#incrementa el contador
+		iContadorDiccionarioVar = iContadorDiccionarioVar + 1
 
-    #crea el objeto tablaVar con : nombre, tipo, scope, direccion
-    obj = tablaVar(p[1],tipoDeclaracionFuncion,"global",var)
-     #lo agrega al diccionario
-    dV[iContadorDiccionarioVar] = obj
-    #incrementa el contador
-    iContadorDiccionarioVar = iContadorDiccionarioVar + 1
-
+#tipo de funcion
 def p_tipoFunction(p):
   '''
   tipoFunction : INT
@@ -1315,6 +1312,7 @@ def p_function_2(p):
   global dV
   global tipoDeclaracion
   global vli, vlf, vls
+  global listaParamFuncion
   #vars locales
   obj = ""
   objAux = ""
@@ -1355,7 +1353,7 @@ def p_function_2(p):
 
 def p_function_3(p):
   '''
-  function_3 : COMA function_aux
+  function_3 : COMA function_2
             | empty
   '''
 
@@ -1391,18 +1389,20 @@ def p_destroyVars(p):
   '''
   destroyVars : empty
   '''
-  global arregloCuadruplos, listaParamFuncion
+  global arregloCuadruplos
   global dV
   global iContadorInicioLocal, iContadorDiccionarioVar, iContadorTemporal, iContadorCuadruplos
   global resultado
   global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb
   global bRetorna
+  global listaParamFuncion
 
   iAux = 0
   iAux = iContadorInicioLocal
   for x in range(iContadorInicioLocal , iContadorDiccionarioVar):
     if(dV[x].getScope() == "local"):
       del dV[x]
+  del listaParamFuncion[:]
 
   if(bRetorna == 1):
     iContadorDiccionarioVar = iAux + 1
@@ -1410,7 +1410,6 @@ def p_destroyVars(p):
     iContadorDiccionarioVar = iAux
 
   iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
-  del listaParamFuncion[:]
 
   vli= 10000
   vlf = 11000
@@ -1445,7 +1444,6 @@ def p_matchFunction(p):
 	global iContadorDiccionarioFuncion
 	global funcionActiva
 	varAux = 0
-	auxTipo = ""
 	for x in range(0,iContadorDiccionarioFuncion):
 		if(p[1] != dF[x].getNombre()):
 			varAux += 1
@@ -1453,9 +1451,6 @@ def p_matchFunction(p):
 			raise errorSemantico("Funcion no definida: " + p[1])
 		else:
 			funcionActiva = p[1]
-			auxTipo = dF[x].getTipo()
-			if(auxTipo != "void"):
-				tipo = dicTipos[auxTipo]
 
 def p_era_func(p):
 	'''
@@ -1465,7 +1460,6 @@ def p_era_func(p):
 	global iContadorTemporal
 	global arregloCuadruplos
 	global resultado
-	global nombreFuncion
 	global iContadorCuadruplos
 	global funcionActiva
 
@@ -1496,6 +1490,7 @@ def p_go_sub(p):
 	if(tipo != "void"):
 		tipoDic = dicTipos[tipo]
 		PTipo.append(tipoDic)
+		PilaO.append(funcionActiva)
 		resultado.append(iContadorTemporal)
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 		iContadorTemporal += 1
@@ -1659,11 +1654,6 @@ def p_putbeeper(p):
 #########################################################################################################################################################################
 ########################################################################################################################################################################
 #########################################################################################################################################################################
-
-def p_imprimeReturn(p):
-  '''
-  imprimeReturn : RETURN
-  '''
 
 def p_imprimeDef(p):
   '''

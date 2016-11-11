@@ -1,11 +1,10 @@
-float A;
-float B;
-float C;
-float D;
-float E;
-float J;
+int a,b;
 
+def int factorial(int g):
+	if(g<>1):
+		a = factorial(b);
+	end_if
+	return 1;
+end_def
 
 main:
-
-print("hola");
