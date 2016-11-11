@@ -1658,7 +1658,7 @@ def p_go_sub(p):
 		tipoDic = dicTipos[tipo]
 		PTipo.append(tipoDic)
 		#agrega la funcion a la pila de operadores
-		PilaO.append(funcionActiva)
+		PilaO.append(iContadorTemporal)
 		resultado.append(iContadorTemporal)
 		#genera parche
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
