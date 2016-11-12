@@ -1,10 +1,4 @@
-int a,b;
-
-def int factorial(int g):
-	if(g<>1):
-		a = factorial(b);
-	end_if
-	return 1;
-end_def
+float a,b;
 
 main:
+a = 1 + 2 * 5 + (25 + b - (4 + 34 * (2 + 34 * 22 / 18 * a) + 12 - 17) / 16 + 18 / 18);

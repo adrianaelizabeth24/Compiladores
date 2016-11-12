@@ -1095,14 +1095,42 @@ def p_condicion_2(p):
 #condicion permite un elif
 def p_condicion_3(p):
   '''
-  condicion_3 : ELIF PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndElif condicion_3
+  condicion_3 : matchElif PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndElif condicion_3
               | empty
   '''
+
+#para el cuadruplo "goto" solo debe aparecer cuando llega else if o else
+def p_macthElif(p):
+	'''
+	matchElif : ELIF
+	'''
+	global PSaltos
+	global PSaltosAux
+	global arregloCuadruplos
+	global iContadorCuadruplos
+	global operador
+	global resultado
+	global bIf
+
+	#saca el tope de Psaltos , que es el apuntador al "gotof"
+	res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+	arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  
+	PSaltosAux.append(iContadorCuadruplos)
+	operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+	resultado.append(-2)
+  #genera el cuadruplo
+	arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
+  #sigye la cuenta del contador y resetea la variable boleana
+	iContadorCuadruplos+=1
+	bIf = 0
 
 #permite un else
 def p_condicion_4(p):
   '''
-  condicion_4 : ELSE DOS_PUNTOS estatuto_2 imprimeEndElse
+  condicion_4 : matchElse DOS_PUNTOS estatuto_2 imprimeEndElse
               | empty
   '''
   global PSaltosAux
@@ -1113,6 +1141,34 @@ def p_condicion_4(p):
     while(len(PSaltosAux)>0):
       res = PSaltosAux.pop()
       arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+
+#para el cuadruplo "goto" solo debe aparecer cuando llega else if o else
+def p_matchElse(p):
+	'''
+	matchElse : ELSE
+	'''
+	global PSaltos
+	global PSaltosAux
+	global arregloCuadruplos
+	global iContadorCuadruplos
+	global operador
+	global resultado
+	global bIf
+
+	#saca el tope de Psaltos , que es el apuntador al "gotof"
+	res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+	arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  
+	PSaltosAux.append(iContadorCuadruplos)
+	operador = "Goto"
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+	resultado.append(-2)
+  #genera el cuadruplo
+	arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
+  #sigye la cuenta del contador y resetea la variable boleana
+	iContadorCuadruplos+=1
+	bIf = 0
 
 def p_imprimeEndElse(p):
   '''
@@ -1168,28 +1224,8 @@ def p_imprimeEndIf(p):
   '''
   imprimeEndIf : END_IF
   '''
-  global PSaltos
-  global PSaltosAux
-  global arregloCuadruplos
-  global iContadorCuadruplos
-  global operador
-  global resultado
-  global bIf
 
-  #saca el tope de Psaltos , que es el apuntador al "gotof"
-  res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  
-  PSaltosAux.append(iContadorCuadruplos)
-  operador = "Goto"
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-  resultado.append(-2)
-  #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
-  #sigye la cuenta del contador y resetea la variable boleana
-  iContadorCuadruplos+=1
-  bIf = 0
+
 
 
 ###################################################################################################
