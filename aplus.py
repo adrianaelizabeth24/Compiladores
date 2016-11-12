@@ -332,11 +332,10 @@ tokens = (
   'PUT_BEEPER',
   'IF',
   'END_IF',
-  'ELIF',
-  'END_ELIF',
   'ELSE',
   'END_ELSE',
   'PRINT',
+  'READ',
   'MAIN',
   'DEF',
   'END_DEF',
@@ -399,11 +398,10 @@ reserved = {
   'putBeeper' : 'PUT_BEEPER',
   'if'        : 'IF',
   'end_if'    : 'END_IF',
-  'elif'      : 'ELIF',
-  'end_elif'  : 'END_ELIF',
   'else'      : 'ELSE',
   'end_else'  : 'END_ELSE',
   'print'     : 'PRINT',
+  'read'			: 'READ',
   'def'       : 'DEF',
   'end_def'   : 'END_DEF',
   'main'	: 'MAIN',
@@ -530,6 +528,7 @@ def p_opciones(p):
   opciones : asignacion
           | condicion
           | escritura
+          | read
           | ciclo
           | turnleft
           | turnright
@@ -1060,7 +1059,7 @@ def p_matchCteBool(p):
 #funcion para aceptar condiciones s
 def p_condicion(p):
   '''
-  condicion : imprimeIf PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
+  condicion : imprimeIf PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndIf condicion_4
   '''
 
 #genera el cuadruplo de condicion
@@ -1091,41 +1090,6 @@ def p_condicion_2(p):
   condicion_2 : exp 
             | checkwall
   '''
-
-#condicion permite un elif
-def p_condicion_3(p):
-  '''
-  condicion_3 : matchElif PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndElif condicion_3
-              | empty
-  '''
-
-#para el cuadruplo "goto" solo debe aparecer cuando llega else if o else
-def p_macthElif(p):
-	'''
-	matchElif : ELIF
-	'''
-	global PSaltos
-	global PSaltosAux
-	global arregloCuadruplos
-	global iContadorCuadruplos
-	global operador
-	global resultado
-	global bIf
-
-	#saca el tope de Psaltos , que es el apuntador al "gotof"
-	res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-	arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  
-	PSaltosAux.append(iContadorCuadruplos)
-	operador = "Goto"
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-	resultado.append(-2)
-  #genera el cuadruplo
-	arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
-  #sigye la cuenta del contador y resetea la variable boleana
-	iContadorCuadruplos+=1
-	bIf = 0
 
 #permite un else
 def p_condicion_4(p):
@@ -1184,34 +1148,6 @@ def p_imprimeEndElse(p):
       arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
   print(p[1])
 
-def p_imprimeEndElif(p):
-  '''
-  imprimeEndElif : END_ELIF
-  '''
-  global PSaltos
-  global PSaltosAux
-  global arregloCuadruplos
-  global iContadorCuadruplos
-  global operador
-  global resultado
-  global bIf
-
-  #saca el tope de Psaltos , que es el apuntador al "gotof"
-  res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  
-  PSaltosAux.append(iContadorCuadruplos)
-  operador = "Goto"
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-  resultado.append(-2)
-  #genera el cuadruplo
-  arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
-  #sigye la cuenta del contador y resetea la variable boleana
-  iContadorCuadruplos+=1
-  bIf = 0
-  print(p[1])
-
 def p_imprimeIf(p):
   '''
   imprimeIf : IF
@@ -1225,12 +1161,9 @@ def p_imprimeEndIf(p):
   imprimeEndIf : END_IF
   '''
 
-
-
-
 ###################################################################################################
 
-#seccion 5 de codigo
+#seccion 5 de codigo ----- escritura y lectura de código
 ###################################################################################################
 
 #genera el cuadruplo para imprimir
@@ -1270,6 +1203,24 @@ def p_matchCteString(p):
 	#mete la constante a la pila de operandos
 	PilaO.append(p[1])
 	ctes+=1
+
+#genera cuadruplo de read
+def p_read(p):
+	'''
+	read : READ PARENTESIS_IZQ matchID PARENTESIS_DER PUNTO_Y_COMA
+	'''
+	global operador
+	global operando1
+	global resultado
+	global PilaO
+	global arregloCuadruplos
+	global iContadorCuadruplos
+	#genera cuadriplo print
+	operador = "read"
+	operando1 = PilaO.pop()
+	resultado.append("nul")
+	arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+	iContadorCuadruplos += 1
 
 ###################################################################################################
 
