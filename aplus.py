@@ -136,6 +136,16 @@ cubo[0][1][10] = -1     # int | float = error
 cubo[0][2][10] = -1     # int | string = error
 cubo[0][3][10] = -1     # int | bool = error
 
+cubo[0][0][11] = 3     # int <= int = bool
+cubo[0][1][11] = 3     # int <= float = bool
+cubo[0][2][11] = -1    # int <= string = error
+cubo[0][3][11] = -1    # int <= bool = error
+
+cubo[0][0][12] = 3     # int >= int = bool
+cubo[0][1][12] = 3     # int >= float = bool
+cubo[0][2][12] = -1    # int >= string = error
+cubo[0][3][12] = -1    # int >= bool = error
+
 # FLOAT
 cubo[1][0][0] = 1     # float + int = float
 cubo[1][1][0] = 1     # float + float = float
@@ -193,6 +203,16 @@ cubo[1][1][10] = -1     # float | float = error
 cubo[1][2][10] = -1     # float | string = error
 cubo[1][3][10] = -1     # float | bool = error
 
+cubo[1][0][11] = 3     # float <= int = bool
+cubo[1][1][11] = 3     # float <= float = bool
+cubo[1][2][11] = -1    # float <= string = error
+cubo[1][3][11] = -1    # float <= bool = error
+
+cubo[1][0][12] = 3     # float >= int = bool
+cubo[1][1][12] = 3     # float >= float = bool
+cubo[1][2][12] = -1    # float >= string = error
+cubo[1][3][12] = -1    # float >= bool = error
+
 # STRING
 cubo[2][0][0] = -1    # string + int = error
 cubo[2][1][0] = -1    # string + float = error
@@ -216,12 +236,12 @@ cubo[2][3][3] = -1    # string / bool = error
 
 cubo[2][0][4] = -1    # string < int = error
 cubo[2][1][4] = -1    # string < float = error
-cubo[2][2][4] = 3     # string < string = bool
+cubo[2][2][4] = -1     # string < string = bool
 cubo[2][3][4] = -1    # string < bool = error
 
 cubo[2][0][5] = -1    # string > int = error
 cubo[2][1][5] = -1    # string > float = error
-cubo[2][2][5] = 3     # string > string = bool
+cubo[2][2][5] = -1     # string > string = bool
 cubo[2][3][5] = -1    # string > bool = error
 
 # ERROR
@@ -232,7 +252,7 @@ cubo[2][3][6] = -1    # string = bool = error
 
 cubo[2][0][7] = -1    # string <> int = error
 cubo[2][1][7] = -1    # string <> float = error
-cubo[2][2][7] = 3     # string <> string = bool
+cubo[2][2][7] = -1     # string <> string = bool
 cubo[2][3][7] = -1    # string <> bool = error
 
 cubo[2][0][8] = -1    # string == int = error
@@ -249,6 +269,16 @@ cubo[2][0][10] = -1     # string | int = error
 cubo[2][1][10] = -1     # string | float = error
 cubo[2][2][10] = -1     # string | string = error
 cubo[2][3][10] = -1     # string | bool = error
+
+cubo[2][0][11] = -1     # string <= int = bool
+cubo[2][1][11] = -1    # string <= float = bool
+cubo[2][2][11] = -1    # string <= string = error
+cubo[2][3][11] = -1    # string <= bool = error
+
+cubo[2][0][12] = -1     # string >= int = bool
+cubo[2][1][12] = -1     # string >= float = bool
+cubo[2][2][12] = -1    # string >= string = error
+cubo[2][3][12] = -1    # string >= bool = error
 
 # BOOL
 cubo[3][0][0] = -1    # bool + int = error
@@ -290,7 +320,7 @@ cubo[3][3][6] = 3    # bool = bool = bool (asignas!)
 cubo[3][0][7] = -1    # bool <> int = error
 cubo[3][1][7] = -1    # bool <> float = error
 cubo[3][2][7] = -1    # bool <> string = error
-cubo[3][3][7] = 3     # bool <> bool = bool
+cubo[3][3][7] = -1     # bool <> bool = bool
 
 cubo[3][0][8] = -1    # bool == int = error
 cubo[3][1][8] = -1    # bool == float = error
@@ -305,9 +335,19 @@ cubo[3][3][9] = 3     # bool & bool = bool
 cubo[3][0][10] = -1     # bool | int = error
 cubo[3][1][10] = -1     # bool | float = error
 cubo[3][2][10] = -1     # bool | string = error
-cubo[3][3][10] = 3    # bool | bool = bool
+cubo[3][3][10] = 3    	# bool | bool = bool
 
-dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "print" : 11}
+cubo[3][0][11] = -1     # bool <= int = bool
+cubo[3][1][11] = -1    # bool <= float = bool
+cubo[3][2][11] = -1    # bool <= string = error
+cubo[3][3][11] = -1    # bool <= bool = error
+
+cubo[3][0][12] = -1     # bool >= int = bool
+cubo[3][1][12] = -1     # bool >= float = bool
+cubo[3][2][12] = -1    # bool >= string = error
+cubo[3][3][12] = -1    # bool >= bool = error
+
+dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14,}
 
 dicTipos = {"int" : 0, "float" : 1, "string" : 2, "bool" : 3, "error" : -1}
 
