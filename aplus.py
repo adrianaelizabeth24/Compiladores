@@ -320,6 +320,8 @@ tokens = (
   'VOID',
   'PARENTESIS_IZQ',
   'PARENTESIS_DER',
+  'CORCHETE_IZQ',
+  'CORCHETE_DER',
   'RETURN',
   'PUNTO_Y_COMA',
   'WHILE',
@@ -378,6 +380,8 @@ t_IGUAL_A           = r'\=='
 t_PUNTO_Y_COMA      = r'\;'
 t_DOS_PUNTOS        = r'\:'
 t_COMA              = r'\,'
+t_CORCHETE_IZQ 			= r'\['
+t_CORCHETE_DER			= r'\]'
 
 
 #palabras reservadas del lenguaje
@@ -537,6 +541,7 @@ def p_opciones(p):
           | pickbeeper
           | putbeeper
           | funcionUsuario
+          | returnFunc
   '''
 
 ###################################################################################################
@@ -548,6 +553,7 @@ def p_opciones(p):
 def p_declaracion_3(p):
   '''
   declaracion_3 : declaracion declaracion_3
+  							| declaracionArreglo declaracion_3
                 | empty
   '''
 
@@ -597,9 +603,9 @@ def p_declaracion(p):
 
   #crea el objeto tablaVar con : nombre, tipo, scope, direccion
   if(bscope == 0):
-    obj = tablaVar(p[2],tipoDeclaracion,'global',var)
+    obj = tablaVar(p[2],tipoDeclaracion,'global',var,1)
   else:
-    obj = tablaVar(p[2],tipoDeclaracion,'local',var)
+    obj = tablaVar(p[2],tipoDeclaracion,'local',var,1)
 
   #en caso de agregarla la guarda en el diccionario
   if(iContadorDiccionarioVar == 0):
@@ -661,9 +667,9 @@ def p_declaracion_2(p):
 
   #crea el objeto tablaVar con : nombre, tipo, scope, direccion
   if(bscope == 0):
-    obj = tablaVar(p[2],tipoDeclaracion,'global',var)
+    obj = tablaVar(p[2],tipoDeclaracion,'global',var,1)
   else:
-    obj = tablaVar(p[2],tipoDeclaracion,'local',var)
+    obj = tablaVar(p[2],tipoDeclaracion,'local',var,1)
 
    #lo agrega al diccionario
   dV[iContadorDiccionarioVar] = obj
@@ -676,6 +682,63 @@ def p_a(p):
   a : declaracion_2
    | empty
   '''
+
+def p_declaracionArreglo(p):
+	'''
+	declaracionArreglo : tipo ID CORCHETE_IZQ CTE_INT CORCHETE_DER PUNTO_Y_COMA
+	'''
+	global bscope
+	global iContadorDiccionarioVar
+	global dV
+	global tipoDeclaracion
+	global vgi, vli, vgf, vlf, vgs, vls
+	#vars locales
+	obj = ""
+	objAux = ""
+	var = 0
+
+	#si no es la primera variable a guardar checa si no se repite el nombre
+	if(iContadorDiccionarioVar != 0):
+		for x in range(0,iContadorDiccionarioVar):
+			objAux = dV[x]
+			#compara los nombres
+			if(p[2] == objAux.getNombre()):
+				raise errorSemantico("Variable ya definida: " + p[2])
+
+	#checa el tipo de variable y su scope y guarda esa direccion de memoria en var
+	if(tipoDeclaracion == "int" and bscope == 0):
+		var = vgi
+		vgi += p[4]
+	elif(tipoDeclaracion == "int" and bscope == 1):
+		var = vli
+		vli+= p[4]
+	elif(tipoDeclaracion == "float" and bscope == 0):
+		var = vgf
+		vgf+= p[4]
+	elif(tipoDeclaracion == "float" and bscope == 1):
+		var = vgf
+		vlf+=p[4]
+	elif(tipoDeclaracion == "string" and bscope == 0):
+		var = vgs
+		vgs+=p[4]
+	elif(tipoDeclaracion == "string" and bscope == 1):
+		var = vls
+		vls+=p[4]
+
+  #crea el objeto tablaVar con : nombre, tipo, scope, direccion
+	if(bscope == 0):
+		obj = tablaVar(p[2],tipoDeclaracion,'global',var,p[4])
+	else:
+		obj = tablaVar(p[2],tipoDeclaracion,'local',var,p[4])
+
+  #en caso de agregarla la guarda en el diccionario
+	if(iContadorDiccionarioVar == 0):
+		dV = {iContadorDiccionarioVar : obj}
+	else:
+		dV[iContadorDiccionarioVar] = obj
+
+  #incrementa contador
+	iContadorDiccionarioVar = iContadorDiccionarioVar + 1
 
 #define los distintos tipos de variables pueden ser int, float, string y bool
 def p_tipo(p):
@@ -1310,7 +1373,7 @@ def p_imprimeEndWhile(p):
 #en caso de retornar un tipo esta obligada a tner return
 def p_function(p):
   '''
-  function : imprimeDef tipoFunction matchNomFunction PARENTESIS_IZQ function_aux PARENTESIS_DER agregaFunc DOS_PUNTOS declaracion_3 estatuto_2 function_4 imprimeEndDef
+  function : imprimeDef tipoFunction matchNomFunction PARENTESIS_IZQ function_aux PARENTESIS_DER agregaFunc DOS_PUNTOS declaracion_3 estatuto_2 imprimeEndDef
   '''
 
 #funcion auxiliar que agrega la funcion a la tabla de funciones
@@ -1387,7 +1450,7 @@ def p_matchNomFunction(p):
 			vgs+=1
 
 		#crea el objeto tablaVar con : nombre, tipo, scope, direccion
-		obj = tablaVar(nombreFuncion,tipoDeclaracionFuncion,"global",var)
+		obj = tablaVar(nombreFuncion,tipoDeclaracionFuncion,"global",var,1)
 		#lo agrega al diccionario
 		dV[iContadorDiccionarioVar] = obj
 		#incrementa el contador
@@ -1454,7 +1517,7 @@ def p_function_2(p):
     vls+=1
   
   #se genera el objeto y se agrega a la listaParam
-  obj = tablaVar(p[2],tipoDeclaracion,'local',var)
+  obj = tablaVar(p[2],tipoDeclaracion,'local',var,1)
   aux = dicTipos[tipoDeclaracion]
   listaParamFuncion.append(aux)
 
@@ -1475,9 +1538,9 @@ def p_function_3(p):
   '''
 
 #return expresion;
-def p_function_4(p):
+def p_returnFunc(p):
   '''
-  function_4 : RETURN expresion PUNTO_Y_COMA
+  returnFunc : RETURN expresion PUNTO_Y_COMA
               | empty
   '''
   global PilaO, PTipo
