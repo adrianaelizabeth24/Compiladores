@@ -1,6 +1,6 @@
-from Tkinter import *
+from tkinter import *
 #import tkmessagebox
-import Tkinter as tk
+import tkinter as tk
 import itertools as it
 
 def donothing():

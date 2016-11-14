@@ -6,6 +6,7 @@
 
 from tablaVar import tablaVar
 from tablaFunciones import tablaFunciones
+from tablaConstantes import tablaConstantes
 from errorSintactico import errorSintactico
 from errorLexico import errorLexico
 from errorSemantico import errorSemantico
@@ -54,6 +55,7 @@ PTipo = []
 arregloCuadruplos = []
 listaParamFuncion = []
 listaAuxParamFuncion = []
+arregloConstantes = []
 
 #diccionarios
 dV = {}
@@ -77,7 +79,7 @@ ctef = 31000
 ctes = 32000
 cteb = 33000
 
-cubo = [[[0 for k in range(11)] for j in range(4)] for i in range(4)]
+cubo = [[[0 for k in range(13)] for j in range(4)] for i in range(4)]
 #Cubo [OP1][OP2][OPERACION] = TIPO
 # INT
 cubo[0][0][0] = 0     # int + int = int
@@ -515,7 +517,7 @@ def p_empty(p):
 #en la tercera parte es el programa principal que es identificado por la palabra MAIN y es seguido de una serie de estatutos
 def p_estatuto(p):
     '''
-    estatuto : start declaracion_3 function_declaration matchMain DOS_PUNTOS estatuto_2
+    estatuto : start declaracion_3 function_declaration matchMain DOS_PUNTOS estatuto_2 cua_end
     '''
 
 #funcion auxiliar de estatuto
@@ -583,6 +585,19 @@ def p_opciones(p):
           | funcionUsuario
           | returnFunc
   '''
+
+def p_cua_end(p):
+  '''
+  cua_end : empty
+  '''
+  global iContadorCuadruplos
+  global arregloCuadruplos , resultado
+  #agrega -2 a resultados para no perder la cuenta
+  resultado.append(-2)
+  #genera el cuadruplo y lo agrega al arreglo de cuádruplos
+  arregloCuadruplos.append(cuadruplo("end","nul","nul",-2   ))
+  #contador de cuadruplos
+  iContadorCuadruplos+=1
 
 ###################################################################################################
 
@@ -807,6 +822,7 @@ def p_asignacion(p):
   global PilaO, PTipo
   global resultado
   global iContadorTemporal, iContadorCuadruplos, iContadorDiccionarioVar
+  global tgi,tgf,tgs,tgb
   varAux = 0;
 
   #saca el tipo de datos de los operandos que esten en la pila de tipos
@@ -878,14 +894,14 @@ def p_exp_2(p):
   	operando1 = PilaO.pop()
   	#incrementa el contador y lo agrega al arreglo de resultados
   	iContadorTemporal += 1
-  	resultado.append(iContadorTemporal)
+  	resultado.append(tgb)
   	#genera el cuadruplo
-  	tgb+=1
   	arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
   	#el temporal lo mete a la pila
-  	PilaO.append(iContadorTemporal)
+  	PilaO.append(tgb)
   	#suma uno al contador
   	iContadorCuadruplos += 1
+  	tgb+=1
 
 #para hacer sumas
 def p_expresion(p):
@@ -903,6 +919,7 @@ def p_cuaTermino(p):
   global dicOperadores
   global resultado
   global iContadorTemporal, iContadorCuadruplos
+  var = 0
 
   #si la lisra tiene más de 1 elemento
   if(len(POper) > 0):
@@ -928,15 +945,17 @@ def p_cuaTermino(p):
       	operando1 = PilaO.pop()
       	iContadorTemporal += 1
       	if(tipo == 0):
+      		var = tgi
       		tgi+=1
       	elif(tipo == 1):
+      		var = tgf
       		tgf+=2
       	#agrega a la pila
       	PTipo.append(tipo)
-      	resultado.append(iContadorTemporal)
+      	resultado.append(var)
       	#agrega al cuadruplo
-      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,iContadorTemporal))
-      	PilaO.append(iContadorTemporal)
+      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,var))
+      	PilaO.append(var)
       	#incrementa el contador de cuadruplos
       	iContadorCuadruplos += 1
 
@@ -981,6 +1000,7 @@ def p_cuaFactor(p):
   global resultado
   global dicOperadores
   global iContadorTemporal, iContadorCuadruplos
+  var = 0
   #entra si ya entro una multiplicacion o division a la pila o suma o resta
   if(len(POper) > 0):
   	#pregunta si el tope es multiplicacion o division en caso de serlo prosigue
@@ -999,8 +1019,10 @@ def p_cuaFactor(p):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
       	if(tipo == 1):
+      		var = tgi
       		tgi+=1
       	elif(tipo == 2):
+      		var = tgf
       		tgf+=2
       	#saca el operador y ambos operandos
       	operador = POper.pop()
@@ -1009,11 +1031,11 @@ def p_cuaFactor(p):
       	iContadorTemporal += 1
       	PTipo.append(tipo)
       	#al arreglo de resultados mete el numero de temporal
-      	resultado.append(iContadorTemporal)
+      	resultado.append(var)
       	#genera un nuevo cuadruplo
       	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
       	#mete el temporal
-      	PilaO.append(iContadorTemporal)
+      	PilaO.append(var)
       	iContadorCuadruplos += 1
 
 #hace match de multiplicacion o division
@@ -1095,19 +1117,18 @@ def p_matchID(p):
       auxTipo = dicTipos[tipo]
       PTipo.append(auxTipo)
       #Meter a pila operadores paso 1 del algoritmo
-      PilaO.append(p[1])
+      dir = dV[x].getDireccion()
+      PilaO.append(dir)
   #No esta declarada
   if(varAux == iContadorDiccionarioVar):
     raise errorSemantico("Variable no declarada: " + p[1])
-
-  print(p[1])
 
 #match una constante numerica entera
 def p_matchCteInt(p):
   '''
   matchCteInt : CTE_INT
   '''
-  global PilaO, PTipo
+  global PilaO, PTipo, arregloConstantes
   global dicTipos
   global ctei
   auxTipo = -2
@@ -1116,18 +1137,20 @@ def p_matchCteInt(p):
   PTipo.append(auxTipo)
 
   #meter a pila de operadores
-  PilaO.append(p[1])
+  PilaO.append(ctei)
   ctei+=1
+  #guardar en tabla de Constantes
+  obj = tablaConstantes(p[1],ctei)
+  arregloConstantes.append(obj)
+
 
 #match una constante numerica flotante
 def p_matchCteFloat(p):
   '''
   matchCteFloat : CTE_FLOAT
   '''
-  global PilaO
-  global PTipo
+  global PilaO,PTipo,arregloConstantes
   global dicTipos
-  global arrCF
   global ctef
   auxTipo = -2
   #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
@@ -1135,8 +1158,11 @@ def p_matchCteFloat(p):
   auxTipo = dicTipos["float"]
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
-  PilaO.append(p[1])
+  PilaO.append(ctef)
   ctef+=1
+  #guardar en tabla de constantes
+  obj = tablaConstantes(p[1],ctef)
+  arregloConstantes.append(obj)
 
 #hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
@@ -1145,14 +1171,18 @@ def p_matchCteBool(p):
   				| FALSE
   '''
   global cteb
-  global dicTipos,PTipo,PilaO
+  global dicTipos,PTipo,PilaO,arregloConstantes
   #calcula diccionario
   auxTipo = dicTipos["bool"]
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
-  PilaO.append(p[1])
+  PilaO.append(cteb)
   #memoria
   cteb+=1
+  #guardar en tabla de constantes
+  obj = tablaConstantes(p[1],cteb)
+  arregloConstantes.append(obj)
+
 
 ###################################################################################################
 
@@ -1296,16 +1326,18 @@ def p_escritura_2(p):
 
 #imprime string
 def p_matchCteString(p):
-	'''
-	matchCteString : CTE_STRING
-	'''
-	global ctes
-	global dicTipos,PTipo,PilaO
-	auxTipo = dicTipos["string"]
-	PTipo.append(auxTipo)
-	#mete la constante a la pila de operandos
-	PilaO.append(p[1])
-	ctes+=1
+  '''
+  matchCteString : CTE_STRING
+  '''
+  global ctes
+  global dicTipos,PTipo,PilaO,arregloConstantes
+  auxTipo = dicTipos["string"]
+  PTipo.append(auxTipo)
+  #mete la constante a la pila de operandos
+  PilaO.append(ctes)
+  ctes+=1
+  obj = tablaConstantes(p[1],ctes)
+  arregloConstantes.append(obj)
 
 #genera cuadruplo de read
 def p_read(p):
@@ -1639,16 +1671,16 @@ def p_destroyVars(p):
     iContadorDiccionarioVar = iAux
 
   #resetea temporal
-  iContadorTemporal = iContadorDiccionarioVar - iContadorInicioLocal
+  iContadorTemporal = 1
   #resetea memoria
   vli= 10000
   vlf = 11000
   vlb = 12000
   vls = 13000
-  tgi -= iContadorTemporal
-  tgf -= iContadorTemporal
-  tgs -= iContadorInicioLocal
-  tgb -= iContadorInicioLocal
+  tgi = 20000
+  tgf = 21000
+  tgs = 22000
+  tgb = 23000
   #genera cuadruplo ret
   resultado.append(-2)
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
@@ -1731,8 +1763,10 @@ def p_go_sub(p):
 	global funcionActiva
 	global PTipo
 	global dicTipos
+	global tgi,tgf,tgs,tgb
 	tipo = ""
 	tipoDic = -2
+	var = 0
 	#cuadruplo gosub
 	resultado.append(-2)
 	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",-2))
@@ -1747,9 +1781,22 @@ def p_go_sub(p):
 		#agrega el tipo de funcion a la pila de tipos
 		tipoDic = dicTipos[tipo]
 		PTipo.append(tipoDic)
+		#direccion del temporal
+		if(tipoDic == 0):
+			var = tgi
+			tgi+=1
+		elif(tipoDic == 1):
+			var = tgf
+			tgf+=1
+		elif(tipoDic == 2):
+			var = tgs
+			tgs+=1
+		else:
+			var = tgb
+			tgb+=1
 		#agrega la funcion a la pila de operadores
-		PilaO.append(iContadorTemporal)
-		resultado.append(iContadorTemporal)
+		PilaO.append(var)
+		resultado.append(var)
 		#genera parche
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 		iContadorTemporal += 1
