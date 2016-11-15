@@ -11,6 +11,8 @@ diccionarioMemTemporalGl = {}
 diccionarioMemTemporalLl = {}
 diccionarioMemConstante = {}
 arregloCuadruplos = []
+InstruccionActual = 0
+i = True
 
 '''
 vgi = 5000
@@ -87,28 +89,24 @@ def Suma(op1,op2, result):
 	valor2 = getValor(op2)
 	res = valor1 + valor2
 	setValor(result, res)
-	print(res)
 
 def Resta(op1,op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 - valor2
 	setValor(resultado, res)
-	print(res)
 
 def Multiplicacion(op1,op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 * valor2
-	setValor(resultado, res)
-	print(res)
+	setValor(result, res)
 
 def Division(op1,op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 / valor2
 	setValor(result, res)
-	print(res)
 
 def Asignacion(op1,result):
 	valor = getValor(op1)
@@ -118,7 +116,20 @@ def Print(result):
 	res = getValor(result)
 	print(res)
 
-def Operacion(op,op1,op2,res):
+def Goto(op1):
+	global InstruccionActual
+	InstruccionActual = op1 -1
+
+def End():
+	global i
+	print("terminé ejecucion")
+	i = False
+
+def Operacion(arregloCuadruplos):
+	op = arregloCuadruplos[0]
+	op1 = arregloCuadruplos[1]
+	op2 = arregloCuadruplos[2]
+	res = arregloCuadruplos[3]
 	if(op == 0):
 		Suma(op1,op2,res)
 	elif(op == 1):
@@ -127,8 +138,37 @@ def Operacion(op,op1,op2,res):
 		Multiplicacion(op1,op2,res)
 	elif(op == 3):
 		Division(op1,op2,res)
-	elif(op == 11):
-		Print(res)
+	elif(op == 6):
+		Asignacion(op1,res)
+	elif(op == 13):
+		Print(op1)
+	elif(op == 15):
+		Goto(op1)
+	elif(op == 16):
+		End()
+
+
+'''
+vgi = 5000
+vgf = 6000
+vgs = 7000
+vgb = 8000
+
+vli= 10000
+vlf = 11000
+vlb = 12000
+vls = 13000
+
+tgi = 20000
+tgf = 21000
+tgs = 22000
+tgb = 23000
+
+ctei = 30000
+ctef = 31000
+ctes = 32000
+cteb = 33000
+'''
 
 def getValor(memoriaVirtual):
 	if(memoriaVirtual > 4999 and memoriaVirtual < 9000):
@@ -152,6 +192,6 @@ def setValor(memoriaVirtual, valor):
 
 
 leeObj()
-print(diccionarioMemConstante)
-for x in range(0,len(arregloCuadruplos)):
-	print(arregloCuadruplos[x])
+while (i == True):
+	Operacion(arregloCuadruplos[InstruccionActual])
+	InstruccionActual += 1

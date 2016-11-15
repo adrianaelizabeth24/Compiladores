@@ -1145,7 +1145,6 @@ def p_matchCteInt(p):
 
   #meter a pila de operadores
   PilaO.append(ctei)
-  ctei+=1
   #guardar en tabla de Constantes
   obj = tablaConstantes(p[1],ctei)
   for x in range(0,numConstantes):
@@ -1154,6 +1153,7 @@ def p_matchCteInt(p):
   if(var == 0):
     arregloConstantes.append(obj)
     numConstantes+=1
+    ctei+=1
 
 #match una constante numerica flotante
 def p_matchCteFloat(p):
@@ -1171,7 +1171,6 @@ def p_matchCteFloat(p):
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(ctef)
-  ctef+=1
   #guardar en tabla de constantes
   obj = tablaConstantes(p[1],ctef)
   for x in range(0,numConstantes):
@@ -1180,6 +1179,7 @@ def p_matchCteFloat(p):
   if(var == 0):
     arregloConstantes.append(obj)
     numConstantes+=1
+    ctef+=1
   
 #hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
@@ -1196,7 +1196,6 @@ def p_matchCteBool(p):
   #mete la constante a la pila de operandos
   PilaO.append(cteb)
   #memoria
-  cteb+=1
   #guardar en tabla de constantes
   obj = tablaConstantes(p[1],cteb)
   for x in range(0,numConstantes):
@@ -1205,6 +1204,7 @@ def p_matchCteBool(p):
   if(var == 0):
     arregloConstantes.append(obj)
     numConstantes+=1
+    cteb+=1
 
 
 
@@ -1360,7 +1360,6 @@ def p_matchCteString(p):
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(ctes)
-  ctes+=1
   obj = tablaConstantes(p[1],ctes)
   for x in range(0,numConstantes):
     if(p[1] == arregloConstantes[x].getValor()):
@@ -1368,6 +1367,7 @@ def p_matchCteString(p):
   if(var == 0):
     arregloConstantes.append(obj)
     numConstantes+=1
+    ctes+=1
 
 #genera cuadruplo de read
 def p_read(p):
