@@ -1023,10 +1023,10 @@ def p_cuaFactor(p):
       if(tipo == -1):
       	raise errorSemantico("uso incorrecto de tipos ")
       else:
-      	if(tipo == 1):
+      	if(tipo == 0):
       		var = tgi
       		tgi+=1
-      	elif(tipo == 2):
+      	elif(tipo == 1):
       		var = tgf
       		tgf+=2
       	#saca el operador y ambos operandos
@@ -1138,22 +1138,28 @@ def p_matchCteInt(p):
   global dicTipos
   global ctei,numConstantes
   auxTipo = -2
-  var = False
+  var = 0
+  varAux = 0
   #calcula el numero de diccionario
   auxTipo = dicTipos["int"]
   PTipo.append(auxTipo)
-
-  #meter a pila de operadores
-  PilaO.append(ctei)
   #guardar en tabla de Constantes
-  obj = tablaConstantes(p[1],ctei)
+  #checa que no exista
   for x in range(0,numConstantes):
+    #si existe prende la variable var
     if(p[1] == arregloConstantes[x].getValor()):
-      var = True
+      var = 1
+      varAux = arregloConstantes[x].getDireccion()
+  #en caso de no existir suma la cte i y la agrega a la tabla de constantes
   if(var == 0):
+    obj = tablaConstantes(p[1],ctei)
+    varAux = ctei
     arregloConstantes.append(obj)
-    numConstantes+=1
     ctei+=1
+    numConstantes+=1
+  #meter a pila de operadores
+  PilaO.append(varAux)
+
 
 #match una constante numerica flotante
 def p_matchCteFloat(p):
@@ -1164,22 +1170,28 @@ def p_matchCteFloat(p):
   global dicTipos
   global ctef, numConstantes
   auxTipo = -2
-  var = False
+  var = 0
+  varAux = 0
   #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
 
   auxTipo = dicTipos["float"]
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(ctef)
-  #guardar en tabla de constantes
-  obj = tablaConstantes(p[1],ctef)
   for x in range(0,numConstantes):
+    #si existe prende la variable var
     if(p[1] == arregloConstantes[x].getValor()):
-      var = True
+      var = 1
+      varAux = arregloConstantes[x].getDireccion()
+  #en caso de no existir suma la cte i y la agrega a la tabla de constantes
   if(var == 0):
+    obj = tablaConstantes(p[1],ctef)
+    varAux = ctef
     arregloConstantes.append(obj)
-    numConstantes+=1
     ctef+=1
+    numConstantes+=1
+  #meter a pila de operadores
+  PilaO.append(varAux)
   
 #hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
@@ -1189,22 +1201,26 @@ def p_matchCteBool(p):
   '''
   global cteb, numConstantes
   global dicTipos,PTipo,PilaO,arregloConstantes
-  var = False
+  var = 0
+  varAux = 0
   #calcula diccionario
   auxTipo = dicTipos["bool"]
   PTipo.append(auxTipo)
-  #mete la constante a la pila de operandos
-  PilaO.append(cteb)
-  #memoria
-  #guardar en tabla de constantes
-  obj = tablaConstantes(p[1],cteb)
+  #checa que no exista
   for x in range(0,numConstantes):
+    #si existe prende la variable var
     if(p[1] == arregloConstantes[x].getValor()):
-      var = True
+      var = 1
+      varAux = arregloConstantes[x].getDireccion()
+  #en caso de no existir suma la cte i y la agrega a la tabla de constantes
   if(var == 0):
+    obj = tablaConstantes(p[1],cteb)
+    varAux = cteb
     arregloConstantes.append(obj)
-    numConstantes+=1
     cteb+=1
+    numConstantes+=1
+  #meter a pila de operadores
+  PilaO.append(varAux)
 
 
 
@@ -1355,19 +1371,26 @@ def p_matchCteString(p):
   '''
   global ctes,numConstantes
   global dicTipos,PTipo,PilaO,arregloConstantes
-  var = False
+  var = 0
+  varAux = 0
   auxTipo = dicTipos["string"]
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
-  PilaO.append(ctes)
-  obj = tablaConstantes(p[1],ctes)
+  #checa que no exista
   for x in range(0,numConstantes):
+    #si existe prende la variable var
     if(p[1] == arregloConstantes[x].getValor()):
-      var = True
+      var = 1
+      varAux = arregloConstantes[x].getDireccion()
+  #en caso de no existir suma la cte i y la agrega a la tabla de constantes
   if(var == 0):
+    obj = tablaConstantes(p[1],ctes)
+    varAux = ctes
     arregloConstantes.append(obj)
-    numConstantes+=1
     ctes+=1
+    numConstantes+=1
+  #meter a pila de operadores
+  PilaO.append(varAux)
 
 #genera cuadruplo de read
 def p_read(p):
