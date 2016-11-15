@@ -1,13 +1,5 @@
 float a,b;
 int c[3];
 
-def void uno():
-	move();
-end_def
-
 main:
 a = 1 + 2 * 5 + (25 + b - (4 + 34 * (2 + 34 * 22 / 18 * a) + 12 - 17) / 16 + 18 / 18);
-read(a);
-while(a < 10):
-	uno();
-end_while

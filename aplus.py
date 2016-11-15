@@ -14,6 +14,7 @@ from cuadruplo import cuadruplo
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+from sys import argv
 
 #variables globales
 #boleanas
@@ -28,6 +29,7 @@ iContadorInicioLocal = 0
 iContadorTemporal = 0
 iContadorCuadruplos = 0
 iContadorParametros = 0
+numConstantes = 0
 #enteros indicadores
 op = -2
 op1 = -2
@@ -532,7 +534,7 @@ def p_start(p):
 	#mete a la pila de saltos el cuadruplo inicial para poder llenar despúes el cuadruplo donde se encuentre main
 	PSaltos.append(iContadorCuadruplos)
 	#agrega -2 a resultados para no perder la cuenta
-	resultado.append(-2)
+	resultado.append("nul")
 	#genera el cuadruplo y lo agrega al arreglo de cuádruplos
 	arregloCuadruplos.append(cuadruplo("GotoMain",-2,"nul","nul"))
 	#contador de cuadruplos
@@ -593,9 +595,9 @@ def p_cua_end(p):
   global iContadorCuadruplos
   global arregloCuadruplos , resultado
   #agrega -2 a resultados para no perder la cuenta
-  resultado.append(-2)
+  resultado.append("nul")
   #genera el cuadruplo y lo agrega al arreglo de cuádruplos
-  arregloCuadruplos.append(cuadruplo("end","nul","nul",-2   ))
+  arregloCuadruplos.append(cuadruplo("end","nul","nul","nul"))
   #contador de cuadruplos
   iContadorCuadruplos+=1
 
@@ -1130,7 +1132,7 @@ def p_matchCteInt(p):
   '''
   global PilaO, PTipo, arregloConstantes
   global dicTipos
-  global ctei
+  global ctei,numConstantes
   auxTipo = -2
   #calcula el numero de diccionario
   auxTipo = dicTipos["int"]
@@ -1142,6 +1144,7 @@ def p_matchCteInt(p):
   #guardar en tabla de Constantes
   obj = tablaConstantes(p[1],ctei)
   arregloConstantes.append(obj)
+  numConstantes+=1
 
 
 #match una constante numerica flotante
@@ -1151,7 +1154,7 @@ def p_matchCteFloat(p):
   '''
   global PilaO,PTipo,arregloConstantes
   global dicTipos
-  global ctef
+  global ctef, numConstantes
   auxTipo = -2
   #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
 
@@ -1163,6 +1166,7 @@ def p_matchCteFloat(p):
   #guardar en tabla de constantes
   obj = tablaConstantes(p[1],ctef)
   arregloConstantes.append(obj)
+  numConstantes +=1
 
 #hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
@@ -1170,7 +1174,7 @@ def p_matchCteBool(p):
   matchCteBool : TRUE
   				| FALSE
   '''
-  global cteb
+  global cteb, numConstantes
   global dicTipos,PTipo,PilaO,arregloConstantes
   #calcula diccionario
   auxTipo = dicTipos["bool"]
@@ -1182,6 +1186,7 @@ def p_matchCteBool(p):
   #guardar en tabla de constantes
   obj = tablaConstantes(p[1],cteb)
   arregloConstantes.append(obj)
+  numConstantes+=1
 
 
 ###################################################################################################
@@ -1211,7 +1216,7 @@ def p_cuacondicion1(p):
   #agrega la posición actual a la pila de saltos
   PSaltos.append(iContadorCuadruplos)
   #el resultado le asigna -2 para estandarizar que está vacio
-  resultado.append(-2)
+  resultado.append("nul")
   #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   #suma uno al contador
@@ -1260,9 +1265,9 @@ def p_matchElse(p):
 	PSaltosAux.append(iContadorCuadruplos)
 	operador = "Goto"
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
-	resultado.append(-2)
+	resultado.append("nul")
   #genera el cuadruplo
-	arregloCuadruplos.append(cuadruplo(operador,"nul","nul",-2))
+	arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   #sigye la cuenta del contador y resetea la variable boleana
 	iContadorCuadruplos+=1
 	bIf = 0
@@ -1329,7 +1334,7 @@ def p_matchCteString(p):
   '''
   matchCteString : CTE_STRING
   '''
-  global ctes
+  global ctes,numConstantes
   global dicTipos,PTipo,PilaO,arregloConstantes
   auxTipo = dicTipos["string"]
   PTipo.append(auxTipo)
@@ -1338,6 +1343,7 @@ def p_matchCteString(p):
   ctes+=1
   obj = tablaConstantes(p[1],ctes)
   arregloConstantes.append(obj)
+  numConstantes+=1
 
 #genera cuadruplo de read
 def p_read(p):
@@ -1389,7 +1395,7 @@ def p_cuaciclo1(p):
   #agrega la posición actual a la pila de saltos
   PSaltos.append(iContadorCuadruplos)
   #el resultado le asigna -2 para estandarizar que está vacio
-  resultado.append(-2)
+  resultado.append("nul")
   #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   #suma uno al contador
@@ -1639,7 +1645,7 @@ def p_returnFunc(p):
   	else:
   		operando1 = PilaO.pop()
   		operador = "Return"
-  		resultado.append(-2)
+  		resultado.append("nul")
   		arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   		iContadorCuadruplos+=1
 
@@ -1682,7 +1688,7 @@ def p_destroyVars(p):
   tgs = 22000
   tgb = 23000
   #genera cuadruplo ret
-  resultado.append(-2)
+  resultado.append("nul")
   arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
   iContadorCuadruplos+=1
   #elimina bRetorna
@@ -1746,8 +1752,8 @@ def p_era_func(p):
 	global iContadorCuadruplos
 	global funcionActiva
 	#era de funcionActiva
-	resultado.append(-2)
-	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul",-2))
+	resultado.append("nul")
+	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul","nul"))
 	iContadorCuadruplos+=1
 
 #cuadruplo gosub + parche guadalupano
@@ -1768,8 +1774,8 @@ def p_go_sub(p):
 	tipoDic = -2
 	var = 0
 	#cuadruplo gosub
-	resultado.append(-2)
-	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul",-2))
+	resultado.append("nul")
+	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul","nul"))
 	iContadorCuadruplos+=1
 	#parche guadalupano
 	#checa el tipo
@@ -1876,12 +1882,12 @@ def p_checkwall(p):
   global arregloCuadruplos
   global resultado
   #cuadruplo era
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","checkwall","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("era","checkwall","nul","nul"))
   iContadorCuadruplos+=1
   #cuadruplo gosub
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un checkwall\n")
 
@@ -1894,12 +1900,12 @@ def p_move(p):
   global arregloCuadruplos
   global resultado
   #era
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","move","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("era","move","nul","nul"))
   iContadorCuadruplos+=1
   #gosub
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","move","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("gosub","move","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un move\n")
 
@@ -1912,12 +1918,12 @@ def p_turnright(p):
   global arregloCuadruplos
   global resultado
   #era
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","turnRight","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("era","turnRight","nul","nul"))
   iContadorCuadruplos+=1
   #gosub
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un turnright\n")
 
@@ -1929,11 +1935,11 @@ def p_turnleft(p):
   global iContadorCuadruplos
   global arregloCuadruplos
   global resultado
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","turnLeft","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("era","turnLeft","nul","nul"))
   iContadorCuadruplos+=1
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","turnLeft","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("gosub","turnLeft","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un turnleft\n")
 
@@ -1946,11 +1952,11 @@ def p_pickbeeper(p):
   global iContadorCuadruplos
   global arregloCuadruplos
   global resultado
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","pickBeeper","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("era","pickBeeper","nul","nul"))
   iContadorCuadruplos+=1
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","pickBeeper","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("gosub","pickBeeper","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un pickbeeper\n")
 
@@ -1962,11 +1968,11 @@ def p_putbeeper(p):
   global iContadorCuadruplos
   global arregloCuadruplos
   global resultado
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("era","putBeeper","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("era","putBeeper","nul","nul"))
   iContadorCuadruplos+=1
-  resultado.append(-2)
-  arregloCuadruplos.append(cuadruplo("gosub","putBeeper","nul",-2))
+  resultado.append("nul")
+  arregloCuadruplos.append(cuadruplo("gosub","putBeeper","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un putbeeper")
 
@@ -1981,6 +1987,37 @@ def p_putbeeper(p):
 def p_error(p):
   raise errorSintactico("Error de sintaxis")
 
+def writeObjectFile():
+	filename = argv
+	filename = "aplusOBJ.txt"
+	target = open(filename, 'w')
+	target.truncate()
+	target.write("constantes")
+	target.write("\n")
+	target.write("\n")
+	for x in range(0,numConstantes):
+		target.write(str(arregloConstantes[x].getValor()))
+		target.write("\t")
+		target.write(str(arregloConstantes[x].getDireccion()))
+		target.write("\n")
+
+	target.write("\n")
+	target.write("\n")
+	target.write("cuadruplos")
+	target.write("\n")
+	target.write("\n")
+	for x in range(0,iContadorCuadruplos):
+		target.write(str(arregloCuadruplos[x].getOperador()))
+		target.write("\t")
+		target.write(str(arregloCuadruplos[x].getOperando1()))
+		target.write("\t")
+		target.write(str(arregloCuadruplos[x].getOperando2()))
+		target.write("\t")
+		target.write(str(arregloCuadruplos[x].getResultado()))
+		target.write("\n")
+
+	target.close()
+
 # Build the parser
 parser = yacc.yacc()
 data = ""
@@ -1991,6 +2028,7 @@ for line in f:
   else:
     data = data + line
 result = parser.parse(data)
+writeObjectFile()
 
 print("\n")
 
