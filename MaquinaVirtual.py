@@ -94,7 +94,7 @@ def Resta(op1,op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 - valor2
-	setValor(resultado, res)
+	setValor(result, res)
 
 def Multiplicacion(op1,op2, result):
 	valor1 = getValor(op1)
