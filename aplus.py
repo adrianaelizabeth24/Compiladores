@@ -2011,23 +2011,20 @@ def p_error(p):
 
 def writeObjectFile():
 	filename = argv
-	filename = "aplusOBJ.txt"
+	filename = "aplusOBJConstantes.txt"
 	target = open(filename, 'w')
 	target.truncate()
-	target.write("constantes")
-	target.write("\n")
-	target.write("\n")
 	for x in range(0,numConstantes):
-		target.write(str(arregloConstantes[x].getValor()))
-		target.write("\t")
 		target.write(str(arregloConstantes[x].getDireccion()))
+		target.write("\t")
+		target.write(str(arregloConstantes[x].getValor()))
 		target.write("\n")
+	target.close()
 
-	target.write("\n")
-	target.write("\n")
-	target.write("cuadruplos")
-	target.write("\n")
-	target.write("\n")
+	filename = argv
+	filename = "aplusOBJCuadruplos.txt"
+	target = open(filename, 'w')
+	target.truncate()
 	for x in range(0,iContadorCuadruplos):
 		target.write(str(arregloCuadruplos[x].getOperador()))
 		target.write("\t")
@@ -2037,7 +2034,6 @@ def writeObjectFile():
 		target.write("\t")
 		target.write(str(arregloCuadruplos[x].getResultado()))
 		target.write("\n")
-
 	target.close()
 
 # Build the parser

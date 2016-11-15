@@ -14,6 +14,7 @@ operador = -2
 operando1 = -2
 operando2 = -2
 resultado = -2
+iContCte = 0
 '''
 vgi = 5000
 vgf = 6000
@@ -34,6 +35,23 @@ cteb = 33000
 '''
 
 #dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "print" : 11}
+def leeObj():
+	leeConstantes()
+
+
+def leeConstantes():
+	key = 0
+	value = 0
+	f = open('aplusOBJConstantes.txt', 'r')
+	for line in f:
+		iContadorAux = 0
+		for word in line.split():
+			if(iContadorAux == 0):
+				key = int(word)
+			else:
+				value = int(word)
+			iContadorAux+=1
+		diccionarioMemConstante[key] = value
 
 
 def Suma(op1,op2, result):
@@ -101,6 +119,5 @@ def setValor(memoriaVirtual, valor):
 		diccionarioMemConstante[memoriaVirtual] = valor
 
 
-
-
-
+leeObj()
+print(diccionarioMemConstante)
