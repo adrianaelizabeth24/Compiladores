@@ -2,6 +2,14 @@ from tkinter import *
 #import tkmessagebox
 import tkinter as tk
 import itertools as it
+import aplus
+import os
+
+clickBefore = False
+lineaX = 0
+lineaY = 0
+posDogX = 200
+posDogY = 210
 
 def donothing():
    filewin = winlevel(win)
@@ -9,23 +17,52 @@ def donothing():
    button.pack()
 
 def animate():
+    global posDogX
+    global posDogY
     """ cycle through """
     img = next(pictures)
     draw.delete("dog")
-    draw.create_image(200,210, anchor=NW, image=img, tags="dog")
+    draw.create_image(posDogX, posDogY, anchor=NW, image=img, tags="dog")
     win.after(delay, animate)
 
 def compileCode():
     input = codeText.get("1.0",'end-1c')
+    text_file = open("prueba.txt", "w")
+    text_file.write(input)
+    text_file.close()
+    os.system('aplus.py')
     print(input)
 
+def moveUp(event):
+    global posDogY
+    posDogY = posDogY - 50
+
+def moveDown(event):
+    global posDogY
+    posDogY = posDogY + 50
+
+def moveLeft(event):
+    global posDogX
+    posDogX = posDogX - 50
+
+def moveRight(event):
+    global posDogX
+    posDogX = posDogX + 50
+
 def onObjectClick(event):
-  #tags = draw.itemcget(item, "tags")
-  print('Got rec', event.x, event.y)
-  '''if "grid" in tags:
-    # this item has the "grid" tag
-  else:
-    # this item does NOT have the "grid" tag'''
+    global clickBefore
+    global lineaX
+    global lineaY
+    print('Got rec', event.x, event.y)
+    if (clickBefore == False):
+      lineaX = event.x
+      lineaY = event.y
+      clickBefore = True
+    else:
+      coord = lineaX, lineaY, event.x, event.y
+      line = draw.create_line(coord, fill="black")
+      clickBefore = False
+      coord = 0, 0, 0, 0
 
 '''Crear divisiones de pantallas'''
 win = PanedWindow()
@@ -76,6 +113,7 @@ for x in range (0, 8):
   y2 = y2 + 50
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
+draw.tag_bind("dog", '<ButtonPress-1>', moveLeft)
 
 # every gif's frame
 fname_list = \
@@ -94,6 +132,5 @@ pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
 # milliseconds
 delay = 150
 animate()
-compileCode()
 
 win.mainloop()
