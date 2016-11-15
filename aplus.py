@@ -1134,6 +1134,7 @@ def p_matchCteInt(p):
   global dicTipos
   global ctei,numConstantes
   auxTipo = -2
+  var = False
   #calcula el numero de diccionario
   auxTipo = dicTipos["int"]
   PTipo.append(auxTipo)
@@ -1143,8 +1144,12 @@ def p_matchCteInt(p):
   ctei+=1
   #guardar en tabla de Constantes
   obj = tablaConstantes(p[1],ctei)
-  arregloConstantes.append(obj)
-  numConstantes+=1
+  for x in range(0,numConstantes):
+    if(p[1] == arregloConstantes[x].getValor()):
+      var = True
+  if(var == 0):
+    arregloConstantes.append(obj)
+    numConstantes+=1
 
 
 #match una constante numerica flotante
@@ -1156,6 +1161,7 @@ def p_matchCteFloat(p):
   global dicTipos
   global ctef, numConstantes
   auxTipo = -2
+  var = False
   #cubo semantico toma el valor float directamente y lo guarda en op2 si op1 está ocupado
 
   auxTipo = dicTipos["float"]
@@ -1165,8 +1171,13 @@ def p_matchCteFloat(p):
   ctef+=1
   #guardar en tabla de constantes
   obj = tablaConstantes(p[1],ctef)
-  arregloConstantes.append(obj)
-  numConstantes +=1
+  for x in range(0,numConstantes):
+    if(p[1] == arregloConstantes[x].getValor()):
+      var = True
+  if(var == 0):
+    arregloConstantes.append(obj)
+    numConstantes+=1
+  
 
 #hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
@@ -1176,6 +1187,7 @@ def p_matchCteBool(p):
   '''
   global cteb, numConstantes
   global dicTipos,PTipo,PilaO,arregloConstantes
+  var = False
   #calcula diccionario
   auxTipo = dicTipos["bool"]
   PTipo.append(auxTipo)
@@ -1185,8 +1197,13 @@ def p_matchCteBool(p):
   cteb+=1
   #guardar en tabla de constantes
   obj = tablaConstantes(p[1],cteb)
-  arregloConstantes.append(obj)
-  numConstantes+=1
+  for x in range(0,numConstantes):
+    if(p[1] == arregloConstantes[x].getValor()):
+      var = True
+  if(var == 0):
+    arregloConstantes.append(obj)
+    numConstantes+=1
+
 
 
 ###################################################################################################
@@ -1336,14 +1353,19 @@ def p_matchCteString(p):
   '''
   global ctes,numConstantes
   global dicTipos,PTipo,PilaO,arregloConstantes
+  var = False
   auxTipo = dicTipos["string"]
   PTipo.append(auxTipo)
   #mete la constante a la pila de operandos
   PilaO.append(ctes)
   ctes+=1
   obj = tablaConstantes(p[1],ctes)
-  arregloConstantes.append(obj)
-  numConstantes+=1
+  for x in range(0,numConstantes):
+    if(p[1] == arregloConstantes[x].getValor()):
+      var = True
+  if(var == 0):
+    arregloConstantes.append(obj)
+    numConstantes+=1
 
 #genera cuadruplo de read
 def p_read(p):
