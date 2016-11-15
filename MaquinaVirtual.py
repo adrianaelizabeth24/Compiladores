@@ -10,11 +10,8 @@ diccionarioMemLocal = {}
 diccionarioMemTemporalGl = {}
 diccionarioMemTemporalLl = {}
 diccionarioMemConstante = {}
-operador = -2
-operando1 = -2
-operando2 = -2
-resultado = -2
-iContCte = 0
+arregloCuadruplos = []
+
 '''
 vgi = 5000
 vgf = 6000
@@ -34,10 +31,13 @@ ctes = 32000
 cteb = 33000
 '''
 
-#dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "print" : 11}
+#dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, 
+#">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11,
+# ">=": 12, "print" : 13 , "read": 14, "GotoMain" : 15, "end" : 16}
+
 def leeObj():
 	leeConstantes()
-
+	leeCuadruplos()
 
 def leeConstantes():
 	key = 0
@@ -49,16 +49,44 @@ def leeConstantes():
 			if(iContadorAux == 0):
 				key = int(word)
 			else:
-				value = int(word)
+				value = float(word)
 			iContadorAux+=1
 		diccionarioMemConstante[key] = value
 
+def leeCuadruplos():
+	op = 0
+	op1 = 0
+	op2 = 0
+	res = 0
+	f = open('aplusOBJCuadruplos.txt', 'r')
+	for line in f:
+		iContadorAux = 0
+		for word in line.split():
+			if(iContadorAux == 0):
+				op = int(word)
+			elif(iContadorAux == 1):
+				if(word == "nul"):
+					op1 = -2
+				else:
+					op1 = int(word)
+			elif(iContadorAux == 2):
+				if(word == "nul"):
+					op2 = -2
+				else:
+					op2 = int(word)
+			else:
+				if(word == "nul"):
+					res = -2
+				else:
+					res = int(word)
+			iContadorAux+=1
+		arregloCuadruplos.append([op,op1,op2,res])
 
 def Suma(op1,op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 + valor2
-	setValor(resultado, res)
+	setValor(result, res)
 	print(res)
 
 def Resta(op1,op2, result):
@@ -79,8 +107,12 @@ def Division(op1,op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 / valor2
-	setValor(resultado, res)
+	setValor(result, res)
 	print(res)
+
+def Asignacion(op1,result):
+	valor = getValor(op1)
+	setValor(result,valor)
 
 def Print(result):
 	res = getValor(result)
@@ -121,3 +153,5 @@ def setValor(memoriaVirtual, valor):
 
 leeObj()
 print(diccionarioMemConstante)
+for x in range(0,len(arregloCuadruplos)):
+	print(arregloCuadruplos[x])

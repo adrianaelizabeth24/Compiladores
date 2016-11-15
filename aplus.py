@@ -351,7 +351,7 @@ cubo[3][1][12] = -1     # bool >= float = bool
 cubo[3][2][12] = -1    # bool >= string = error
 cubo[3][3][12] = -1    # bool >= bool = error
 
-dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14,}
+dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, "GotoMain" : 15, "end": 16}
 
 dicTipos = {"int" : 0, "float" : 1, "string" : 2, "bool" : 3, "error" : -1}
 
@@ -459,7 +459,7 @@ reserved = {
 
 #er de float se debe poner antes de int por que luego reconoce int . int
 def t_CTE_FLOAT(t):
-    r'[0-9]+\.[[0-9]+]'
+    r'[0-9]+\.[0-9]+'
     t.value = float(t.value)
     return t
 
@@ -492,7 +492,7 @@ def t_newline(t):
 
 #excepción de error léxico
 def t_error(t):
-      raise errorLexico("Error de Lexico: " + t.value[0] + " en linea : " + t.lexer.lineno)
+      raise errorLexico("Error de Lexico: " + t.value[0])
       sys.exit()
 
 lexer = lex.lex()
@@ -528,15 +528,16 @@ def p_start(p):
 	'''
 	start : empty
 	'''
-	global PSaltos
+	global PSaltos,dicOperadores
 	global iContadorCuadruplos
 	global arregloCuadruplos , resultado
 	#mete a la pila de saltos el cuadruplo inicial para poder llenar despúes el cuadruplo donde se encuentre main
 	PSaltos.append(iContadorCuadruplos)
 	#agrega -2 a resultados para no perder la cuenta
 	resultado.append("nul")
+	op = dicOperadores["GotoMain"]
 	#genera el cuadruplo y lo agrega al arreglo de cuádruplos
-	arregloCuadruplos.append(cuadruplo("GotoMain",-2,"nul","nul"))
+	arregloCuadruplos.append(cuadruplo(op,-2,"nul","nul"))
 	#contador de cuadruplos
 	iContadorCuadruplos+=1
 
@@ -593,11 +594,12 @@ def p_cua_end(p):
   cua_end : empty
   '''
   global iContadorCuadruplos
-  global arregloCuadruplos , resultado
+  global arregloCuadruplos , resultado, dicOperadores
   #agrega -2 a resultados para no perder la cuenta
   resultado.append("nul")
+  op = dicOperadores["end"]
   #genera el cuadruplo y lo agrega al arreglo de cuádruplos
-  arregloCuadruplos.append(cuadruplo("end","nul","nul","nul"))
+  arregloCuadruplos.append(cuadruplo(op,"nul","nul","nul"))
   #contador de cuadruplos
   iContadorCuadruplos+=1
 
@@ -845,7 +847,7 @@ def p_asignacion(p):
     #mete el nuevo tipo a la pila de tipos
     PTipo.append(tipo)
     resultado.append(operando1)
-    arregloCuadruplos.append(cuadruplo(operador,operando2,"nul",resultado[iContadorCuadruplos]))
+    arregloCuadruplos.append(cuadruplo(op,operando2,"nul",resultado[iContadorCuadruplos]))
     PilaO.append(resultado[iContadorCuadruplos])
     iContadorCuadruplos += 1
 
@@ -898,7 +900,7 @@ def p_exp_2(p):
   	iContadorTemporal += 1
   	resultado.append(tgb)
   	#genera el cuadruplo
-  	arregloCuadruplos.append(cuadruplo(operador,operando2,operando1,resultado[iContadorCuadruplos]))
+  	arregloCuadruplos.append(cuadruplo(op,operando2,operando1,resultado[iContadorCuadruplos]))
   	#el temporal lo mete a la pila
   	PilaO.append(tgb)
   	#suma uno al contador
@@ -943,6 +945,7 @@ def p_cuaTermino(p):
       	#hace cuadruplo
       	#saca d epila
       	operador = POper.pop()
+      	operadorAux = dicOperadores[operador]
       	operando2 = PilaO.pop()
       	operando1 = PilaO.pop()
       	iContadorTemporal += 1
@@ -956,7 +959,7 @@ def p_cuaTermino(p):
       	PTipo.append(tipo)
       	resultado.append(var)
       	#agrega al cuadruplo
-      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,var))
+      	arregloCuadruplos.append(cuadruplo(operadorAux,operando1,operando2,var))
       	PilaO.append(var)
       	#incrementa el contador de cuadruplos
       	iContadorCuadruplos += 1
@@ -1028,6 +1031,7 @@ def p_cuaFactor(p):
       		tgf+=2
       	#saca el operador y ambos operandos
       	operador = POper.pop()
+      	operadorAux = dicOperadores[operador]
       	operando2 = PilaO.pop()
       	operando1 = PilaO.pop()
       	iContadorTemporal += 1
@@ -1035,7 +1039,7 @@ def p_cuaFactor(p):
       	#al arreglo de resultados mete el numero de temporal
       	resultado.append(var)
       	#genera un nuevo cuadruplo
-      	arregloCuadruplos.append(cuadruplo(operador,operando1,operando2,resultado[iContadorCuadruplos]))
+      	arregloCuadruplos.append(cuadruplo(operadorAux,operando1,operando2,resultado[iContadorCuadruplos]))
       	#mete el temporal
       	PilaO.append(var)
       	iContadorCuadruplos += 1
@@ -1151,7 +1155,6 @@ def p_matchCteInt(p):
     arregloConstantes.append(obj)
     numConstantes+=1
 
-
 #match una constante numerica flotante
 def p_matchCteFloat(p):
   '''
@@ -1178,7 +1181,6 @@ def p_matchCteFloat(p):
     arregloConstantes.append(obj)
     numConstantes+=1
   
-
 #hace matech a una constante boleana con true o false
 def p_matchCteBool(p):
   '''
@@ -1329,11 +1331,11 @@ def p_escritura(p):
   global operador
   global operando1
   global resultado
-  global PilaO
+  global PilaO, dicOperadores
   global arregloCuadruplos
   global iContadorCuadruplos
   #genera cuadriplo print
-  operador = "print"
+  operador = dicOperadores["print"]
   operando1 = PilaO.pop()
   resultado.append("nul")
   arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
@@ -1375,11 +1377,10 @@ def p_read(p):
 	global operador
 	global operando1
 	global resultado
-	global PilaO
-	global arregloCuadruplos
+	global PilaO, arregloCuadruplos, dicOperadores
 	global iContadorCuadruplos
 	#genera cuadriplo print
-	operador = "read"
+	operador = dicOperadores["read"]
 	operando1 = PilaO.pop()
 	resultado.append("nul")
 	arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
