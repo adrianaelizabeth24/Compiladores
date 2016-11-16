@@ -11,6 +11,19 @@ lineaX = 0
 lineaY = 0
 posDogX = 200
 posDogY = 210
+gradDog = 1
+# every gif's frame
+fname_list = \
+['./image/frame_0_delay-0.1s.gif',
+ './image/frame_1_delay-0.1s.gif',
+ './image/frame_2_delay-0.1s.gif',
+ './image/frame_3_delay-0.1s.gif',
+ './image/frame_4_delay-0.1s.gif',
+ './image/frame_5_delay-0.1s.gif',
+ './image/frame_6_delay-0.1s.gif']
+
+# store as tk img_objects
+pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
 
 def donothing():
    filewin = winlevel(win)
@@ -55,6 +68,58 @@ def moveLeft(event):
 def moveRight(event):
     global posDogX
     posDogX = posDogX + 50
+
+def girar(event):
+    global gradDog
+    global fname_list
+    global pictures
+    gradDog = gradDog + 1
+    print(gradDog)
+    if gradDog == 1:
+      #normal
+      fname_list = \
+        ['./image/frame_0_delay-0.1s.gif',
+         './image/frame_1_delay-0.1s.gif',
+        './image/frame_2_delay-0.1s.gif',
+        './image/frame_3_delay-0.1s.gif',
+        './image/frame_4_delay-0.1s.gif',
+        './image/frame_5_delay-0.1s.gif',
+        './image/frame_6_delay-0.1s.gif']
+      pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
+    elif gradDog == 2:
+      #90grad
+      fname_list = \
+        ['./image/90grados/frame_0_delay-0.1s.gif',
+         './image/90grados/frame_1_delay-0.1s.gif',
+        './image/90grados/frame_2_delay-0.1s.gif',
+        './image/90grados/frame_3_delay-0.1s.gif',
+        './image/90grados/frame_4_delay-0.1s.gif',
+        './image/90grados/frame_5_delay-0.1s.gif',
+        './image/90grados/frame_6_delay-0.1s.gif']
+      pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
+    if gradDog == 3:
+        #180 grad
+        fname_list = \
+        ['./image/180grados/frame_0_delay-0.1s.gif',
+         './image/180grados/frame_1_delay-0.1s.gif',
+        './image/180grados/frame_2_delay-0.1s.gif',
+        './image/180grados/frame_3_delay-0.1s.gif',
+        './image/180grados/frame_4_delay-0.1s.gif',
+        './image/180grados/frame_5_delay-0.1s.gif',
+        './image/180grados/frame_6_delay-0.1s.gif']
+        pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
+    elif gradDog == 4:
+        # 270 grad
+        fname_list = \
+        ['./image/270grados/frame_0_delay-0.1s.gif',
+         './image/270grados/frame_1_delay-0.1s.gif',
+        './image/270grados/frame_2_delay-0.1s.gif',
+        './image/270grados/frame_3_delay-0.1s.gif',
+        './image/270grados/frame_4_delay-0.1s.gif',
+        './image/270grados/frame_5_delay-0.1s.gif',
+        './image/270grados/frame_6_delay-0.1s.gif']
+        pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
+        gradDog = 0
 
 def onObjectClick(event):
     global clickBefore
@@ -120,21 +185,7 @@ for x in range (0, 8):
   y2 = y2 + 50
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
-draw.tag_bind("dog", '<ButtonPress-1>', moveUp)
-
-# every gif's frame
-fname_list = \
-['./image/frame_0_delay-0.1s.gif',
- './image/frame_1_delay-0.1s.gif',
- './image/frame_2_delay-0.1s.gif',
- './image/frame_3_delay-0.1s.gif',
- './image/frame_4_delay-0.1s.gif',
- './image/frame_5_delay-0.1s.gif',
- './image/frame_6_delay-0.1s.gif']
-
-
-# store as tk img_objects
-pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
+draw.tag_bind("dog", '<ButtonPress-1>', girar)
 
 # milliseconds
 delay = 150
