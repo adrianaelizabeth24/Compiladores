@@ -820,7 +820,7 @@ def p_tipo(p):
 #funcion que asigna a un id algo
 def p_asignacion(p):
   '''
-  asignacion : matchID EQUIVALE asignacion_aux
+  asignacion : matchID arreglo EQUIVALE asignacion_aux
   '''
   global arregloCuadruplos
   global PilaO, PTipo
@@ -1093,19 +1093,20 @@ def p_cuaFondoFalsoPD(p):
   global POper
   POper.pop()
 
-#match de id , enteros o flotantes
+#match de id , enteros o flotantes, boleanos o strings
 def p_var_cte(p):
   '''
-  var_cte : matchID
+  var_cte : matchID arreglo
           | matchCteInt
           | matchCteFloat
           | matchCteBool
+          | matchCteString
   '''
 
 #match de id checa que exista y guarda el tipo en la pila de tipo
 def p_matchID(p):
   '''
-  matchID : ID
+  matchID : ID 
   '''
   global dV, dicTipos
   global iContadorDiccionarioVar
@@ -1159,7 +1160,6 @@ def p_matchCteInt(p):
     numConstantes+=1
   #meter a pila de operadores
   PilaO.append(varAux)
-
 
 #match una constante numerica flotante
 def p_matchCteFloat(p):
@@ -1222,7 +1222,15 @@ def p_matchCteBool(p):
   #meter a pila de operadores
   PilaO.append(varAux)
 
-
+def p_arreglo(p):
+	'''
+	arreglo : validaDimensiones CORCHETE_IZQ expresion CORCHETE_DER
+					| empty
+	'''
+def p_validaDimesiones(p):
+	'''
+	validaDimensiones : empty
+	'''
 
 ###################################################################################################
 
@@ -1360,8 +1368,7 @@ def p_escritura(p):
 #hace match de un string o bien de una expresion
 def p_escritura_2(p):
   '''
-  escritura_2 : matchCteString
-              | expresion
+  escritura_2 : expresion
   '''
 
 #imprime string
