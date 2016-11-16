@@ -33,9 +33,10 @@ ctes = 32000
 cteb = 33000
 '''
 
-#dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, 
-#">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11,
-# ">=": 12, "print" : 13 , "read": 14, "GotoMain" : 15, "end" : 16}
+#dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, 
+#"<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, 
+#"&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, 
+#"end": 15, "Goto": 16, "GotoF": 17}
 
 def leeObj():
 	leeConstantes()
@@ -84,33 +85,87 @@ def leeCuadruplos():
 			iContadorAux+=1
 		arregloCuadruplos.append([op,op1,op2,res])
 
-def Suma(op1,op2, result):
+#funcion para sumar dos operandos
+def Suma(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 + valor2
 	setValor(result, res)
 
-def Resta(op1,op2, result):
+#funcion para restar dos operandos
+def Resta(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 - valor2
 	setValor(result, res)
 
-def Multiplicacion(op1,op2, result):
+#funcion para multiplicar dos operandos
+def Multiplicacion(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 * valor2
 	setValor(result, res)
 
-def Division(op1,op2, result):
+#funcion para dividir dos operandos
+def Division(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
 	res = valor1 / valor2
 	setValor(result, res)
 
+#compara dos valores y retorna verdadero o falso
+#de acuerdo a los operadores
+def MenorQue(op1, op2, result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(op1 < op2):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
+
+def MayorQue(op1, op2, result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(op1 > op2):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
+
 def Asignacion(op1,result):
 	valor = getValor(op1)
 	setValor(result,valor)
+
+def Diferente(op1, op2, result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(op1 != op2):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
+
+def IgualQue(op1, op2, result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(op1 == op2):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
+
+def MenorIgual(op1, op2, result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(op1 <= op2):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
+
+def MayorIgual(op1, op2, result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(op1 >= op2):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
 
 def Print(result):
 	res = getValor(result)
@@ -119,6 +174,11 @@ def Print(result):
 def Goto(op1):
 	global InstruccionActual
 	InstruccionActual = op1 -1
+
+def GotoF(op1,result):
+	global InstruccionActual
+	if(op1 == 0):
+		InstruccionActual = op1 -1
 
 def End():
 	global i
@@ -138,14 +198,29 @@ def Operacion(arregloCuadruplos):
 		Multiplicacion(op1,op2,res)
 	elif(op == 3):
 		Division(op1,op2,res)
+	elif(op == 4):
+		MenorQue(op1,op2,res)
+	elif(op == 5):
+		MayorQue(op1,op2,res)
 	elif(op == 6):
 		Asignacion(op1,res)
+	elif(op == 7):
+		Diferente(op1,op2,res)
+	elif(op == 8):
+		IgualQue(op1,op2,res)
+	elif(op == 11):
+		MenorIgual(op1,op2,res)
+	elif(op == 12):
+		MayorIgual(op1,op2,res)
 	elif(op == 13):
 		Print(op1)
 	elif(op == 15):
-		Goto(op1)
-	elif(op == 16):
 		End()
+	elif(op == 16):
+		Goto(op1)
+	elif(op == 17):
+		GotoF(op1,res)
+
 
 
 '''

@@ -1,5 +1,8 @@
-int a[9];
+int x;
 int c,i;
 
 main:
-c = a[i] * 2;
+c = 10;
+i = 2;
+x = c * i * 2;
+print(x);
