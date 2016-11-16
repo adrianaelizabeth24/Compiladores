@@ -4,6 +4,7 @@ import tkinter as tk
 import itertools as it
 import aplus
 import os
+import subprocess
 
 clickBefore = False
 lineaX = 0
@@ -31,7 +32,13 @@ def compileCode():
     text_file.write(input)
     text_file.close()
     os.system('aplus.py')
-    print(input)
+
+    with open("output.txt", "w+") as output:
+      subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
+
+    out_file = open("output.txt", "r")
+    outText.delete("1.0", "end-1c")
+    outText.insert(END, out_file.read())
 
 def moveUp(event):
     global posDogY
