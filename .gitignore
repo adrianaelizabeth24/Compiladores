@@ -4,6 +4,9 @@ __pycache__/
 __pycache__/parsetab.cpython-35.pyc
 parser.out
 parsetab.py
+aplusOBJConstantes.txt
+aplusOBJCuadruplos.txt
+prueba.txt
 
 # C extensions
 *.so

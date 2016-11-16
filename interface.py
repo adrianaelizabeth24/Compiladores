@@ -53,28 +53,41 @@ def compileCode():
     outText.delete("1.0", "end-1c")
     outText.insert(END, out_file.read())
 
-def moveUp(event):
+def moveUp():
     global posDogY
     posDogY = posDogY - 50
 
-def moveDown(event):
+def moveDown():
     global posDogY
     posDogY = posDogY + 50
 
-def moveLeft(event):
+def moveLeft():
     global posDogX
     posDogX = posDogX - 50
 
-def moveRight(event):
+def moveRight():
     global posDogX
     posDogX = posDogX + 50
 
-def girar(event):
+def move(event):
+    global gradDog
+
+    if gradDog == 1:
+      moveRight()
+    elif gradDog == 2:
+      moveDown()
+    if gradDog == 3:
+      moveLeft()
+    elif gradDog == 0 or gradDog == 4:
+      moveUp()
+
+def rotateDog(event):
     global gradDog
     global fname_list
     global pictures
+
     gradDog = gradDog + 1
-    print(gradDog)
+
     if gradDog == 1:
       #normal
       fname_list = \
@@ -185,9 +198,10 @@ for x in range (0, 8):
   y2 = y2 + 50
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
-draw.tag_bind("dog", '<ButtonPress-1>', girar)
+draw.tag_bind("dog", '<ButtonPress-1>', rotateDog)
+draw.tag_bind("dog", '<ButtonPress-2>', move)
 
-# milliseconds
+# animation in 150 milliseconds
 delay = 150
 animate()
 
