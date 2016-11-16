@@ -113,7 +113,7 @@ for x in range (0, 8):
   y2 = y2 + 50
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
-draw.tag_bind("dog", '<ButtonPress-1>', moveLeft)
+draw.tag_bind("dog", '<ButtonPress-1>', moveUp)
 
 # every gif's frame
 fname_list = \
