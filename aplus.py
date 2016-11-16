@@ -44,6 +44,7 @@ operador = ""
 operando1 = ""
 operando2 = ""
 nombreFuncion = ""
+nombreIDArr = ""
 memTipo = ""
 funcionActiva = ""
 
@@ -1111,6 +1112,7 @@ def p_matchID(p):
   global dV, dicTipos
   global iContadorDiccionarioVar
   global PilaO, PTipo
+  global nombreIDArr
   varAux = 0
   tipo = ""
   auxTipo = -2
@@ -1120,6 +1122,7 @@ def p_matchID(p):
       varAux += 1
     else:
       #cubo semantico tipo de dato correcto
+      nombreIDArr = p[1]
       tipo = dV[x].getTipo()
       auxTipo = dicTipos[tipo]
       PTipo.append(auxTipo)
@@ -1222,15 +1225,63 @@ def p_matchCteBool(p):
   #meter a pila de operadores
   PilaO.append(varAux)
 
+#sintaxis para permitir operaciones con arreglos
 def p_arreglo(p):
 	'''
 	arreglo : validaDimensiones CORCHETE_IZQ expresion CORCHETE_DER
 					| empty
 	'''
+
+#funcion auxiliar para generar cuadruplos de arreglos
 def p_validaDimesiones(p):
 	'''
 	validaDimensiones : empty
 	'''
+	global PilaO, PTipo, resultado, dicOperadores
+	global arregloCuadruplos
+	global nombreIDArr
+	global iContadorDiccionarioVar,iContadorCuadruplos
+	global tgi
+	tam = 0
+	direccion = 0
+	#obtiene el tipo de dato de la expresion del arreglo
+	tipo = PTipo.pop();
+	#si no es int no se puede
+	if(tipo != 0):
+		raise errorSemantico("Dentro del arreglo solo debes tener expresiones enteras")
+	#saca el operando1 que contiene la expresion
+	operando1 = PilaO.pop()
+	#busca la variable que se llame igual
+	for x in range(0,iContadorDiccionarioVar):
+		if(nombreIDArr == dV[x].getNombre()):
+			#saca el tamaño y la direccion
+			tam = dV[x].getSize()
+			direccion = dV[x].getDireccion()
+	#cuadruplo verifica
+	op = "ver"
+	#para no perder la cuenta
+	resultado.append("nul")
+	#cuadruplo verifica simplificado
+	#como solo recibe un numero 
+	#ver exp 0 tam-1
+	arregloCuadruplos.append(cuadruplo("ver",operando1,0,tam-1))
+	#suma al contador de cuadruplos
+	iContadorCuadruplos+=1
+	#segundo cuadruplo donde suma direccion base
+	op = dicOperadores["+"]
+	#es int la operacion por que es una direccion + una expresion "int"
+	PTipo.append(0)
+	#agregas el temporal que es una direccion de mememoria temporal int
+	PilaO.append(tgi)
+	#para no perder la cuenta
+	resultado.append(tgi)
+	#genera cuadruplo direccion base mas offset
+	arregloCuadruplos.append(cuadruplo(op,operando1,op,tgi))
+	#suma contadores
+	tgi+=1
+	iContadorCuadruplos+=1
+
+
 
 ###################################################################################################
 
