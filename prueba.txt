@@ -1,2 +1,13 @@
+int a, b;
 main:
- print("Hello, world");
+a = 1;
+b = 10;
+if(a < b):
+ while(a < b/2):
+  print("hola putos soy doggo");
+a = a + 1;
+end_while
+end_if
+else:
+ print("hi!");
+end_else

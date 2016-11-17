@@ -60,7 +60,7 @@ def leeConstantes():
 					if(iContadorAux == 1):
 						value = word
 					else:
-						value = str(value) + word
+						value = str(value) + " " + word
 			iContadorAux+=1
 		diccionarioMemConstante[key] = value
 
