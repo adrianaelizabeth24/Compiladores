@@ -2,7 +2,6 @@ from tkinter import *
 #import tkmessagebox
 import tkinter as tk
 import itertools as it
-import aplus
 import os
 import subprocess
 
@@ -44,7 +43,8 @@ def compileCode():
     text_file = open("prueba.txt", "w")
     text_file.write(input)
     text_file.close()
-    os.system('aplus.py')
+    # os.system('aplus.py')
+    subprocess.call(["python", "./aplus.py"]);
 
     with open("output.txt", "w+") as output:
       subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
@@ -52,6 +52,8 @@ def compileCode():
     out_file = open("output.txt", "r")
     outText.delete("1.0", "end-1c")
     outText.insert(END, out_file.read())
+    out_file.close()
+
 
 def moveUp():
     global posDogY
@@ -138,14 +140,14 @@ def onObjectClick(event):
     global clickBefore
     global lineaX
     global lineaY
-    print('Got rec', event.x, event.y)
+    #print('Got rec', event.x, event.y)
     if (clickBefore == False):
       lineaX = event.x
       lineaY = event.y
       clickBefore = True
     else:
       coord = lineaX, lineaY, event.x, event.y
-      line = draw.create_line(coord, fill="black")
+      line = draw.create_line(coord, fill="black", tags="wall")
       clickBefore = False
       coord = 0, 0, 0, 0
 
@@ -158,7 +160,7 @@ win.add(left)
 
 
 codeText = Text (left, height=30, width = 30)
-codeText.insert(END, 'main: \n print("Hello, world");')
+codeText.insert(END, 'main: print("Hello, world");')
 left.add(codeText)
 
 bottom = Label(left)
@@ -170,7 +172,7 @@ left.add(bottom)
 right = PanedWindow(win, orient=VERTICAL)
 win.add(right)
 
-draw = Canvas (right, width=550, height=300)
+draw = Canvas (right, width=600, height=400)
 draw.pack()
 right.add(draw)
 
@@ -204,5 +206,7 @@ draw.tag_bind("dog", '<ButtonPress-2>', move)
 # animation in 150 milliseconds
 delay = 150
 animate()
+
+
 
 win.mainloop()
