@@ -901,7 +901,7 @@ def p_exp_2(p):
   	iContadorTemporal += 1
   	resultado.append(tgb)
   	#genera el cuadruplo
-  	arregloCuadruplos.append(cuadruplo(op,operando2,operando1,resultado[iContadorCuadruplos]))
+  	arregloCuadruplos.append(cuadruplo(op,operando1,operando2,resultado[iContadorCuadruplos]))
   	#el temporal lo mete a la pila
   	PilaO.append(tgb)
   	#suma uno al contador
@@ -1310,7 +1310,7 @@ def p_cuacondicion1(p):
   #agrega la posición actual a la pila de saltos
   PSaltos.append(iContadorCuadruplos)
   #el resultado le asigna -2 para estandarizar que está vacio
-  resultado.append("nul")
+  resultado.append(-2)
   #genera el cuadruplo
   arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   #suma uno al contador
@@ -1382,7 +1382,7 @@ def p_imprimeEndIf(p):
   #saca el tope de Psaltos , que es el apuntador al "gotof"
   res = PSaltos.pop()
   #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos)
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
 
 ###################################################################################################
 

@@ -123,7 +123,7 @@ def Division(op1, op2, result):
 def MenorQue(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
-	if(op1 < op2):
+	if(valor1 < valor2):
 		setValor(result,"true")
 	else:
 		setValor(result,"false")
@@ -131,7 +131,7 @@ def MenorQue(op1, op2, result):
 def MayorQue(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
-	if(op1 > op2):
+	if(valor1 > valor2):
 		setValor(result,"true")
 	else:
 		setValor(result,"false")
@@ -143,7 +143,7 @@ def Asignacion(op1,result):
 def Diferente(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
-	if(op1 != op2):
+	if(valor1 != valor2):
 		setValor(result,"true")
 	else:
 		setValor(result,"false")
@@ -151,7 +151,7 @@ def Diferente(op1, op2, result):
 def IgualQue(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
-	if(op1 == op2):
+	if(valor1 == valor2):
 		setValor(result,"true")
 	else:
 		setValor(result,"false")
@@ -159,7 +159,7 @@ def IgualQue(op1, op2, result):
 def MenorIgual(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
-	if(op1 <= op2):
+	if(valor1 <= valor2):
 		setValor(result,"true")
 	else:
 		setValor(result,"false")
@@ -167,7 +167,7 @@ def MenorIgual(op1, op2, result):
 def MayorIgual(op1, op2, result):
 	valor1 = getValor(op1)
 	valor2 = getValor(op2)
-	if(op1 >= op2):
+	if(valor1 >= valor2):
 		setValor(result,"true")
 	else:
 		setValor(result,"false")
@@ -178,7 +178,7 @@ def Print(result):
 
 def Goto(op1):
 	global InstruccionActual
-	InstruccionActual = op1 -1
+	InstruccionActual = op1 - 1
 
 def GotoF(op1,result):
 	global InstruccionActual
