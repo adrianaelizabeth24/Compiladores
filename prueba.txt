@@ -1,13 +1,14 @@
 int a, b;
 main:
-a = 1;
-b = 10;
-if(a < b):
- while(a < b/2):
-  print("hola putos soy doggo");
+a = 0;
+b = 0;
+while(a < 10):
+ while(b < 10):
+  print("hola");
+  print(a);
+  print(b);
+  b = b +1;
+ end_while
 a = a + 1;
+b = 0;
 end_while
-end_if
-else:
- print("hi!");
-end_else
