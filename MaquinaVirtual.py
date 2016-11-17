@@ -52,7 +52,12 @@ def leeConstantes():
 			if(iContadorAux == 0):
 				key = int(word)
 			else:
-				value = float(word)
+				if(key < 31000):
+					value = int(word)
+				elif(key > 30999 and key < 32000):
+					value = float(word)
+				else:
+					value = word
 			iContadorAux+=1
 		diccionarioMemConstante[key] = value
 
@@ -177,8 +182,9 @@ def Goto(op1):
 
 def GotoF(op1,result):
 	global InstruccionActual
-	if(op1 == 0):
-		InstruccionActual = op1 -1
+	operando1 = getValor(op1)
+	if(operando1 == "false"):
+		InstruccionActual = result - 1
 
 def End():
 	global i

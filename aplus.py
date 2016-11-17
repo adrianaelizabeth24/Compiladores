@@ -1341,11 +1341,6 @@ def p_matchElse(p):
 	global operador, resultado
 	global bIf
 
-	#saca el tope de Psaltos , que es el apuntador al "gotof"
-	res = PSaltos.pop()
-  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-	arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
-  
 	PSaltos.append(iContadorCuadruplos)
 	operador = dicOperadores["Goto"]
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
@@ -1364,9 +1359,8 @@ def p_imprimeEndElse(p):
   global iContadorCuadruplos
   global arregloCuadruplos
   #llenas en donde se regresa cuando acabe el else
-  while(len(PSaltos)>0):
-    res = PSaltos.pop()
-    arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  res = PSaltos.pop()
+  arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
   print(p[1])
 
 def p_imprimeIf(p):
@@ -1381,6 +1375,14 @@ def p_imprimeEndIf(p):
   '''
   imprimeEndIf : END_IF
   '''
+  global PSaltos
+  global arregloCuadruplos
+  global iContadorCuadruplos
+
+  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  res = PSaltos.pop()
+  #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos)
 
 ###################################################################################################
 

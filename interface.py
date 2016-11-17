@@ -158,7 +158,7 @@ win.add(left)
 
 
 codeText = Text (left, height=30, width = 30)
-codeText.insert(END, 'print("Hello, world")')
+codeText.insert(END, 'main: \n print("Hello, world");')
 left.add(codeText)
 
 bottom = Label(left)

@@ -1,8 +1,2 @@
-int x;
-int c,i;
-
-main:
-c = 10;
-i = 2;
-x = c * i * 2;
-print(x);
+main: 
+ print("Hello, world");
