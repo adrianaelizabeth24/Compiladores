@@ -57,7 +57,10 @@ def leeConstantes():
 				elif(key > 30999 and key < 32000):
 					value = float(word)
 				else:
-					value = word
+					if(iContadorAux == 1):
+						value = word
+					else:
+						value = str(value) + word
 			iContadorAux+=1
 		diccionarioMemConstante[key] = value
 

@@ -1,10 +1,2 @@
-int a,b;
 main:
-a = 5;
-b = 1;
-if(a < b):
-print("if");
-end_if
-else:
-print("else");
-end_else
+ print("Hello, world");

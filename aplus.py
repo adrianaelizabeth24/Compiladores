@@ -478,7 +478,7 @@ def t_ID(t):
 
 #er de string debe ser definida entre comillas y puede contener cualquier cosa
 def t_CTE_STRING(t):
-    r'\"[A-Za-z0-9_\(\)\{\}\[\]\<\>\!]*\"'
+    r'\"([a-zA-Z]|[0-9]|[ \*\[\]\\\^\-\.\?\+\|\(\)\$\/\{\}\%\<\>=&;,_:\[\]\'!$#@])*\"'
     t.type = reserved.get(t.value,'CTE_STRING') 
     return t;
 
