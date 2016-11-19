@@ -89,7 +89,6 @@ def move():
 
 def turnLeft(event):
   global gradDog
-
   gradDog = gradDog + 1
 
   if gradDog == 5:
@@ -98,7 +97,6 @@ def turnLeft(event):
 
 def turnRight(event):
   global gradDog
-
   gradDog = gradDog - 1
 
   if gradDog == 0:
