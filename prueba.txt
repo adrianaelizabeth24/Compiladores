@@ -1,2 +1,7 @@
-main: 
- print("Hello, world");
+int a;
+def void prueba(int b):
+ print("hola");
+end_def
+
+main:
+print("b");

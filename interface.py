@@ -38,6 +38,17 @@ def animate():
     draw.create_image(posDogX, posDogY, anchor=NW, image=img, tags="dog")
     win.after(delay, animate)
 
+def putBeeper(event):
+    global posDogX
+    global posDogY
+    poop = tk.PhotoImage(file='./image/poop.gif')
+    draw.create_image(event.x, event.y, image=poop, tags="poop")
+
+    #(tk.PhotoImage(file=img_name) for img_name in fname_list)
+
+
+#def pickBeeper():
+
 def compileCode():
     #input = codeText.get("1.0",'end-1c')
     #text_file = open("prueba.txt", "w")
@@ -217,9 +228,10 @@ for x in range (0, 8):
   y2 = y2 + 50
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
-draw.tag_bind("dog", '<ButtonPress-1>', turnLeft)
-draw.tag_bind("dog", '<ButtonPress-3>', turnRight)
-#draw.tag_bind("dog", '<ButtonPress-2>', move)
+
+draw.tag_bind("dog", '<ButtonPress-1>', move)
+draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
+draw.tag_bind("dog", '<ButtonPress-2>', putBeeper)
 
 # animation in 150 milliseconds
 delay = 150
