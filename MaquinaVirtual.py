@@ -4,13 +4,16 @@
 #Adriana Valenzuela a01195331
 #Mayra Ruiz a00812918
 
+from tablaFunciones import tablaFunciones
+
 #variables globales
 diccionarioMemGlobal = {}
-diccionarioMemLocal = {}
 diccionarioMemTemporalGl = {}
-diccionarioMemTemporalLl = {}
 diccionarioMemConstante = {}
+diccionarioMemLocal = {}
+diccionarioMemTemporalLl = {}
 arregloCuadruplos = []
+arregloFunciones = []
 InstruccionActual = 0
 i = True
 
@@ -33,16 +36,40 @@ ctes = 32000
 cteb = 33000
 '''
 
-#dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, 
-#"<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, 
-#"&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, 
-#"end": 15, "Goto": 16, "GotoF": 17}
+#dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3,
+# "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, 
+#"print" : 13 , "read": 14, "end": 15, "Goto": 16, "GotoF": 17,
+# "Era":18, "Gosub":19, "Param":20, "Ver":21, "Ret":22, "Return":23,
+# "move":24 , "checkwall":25, "turnRight":26, "turnLeft":27, "pickBeeper":28, "putBeeper":29}
 
 def leeObj():
+	leeFunciones()
 	leeConstantes()
 	leeCuadruplos()
 
+def leeFunciones():
+	global arregloFunciones
+	nombre = ""
+	tipoFunc = ""
+	listaParam = []
+	inicioCuadruplo = 0
+	f = open('aplusOBJFunciomes.txt','r')
+	for line in f:
+		iContadorAux = 0
+		for word in line.split():
+			if(iContadorAux == 0):
+				nombre = word
+			elif(iContadorAux == 1):
+				tipoFunc = word
+			elif(iContadorAux == 2):
+				listaParam.extend(word)
+			else:
+				inicioCuadruplo = int(word)
+			iContadorAux += 1
+		arregloFunciones.append(tablaVar(nombre,tipoFunc,listaParam,inicioCuadruplo))
+
 def leeConstantes():
+	global diccionarioMemConstante
 	key = 0
 	value = 0
 	f = open('aplusOBJConstantes.txt', 'r')
@@ -65,6 +92,7 @@ def leeConstantes():
 		diccionarioMemConstante[key] = value
 
 def leeCuadruplos():
+	global arregloCuadruplos
 	op = 0
 	op1 = 0
 	op2 = 0
@@ -179,6 +207,8 @@ def Print(result):
 	res = getValor(result)
 	print(res)
 
+def Read():
+
 def Goto(op1):
 	global InstruccionActual
 	InstruccionActual = op1 - 1
@@ -189,10 +219,19 @@ def GotoF(op1,result):
 	if(operando1 == "false"):
 		InstruccionActual = result - 1
 
+def Era():
+
+def Gosub():
+
+def Param():
+
+def Ver():
+
 def End():
 	global i
 	print("terminé ejecucion")
 	i = False
+
 
 def Operacion(arregloCuadruplos):
 	op = arregloCuadruplos[0]

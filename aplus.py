@@ -352,7 +352,7 @@ cubo[3][1][12] = -1     # bool >= float = bool
 cubo[3][2][12] = -1    # bool >= string = error
 cubo[3][3][12] = -1    # bool >= bool = error
 
-dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, "end": 15, "Goto": 16, "GotoF": 17}
+dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, "end": 15, "Goto": 16, "GotoF": 17, "Era":18, "Gosub":19, "Param":20, "Ver":21, "Ret":22, "Return":23, "move":24 , "checkwall":25, "turnRight":26, "turnLeft":27, "pickBeeper":28, "putBeeper":29}
 
 dicTipos = {"int" : 0, "float" : 1, "string" : 2, "bool" : 3, "error" : -1}
 
@@ -1264,7 +1264,8 @@ def p_validaDimesiones(p):
 	#cuadruplo verifica simplificado
 	#como solo recibe un numero 
 	#ver exp 0 tam-1
-	arregloCuadruplos.append(cuadruplo("ver",operando1,0,tam-1))
+	operador = dicOperadores["Ver"]
+	arregloCuadruplos.append(cuadruplo(operador,operando1,0,tam-1))
 	#suma al contador de cuadruplos
 	iContadorCuadruplos+=1
 	#segundo cuadruplo donde suma direccion base
@@ -1542,7 +1543,7 @@ def p_imprimeEndWhile(p):
 #en caso de retornar un tipo esta obligada a tner return
 def p_function(p):
   '''
-  function : imprimeDef tipoFunction matchNomFunction PARENTESIS_IZQ function_aux PARENTESIS_DER agregaFunc DOS_PUNTOS declaracion_3 estatuto_2 imprimeEndDef
+  function : imprimeDef tipoFunction matchNomFunction PARENTESIS_IZQ function_aux PARENTESIS_DER agregaFunc DOS_PUNTOS declaracion_3 estatuto_2 END_DEF
   '''
 
 #funcion auxiliar que agrega la funcion a la tabla de funciones
@@ -1552,7 +1553,7 @@ def p_agregaFunc(p):
 	'''
 	global bscope
 	global listaParamFuncion
-	global iContadorDiccionarioFuncion, iContadorDiccionarioVar
+	global iContadorDiccionarioFuncion, iContadorDiccionarioVar,iContadorCuadruplos
 	global dF,dV
 	global tipoDeclaracionFuncion
 	global vgi, vli, vgf, vlf, vgs, vls
@@ -1567,7 +1568,7 @@ def p_agregaFunc(p):
 	#agrega los parametros de la funcion
 	listaAux = []
 	listaAux.extend(listaParamFuncion)
-	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux, -2)
+	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux, iContadorCuadruplos)
 
 	#la agrega al diccionario
 	if(iContadorDiccionarioFuncion == 0):
@@ -1735,9 +1736,9 @@ def p_returnFunc(p):
   	#si esta bien hace el cuadruplo
   	else:
   		operando1 = PilaO.pop()
-  		operador = "Return"
+  		operador = dicOperadores["Return"]
   		resultado.append("nul")
-  		arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+  		arregloCuadruplos.append(cuadruplo(operador,operando1,"nul","nul"))
   		iContadorCuadruplos+=1
 
 #destruye variables de lista paramfuncion y del Dic.de vars
@@ -1746,7 +1747,7 @@ def p_destroyVars(p):
   destroyVars : empty
   '''
   global arregloCuadruplos
-  global dV
+  global dV,dicOperadores
   global iContadorInicioLocal, iContadorDiccionarioVar, iContadorTemporal, iContadorCuadruplos
   global resultado
   global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb
@@ -1780,7 +1781,8 @@ def p_destroyVars(p):
   tgb = 23000
   #genera cuadruplo ret
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("ret","nul","nul",resultado[iContadorCuadruplos]))
+  operador = dicOperadores["Ret"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
   #elimina bRetorna
   bRetorna = 0
@@ -1796,10 +1798,6 @@ def p_imprimeDef(p):
   #guarda pos donde inicia el diccionario local
   iContadorInicioLocal = iContadorDiccionarioVar
 
-def p_imprimeEndDef(p):
-  '''
-  imprimeEndDef : END_DEF
-  '''
 
 ###################################################################################################
 
@@ -1837,14 +1835,14 @@ def p_era_func(p):
 	era_func : empty
 	'''
 	global PilaO
-	global iContadorTemporal
-	global arregloCuadruplos
-	global resultado
-	global iContadorCuadruplos
+	global iContadorTemporal, iContadorCuadruplos
+	global arregloCuadruplos,resultado
+	global dicOperadores
 	global funcionActiva
 	#era de funcionActiva
 	resultado.append("nul")
-	arregloCuadruplos.append(cuadruplo("era",funcionActiva,"nul","nul"))
+	operador = dicOperadores("Era")
+	arregloCuadruplos.append(cuadruplo(operador,funcionActiva,"nul","nul"))
 	iContadorCuadruplos+=1
 
 #cuadruplo gosub + parche guadalupano
@@ -1852,21 +1850,18 @@ def p_go_sub(p):
 	'''
 	go_sub : empty
 	'''
-	global iContadorTemporal
-	global arregloCuadruplos, dF
-	global resultado
-	global iContadorCuadruplos
-	global iContadorDiccionarioFuncion
+	global arregloCuadruplos, dF,resultado, dicTipos, dicOperadores
+	global iContadorCuadruplos, iContadorDiccionarioFuncion, iContadorTemporal
 	global funcionActiva
 	global PTipo
-	global dicTipos
 	global tgi,tgf,tgs,tgb
 	tipo = ""
 	tipoDic = -2
 	var = 0
 	#cuadruplo gosub
 	resultado.append("nul")
-	arregloCuadruplos.append(cuadruplo("gosub",funcionActiva,"nul","nul"))
+	operador = dicOperadores["Gosub"]
+	arregloCuadruplos.append(cuadruplo(operador,funcionActiva,"nul","nul"))
 	iContadorCuadruplos+=1
 	#parche guadalupano
 	#checa el tipo
@@ -1894,7 +1889,7 @@ def p_go_sub(p):
 		#agrega la funcion a la pila de operadores
 		PilaO.append(var)
 		resultado.append(var)
-		#genera parche
+		#genera parche guadalupano
 		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
 		iContadorTemporal += 1
 		iContadorCuadruplos += 1
@@ -1912,11 +1907,9 @@ def p_functionUsuario_aux1(p):
   '''
   functionUsuario_aux1 : expresion functionUsuario_aux2
   '''
-  global iContadorCuadruplos
-  global arregloCuadruplos
+  global iContadorCuadruplos, iContadorParametros
+  global arregloCuadruplos,resultado, dicOperadores
   global PilaO, PTipo
-  global resultado
-  global iContadorParametros
   global funcionActiva
   global tipo
   #checa tipo de parametro de la funcion y los agrgea a auxiliar de parametros
@@ -1925,7 +1918,8 @@ def p_functionUsuario_aux1(p):
   #genera cuadruplo de param
   operando1 = PilaO.pop()
   resultado.append(iContadorParametros + 1)
-  arregloCuadruplos.append(cuadruplo("param",operando1,"nul",resultado[iContadorCuadruplos]))
+  operador = dicOperadores["Param"]
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
   iContadorCuadruplos+=1
   iContadorParametros+=1
 
@@ -1970,15 +1964,11 @@ def p_checkwall(p):
   checkwall : CHECKWALL PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
-  global arregloCuadruplos
-  global resultado
-  #cuadruplo era
+  global arregloCuadruplos, resultado, dicOperadores
+  #cuadruplo checkwall, este no recibe un era ni gosub por que es una funcion que yo defino en la interfaz gráfica
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("era","checkwall","nul","nul"))
-  iContadorCuadruplos+=1
-  #cuadruplo gosub
-  resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("gosub","checkwall","nul","nul"))
+  operador = dicOperadores["checkwall"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
   print("Encontré un checkwall\n")
 
@@ -1988,17 +1978,12 @@ def p_move(p):
   move : MOVE PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
-  global arregloCuadruplos
-  global resultado
-  #era
+  global arregloCuadruplos, resultado, dicOperadores
+  #cuadruplo move
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("era","move","nul","nul"))
+  operador = dicOperadores["move"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
-  #gosub
-  resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("gosub","move","nul","nul"))
-  iContadorCuadruplos+=1
-  print("Encontré un move\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de turnRight();
 def p_turnright(p):
@@ -2006,66 +1991,54 @@ def p_turnright(p):
   turnright : TURN_RIGHT PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
-  global arregloCuadruplos
-  global resultado
-  #era
+  global arregloCuadruplos,resultado, dicOperadores
+  #cuadruplo turnRight, no llama a era ni a gosub por que es una funcion diferente
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("era","turnRight","nul","nul"))
+  operador = dicOperadores["turnRight"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
-  #gosub
-  resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("gosub","turnRight","nul","nul"))
-  iContadorCuadruplos+=1
-  print("Encontré un turnright\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de turnLeft();
+#cuadruplo turnleft
 def p_turnleft(p):
   '''
   turnleft : TURN_LEFT PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
   global iContadorCuadruplos
-  global arregloCuadruplos
-  global resultado
+  global arregloCuadruplos,resultado, dicOperadores
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("era","turnLeft","nul","nul"))
+  operador = dicOperadores["turnLeft"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
-  resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("gosub","turnLeft","nul","nul"))
-  iContadorCuadruplos+=1
-  print("Encontré un turnleft\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de pickBeeper();
+#genera cuadruplo pickbeeper
 def p_pickbeeper(p):
   '''
   pickbeeper : PICK_BEEPER PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
-
   global iContadorCuadruplos
-  global arregloCuadruplos
-  global resultado
+  global arregloCuadruplos,resultado, dicOperadores
+  #genera cuasdruplo pickBeeper
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("era","pickBeeper","nul","nul"))
+  operador = dicOperadores["pickBeeper"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
-  resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("gosub","pickBeeper","nul","nul"))
-  iContadorCuadruplos+=1
-  print("Encontré un pickbeeper\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de putBeeper();
+#genera cuadruplo putbeeper
 def p_putbeeper(p):
   '''
   putbeeper : PUT_BEEPER PARENTESIS_IZQ PARENTESIS_DER PUNTO_Y_COMA
   '''
+  #genera el cuadrupli putBeeper, solo se ocupa saber este comando
+  #el resto de la info para procesarlo se genera dentro de la interfaz
   global iContadorCuadruplos
-  global arregloCuadruplos
-  global resultado
+  global arregloCuadruplos,resultado, dicOperadores
   resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("era","putBeeper","nul","nul"))
+  operador = dicOperadores["putBeeper"]
+  arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
-  resultado.append("nul")
-  arregloCuadruplos.append(cuadruplo("gosub","putBeeper","nul","nul"))
-  iContadorCuadruplos+=1
-  print("Encontré un putbeeper")
 
 #########################################################################################################################################################################
 ########################################################################################################################################################################
@@ -2078,7 +2051,10 @@ def p_putbeeper(p):
 def p_error(p):
   raise errorSintactico("Error de sintaxis")
 
+#funcion que genera los obj del compilador
 def writeObjectFile():
+	#genera obj de constantes
+	#toma el valor de la constante y su dirección virtual
 	filename = argv
 	filename = "aplusOBJConstantes.txt"
 	target = open(filename, 'w')
@@ -2090,6 +2066,9 @@ def writeObjectFile():
 		target.write("\n")
 	target.close()
 
+	#genera el obj de cuadruplos
+	#toma cada uno de los cuadruplos ya referenciando al tipo de operador (con numero)
+	#y con direcciones virtuales
 	filename = argv
 	filename = "aplusOBJCuadruplos.txt"
 	target = open(filename, 'w')
@@ -2105,7 +2084,25 @@ def writeObjectFile():
 		target.write("\n")
 	target.close()
 
+	#genera el obj de funciones
+	#toma el toda la información de la tabla de procedimientos la cual incluye nombre, tipo de retorno, parametros,e inicio de Cuadruplo
+	filename = argv
+	filename = "aplusOBJFunciones.txt"
+	target = open(filename, 'w')
+	target.truncate()
+	for x in range(0,iContadorDiccionarioFuncion):
+		target.write(str(dF[x].getNombre()))
+		target.write("\t")
+		target.write(str(dF[x].getTipo()))
+		target.write("\t")
+		target.write(str(dF[x].getParametros()))
+		target.write("\t")
+		target.write(str(dF[x].getStart()))
+		target.write("\n")
+	target.close()
+
 # Build the parser
+#main 
 parser = yacc.yacc()
 data = ""
 f = open('prueba.txt', 'r')
@@ -2118,13 +2115,23 @@ result = parser.parse(data)
 writeObjectFile()
 
 print("\n")
-
+#prints para debugear archivo
 for x in range(0,iContadorDiccionarioVar):
   print("variable numero " + str(x))
   print(dV[x].getNombre())
   print(dV[x].getTipo())
   print(dV[x].getDireccion())
   print("--------------------")
+
+print("\n")
+
+for x in range(0,iContadorDiccionarioFuncion):
+	print("funcion numero" + str(x))
+	print(dF[x].getNombre())
+	print(dF[x].getTipo())
+	print(dF[x].getParametros())
+	print(dF[x].getStart())
+	print("-----------------")
 
 print("\n")
 

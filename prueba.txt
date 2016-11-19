@@ -1,14 +1,7 @@
-int a, b;
+int a;
+def void prueba(int b):
+ print("hola");
+end_def
+
 main:
-a = 0;
-b = 0;
-while(a < 10):
- while(b < 10):
-  print("hola");
-  print(a);
-  print(b);
-  b = b +1;
- end_while
-a = a + 1;
-b = 0;
-end_while
+print("b");

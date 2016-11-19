@@ -94,3 +94,14 @@ ENV/
 
 # Rope project settings
 .ropeproject
+aplusOBJConstantes.txt
+__pycache__/cuadruplo.cpython-35.pyc
+*.pyc
+aplusOBJConstantes.txt
+aplusOBJCuadruplos.txt
+output.txt
+parser.out
+parsetab.py
+prueba.txt
+*.pyc
+*.DS_Store

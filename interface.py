@@ -38,21 +38,36 @@ def animate():
     draw.create_image(posDogX, posDogY, anchor=NW, image=img, tags="dog")
     win.after(delay, animate)
 
-def compileCode():
-    input = codeText.get("1.0",'end-1c')
-    text_file = open("prueba.txt", "w")
-    text_file.write(input)
-    text_file.close()
-    # os.system('aplus.py')
-    subprocess.call(["python", "./aplus.py"]);
+def putBeeper(event):
+    global posDogX
+    global posDogY
+    poop = tk.PhotoImage(file='./image/poop.gif')
+    draw.create_image(event.x, event.y, image=poop, tags="poop")
 
-    with open("output.txt", "w+") as output:
-      subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
+    #(tk.PhotoImage(file=img_name) for img_name in fname_list)
+
+
+#def pickBeeper():
+
+def compileCode():
+    #input = codeText.get("1.0",'end-1c')
+    #text_file = open("prueba.txt", "w")
+    #text_file.write(input)
+    #text_file.close()
+    # os.system('aplus.py')
+    #subprocess.call(["python", "./aplus.py"]);
+
+    #with open("output.txt", "w+") as output:
+     # subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
 
     out_file = open("output.txt", "r")
     outText.delete("1.0", "end-1c")
     outText.insert(END, out_file.read())
-    out_file.close()
+
+    with open('output.txt') as out:
+      for line in out:
+        if 'move()' in line:
+          move()
 
 
 def moveUp():
@@ -83,12 +98,26 @@ def move(event):
     elif gradDog == 0 or gradDog == 4:
       moveUp()
 
-def rotateDog(event):
+def turnLeft(event):
+  global gradDog
+  gradDog = gradDog + 1
+
+  if gradDog == 5:
+    gradDog = 1
+  rotateDog()
+
+def turnRight(event):
+  global gradDog
+  gradDog = gradDog - 1
+
+  if gradDog == 0:
+    gradDog = 4
+  rotateDog()
+
+def rotateDog():
     global gradDog
     global fname_list
     global pictures
-
-    gradDog = gradDog + 1
 
     if gradDog == 1:
       #normal
@@ -134,7 +163,6 @@ def rotateDog(event):
         './image/270grados/frame_5_delay-0.1s.gif',
         './image/270grados/frame_6_delay-0.1s.gif']
         pictures = it.cycle(tk.PhotoImage(file=img_name) for img_name in fname_list)
-        gradDog = 0
 
 def onObjectClick(event):
     global clickBefore
@@ -200,8 +228,9 @@ for x in range (0, 8):
   y2 = y2 + 50
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
-draw.tag_bind("dog", '<ButtonPress-1>', rotateDog)
-draw.tag_bind("dog", '<ButtonPress-2>', move)
+draw.tag_bind("dog", '<ButtonPress-1>', move)
+draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
+draw.tag_bind("dog", '<ButtonPress-2>', putBeeper)
 
 # animation in 150 milliseconds
 delay = 150
