@@ -10,11 +10,12 @@ from tablaFunciones import tablaFunciones
 diccionarioMemGlobal = {}
 diccionarioMemTemporalGl = {}
 diccionarioMemConstante = {}
-diccionarioMemLocal = {}
-diccionarioMemTemporalLl = {}
+diccionarioMemLocal = [{}]
+diccionarioMemTemporalLl = [{}]
 arregloCuadruplos = []
 arregloFunciones = []
 InstruccionActual = 0
+FuncionActiva = 0
 i = True
 
 '''
@@ -53,7 +54,7 @@ def leeFunciones():
 	tipoFunc = ""
 	listaParam = []
 	inicioCuadruplo = 0
-	f = open('aplusOBJFunciomes.txt','r')
+	f = open('aplusOBJFunciones.txt','r')
 	for line in f:
 		iContadorAux = 0
 		for word in line.split():
@@ -62,11 +63,18 @@ def leeFunciones():
 			elif(iContadorAux == 1):
 				tipoFunc = word
 			elif(iContadorAux == 2):
+				word = word[1:]
+				word = word[:-1]
 				listaParam.extend(word)
 			else:
 				inicioCuadruplo = int(word)
 			iContadorAux += 1
-		arregloFunciones.append(tablaVar(nombre,tipoFunc,listaParam,inicioCuadruplo))
+		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,listaParam,inicioCuadruplo))
+	for x in range(0,len(arregloFunciones)):
+		print(arregloFunciones[x].getNombre())
+		print(arregloFunciones[x].getTipo())
+		print(arregloFunciones[x].getParametros())
+		print(arregloFunciones[x].getStart())
 
 def leeConstantes():
 	global diccionarioMemConstante
@@ -208,6 +216,8 @@ def Print(result):
 	print(res)
 
 def Read():
+	#
+	print("un read")
 
 def Goto(op1):
 	global InstruccionActual
@@ -220,18 +230,45 @@ def GotoF(op1,result):
 		InstruccionActual = result - 1
 
 def Era():
+	print("era")
 
 def Gosub():
+	print("gosub")
 
 def Param():
+	print("param")
 
 def Ver():
+	print("ver")
+
+def Ret():
+	print("ret")
+
+def Return():
+	print("return")
+
+def move():
+	print("move")
+
+def checkwall():
+	print("checkwall")
+
+def turnRight():
+	print("turnrigjy")
+
+def turnLeft():
+	print("turnleft")
+
+def pickBeeper():
+	print("pickbeeper")
+
+def putBeeper():
+	print("putbeep")
 
 def End():
 	global i
 	print("terminé ejecucion")
 	i = False
-
 
 def Operacion(arregloCuadruplos):
 	op = arregloCuadruplos[0]
@@ -262,20 +299,44 @@ def Operacion(arregloCuadruplos):
 		MayorIgual(op1,op2,res)
 	elif(op == 13):
 		Print(op1)
+	elif(op == 14):
+		Read(op1)
 	elif(op == 15):
 		End()
 	elif(op == 16):
 		Goto(op1)
 	elif(op == 17):
 		GotoF(op1,res)
-
-
+	elif(op == 18):
+		Era(op1)
+	elif(op == 19):
+		Gosub(op1)
+	elif(op == 20):
+		Param(op1,res)
+	elif(op == 21):
+		Ver(op1,op2,res)
+	elif(op == 22):
+		Ret()
+	elif(op == 23):
+		Return(op1)
+	elif(op == 24):
+		move()
+	elif(op == 25):
+		checkwall()
+	elif(op == 26):
+		turnRight()
+	elif(op == 27):
+		turnLeft()
+	elif(op == 28):
+		pickBeeper()
+	elif(op == 29):
+		putBeeper()
 
 '''
 vgi = 5000
 vgf = 6000
 vgs = 7000
-vgb = 8000
+vgb = 8000 
 
 vli= 10000
 vlf = 11000
