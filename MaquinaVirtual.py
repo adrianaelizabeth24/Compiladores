@@ -7,15 +7,24 @@
 from tablaFunciones import tablaFunciones
 
 #variables globales
+#memoria
 diccionarioMemGlobal = {}
 diccionarioMemTemporalGl = {}
 diccionarioMemConstante = {}
 diccionarioMemLocal = [{}]
 diccionarioMemTemporalLl = [{}]
+#cuadruplos
 arregloCuadruplos = []
+#funciones
 arregloFunciones = []
+
 InstruccionActual = 0
 FuncionActiva = 0
+bFuncion = False
+iPosArray = -2
+iNumParam = 0
+iSaveInstruccionActual = 0
+iContadorParam = 0
 i = True
 
 '''
@@ -54,49 +63,61 @@ def leeFunciones():
 	tipoFunc = ""
 	listaParam = []
 	inicioCuadruplo = 0
+	#abre obj
 	f = open('aplusOBJFunciones.txt','r')
 	for line in f:
 		iContadorAux = 0
 		for word in line.split():
+			#guarda nombe de función
 			if(iContadorAux == 0):
 				nombre = word
+			#guarda típo de funcion
 			elif(iContadorAux == 1):
 				tipoFunc = word
+			#guarda parametros de funcion
 			elif(iContadorAux == 2):
+				#como detecta el [ y ]
+				#quita [
 				word = word[1:]
+				#quita ]
 				word = word[:-1]
 				listaParam.extend(word)
 			else:
+				#guarda donde inicia el cuadruplo
 				inicioCuadruplo = int(word)
 			iContadorAux += 1
+		#agrega la función al arreglo de funciones
 		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,listaParam,inicioCuadruplo))
-	for x in range(0,len(arregloFunciones)):
-		print(arregloFunciones[x].getNombre())
-		print(arregloFunciones[x].getTipo())
-		print(arregloFunciones[x].getParametros())
-		print(arregloFunciones[x].getStart())
 
 def leeConstantes():
 	global diccionarioMemConstante
 	key = 0
 	value = 0
+	#abre el obj
 	f = open('aplusOBJConstantes.txt', 'r')
 	for line in f:
 		iContadorAux = 0
 		for word in line.split():
+			#guarda la direccion virtual
 			if(iContadorAux == 0):
 				key = int(word)
 			else:
+				#guarda el valor
+				#si es menor que 31000 la dirección significa int
 				if(key < 31000):
 					value = int(word)
+				#float
 				elif(key > 30999 and key < 32000):
 					value = float(word)
+				#string
 				else:
+					#maneja que no se borren partes de la palabra si vienen espacios
 					if(iContadorAux == 1):
 						value = word
 					else:
 						value = str(value) + " " + word
 			iContadorAux+=1
+		#agrega a memoria
 		diccionarioMemConstante[key] = value
 
 def leeCuadruplos():
@@ -105,28 +126,43 @@ def leeCuadruplos():
 	op1 = 0
 	op2 = 0
 	res = 0
+	#abre el obj
 	f = open('aplusOBJCuadruplos.txt', 'r')
 	for line in f:
 		iContadorAux = 0
+		bWord = False
 		for word in line.split():
+			#soiempre lo convierte a int
 			if(iContadorAux == 0):
 				op = int(word)
+				#si es era o gosub la siguiente vas a usar palabra y enciende la palabra
+				if((op == 18) or (op == 19)):
+					bWord = True
 			elif(iContadorAux == 1):
+				#si es nul convierte a -2 --> vacio
 				if(word == "nul"):
 					op1 = -2
+				#si está encendido lee palabra y lo apaga
+				elif(bWord == 1):
+					op1 = word
+					bWord = False
+				#si no convierte a numero
 				else:
 					op1 = int(word)
+			#lee op2 lo convierte a num
 			elif(iContadorAux == 2):
 				if(word == "nul"):
 					op2 = -2
 				else:
 					op2 = int(word)
+			#lee resultado
 			else:
 				if(word == "nul"):
 					res = -2
 				else:
 					res = int(word)
 			iContadorAux+=1
+		#lo agrega al arreglo de memoria
 		arregloCuadruplos.append([op,op1,op2,res])
 
 #funcion para sumar dos operandos
@@ -229,22 +265,40 @@ def GotoF(op1,result):
 	if(operando1 == "false"):
 		InstruccionActual = result - 1
 
-def Era():
-	print("era")
+def Era(op1):
+	global bFuncion
+	global FuncionActiva, iPosArray
+	global diccionarioMemTemporalLl, diccionarioMemLocal
+	global arregloFunciones
+	#entra a una funcion
+	bFuncion = True
 
-def Gosub():
-	print("gosub")
+	FuncionActiva +=1
+	diccionarioMemLocal.append({})
+	diccionarioMemTemporalLl.append({})
+	for x in range(0,len(arregloFunciones)):
+		if(op1 == arregloFunciones[x].getNombre()):
+			iPosArray = x
+			iNumParam = arregloFunciones[x].getParametros()
 
-def Param():
+
+def Gosub(op1):
+	global InstruccionActual, iSaveInstruccionActual, iPosArray
+	iSaveInstruccionActual = InstruccionActual + 1
+	InstruccionActual = arregloFunciones[iPosArray].getStart() - 1
+
+def Param(op1,result):
 	print("param")
 
-def Ver():
+
+def Ver(op1,op2,result):
 	print("ver")
 
 def Ret():
-	print("ret")
+	global InstruccionActual, iSaveInstruccionActual
+	InstruccionActual = iSaveInstruccionActual - 1
 
-def Return():
+def Return(op1):
 	print("return")
 
 def move():
@@ -355,22 +409,35 @@ cteb = 33000
 '''
 
 def getValor(memoriaVirtual):
+	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
+	global diccionarioMemTemporalGl, diccionarioMemTemporalLl
+	global bFuncion, FuncionActiva
+
 	if(memoriaVirtual > 4999 and memoriaVirtual < 9000):
 		return diccionarioMemGlobal[memoriaVirtual]
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
-		return diccionarioMemLocal[memoriaVirtual]
+		return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
 	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
-		return diccionarioMemTemporalGl[memoriaVirtual]
+		if(bFuncion == 0):
+			return diccionarioMemTemporalGl[memoriaVirtual]
+		else:
+			return diccionarioMemTemporalLl[FuncionActiva-1][memoriaVirtual]
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		return diccionarioMemConstante[memoriaVirtual]
 
 def setValor(memoriaVirtual, valor):
+	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
+	global diccionarioMemTemporalGl, diccionarioMemTemporalLl
+	global bFuncion, FuncionActiva
 	if(memoriaVirtual > 4999 and memoriaVirtual < 9000):
 		diccionarioMemGlobal[memoriaVirtual] = valor
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
-		diccionarioMemLocal[memoriaVirtual] = valor
+		diccionarioMemLocal[FuncionActiva-1][memoriaVirtual] = valor
 	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
-		diccionarioMemTemporalGl[memoriaVirtual] = valor
+		if(bFuncion == 0):
+			diccionarioMemTemporalGl[memoriaVirtual] = valor
+		else:
+			diccionarioMemTemporalLl[FuncionActiva-1][memoriaVirtual] = valor
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		diccionarioMemConstante[memoriaVirtual] = valor
 

@@ -50,15 +50,15 @@ def putBeeper(event):
 #def pickBeeper():
 
 def compileCode():
-    #input = codeText.get("1.0",'end-1c')
-    #text_file = open("prueba.txt", "w")
-    #text_file.write(input)
-    #text_file.close()
-    # os.system('aplus.py')
-    #subprocess.call(["python", "./aplus.py"]);
+    input = codeText.get("1.0",'end-1c')
+    text_file = open("prueba.txt", "w")
+    text_file.write(input)
+    text_file.close()
+    os.system('aplus.py')
+    subprocess.call(["python", "./aplus.py"]);
 
-    #with open("output.txt", "w+") as output:
-     # subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
+    with open("output.txt", "w+") as output:
+      subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
 
     out_file = open("output.txt", "r")
     outText.delete("1.0", "end-1c")

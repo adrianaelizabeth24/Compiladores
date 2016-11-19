@@ -1,2 +1,3 @@
-32000	"hola"
-32001	"b"
+32000	"estoy dentro de la funcion"
+30000	1
+30001	2
