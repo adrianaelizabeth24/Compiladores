@@ -1,9 +1,10 @@
 from tkinter import *
-#import tkmessagebox
+# import tkmessagebox
 import tkinter as tk
 import itertools as it
 import os
 import subprocess
+import random
 
 clickBefore = False
 lineaX = 0
@@ -11,6 +12,9 @@ lineaY = 0
 posDogX = 200
 posDogY = 210
 gradDog = 1
+posBoneX = 0
+posBoneY = 0
+
 # every gif's frame
 fname_list = \
 ['./image/frame_0_delay-0.1s.gif',
@@ -42,23 +46,36 @@ def putBeeper(event):
     global posDogX
     global posDogY
     poop = tk.PhotoImage(file='./image/poop.gif')
-    draw.create_image(event.x, event.y, image=poop, tags="poop")
 
-    #(tk.PhotoImage(file=img_name) for img_name in fname_list)
+    w = Label(draw, image=poop)
+    w.poop = poop
+    w.pack(side="left")
+    draw.create_window(posDogX + 20, posDogY + 20, window=w)
+    valor = input("Dime stuffz: ")
+    print('Me dijiste: ' + valor)
 
+def pickBeeper():
+    global posBoneX
+    global posBoneY
 
-#def pickBeeper():
+    bone = tk.PhotoImage(file='./image/bone.gif')
+
+    w2 = Label(draw, image=bone)
+    w2.bone = bone
+    w2.pack(side="left")
+    draw.create_window(posBoneX, posBoneY, window=w2)
 
 def compileCode():
-    #input = codeText.get("1.0",'end-1c')
-    #text_file = open("prueba.txt", "w")
-    #text_file.write(input)
-    #text_file.close()
-    # os.system('aplus.py')
-    #subprocess.call(["python", "./aplus.py"]);
+    input = codeText.get("1.0",'end-1c')
+    
+    text_file = open("prueba.txt", "w")
+    text_file.write(input)
+    text_file.close()
+    os.system('aplus.py')
+    subprocess.call(["python", "./aplus.py"]);
 
-    #with open("output.txt", "w+") as output:
-     # subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
+    with open("output.txt", "w+") as output:
+      subprocess.call(["python", "./MaquinaVirtual.py"], stdout=output);
 
     out_file = open("output.txt", "r")
     outText.delete("1.0", "end-1c")
@@ -86,7 +103,7 @@ def moveRight():
     global posDogX
     posDogX = posDogX + 50
 
-def move():
+def move(event):
     global gradDog
 
     if gradDog == 1:
@@ -179,6 +196,16 @@ def onObjectClick(event):
       clickBefore = False
       coord = 0, 0, 0, 0
 
+def checkWall(event):
+    global posDogX
+    global posDogY
+
+    var = draw.find_overlapping(posDogX, posDogY, posDogX+50, posDogY+50)
+
+    for item in var:
+      if (draw.itemcget(item, "tags") == 'wall'):
+        print ("Wall cercano")
+
 '''Crear divisiones de pantallas'''
 win = PanedWindow()
 win.pack(fill= BOTH, expand=1)
@@ -212,6 +239,18 @@ right.add(outText)
   Dibujar cuadricula
 '''
 
+randX = random.randint(0, 11)
+randY = random.randint(0, 7)
+
+posBoneX = 38 + (randX * 50) 
+posBoneY = 10 + (randY * 50)
+
+
+print(randX)
+print(randY)
+print(posBoneX)
+print(posBoneY)
+
 x1 = 0
 x2 = 13
 y1 = 10
@@ -219,7 +258,7 @@ y2 = 23
 for x in range (0, 8):
   x1 = 38
   x2 = 51
-  for y in range (0, 15):
+  for y in range (0, 12):
     draw.create_rectangle(x1,y1,x2,y2, fill="blue", tags="grid")
     x1 = x1 + 50
     x2 = x2 + 50
@@ -227,11 +266,13 @@ for x in range (0, 8):
   y1 = y1 + 50
   y2 = y2 + 50
 
+pickBeeper()
+
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
 
 draw.tag_bind("dog", '<ButtonPress-1>', move)
 draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
-draw.tag_bind("dog", '<ButtonPress-2>', putBeeper)
+draw.tag_bind("dog", '<ButtonPress-2>', checkWall)
 
 # animation in 150 milliseconds
 delay = 150
