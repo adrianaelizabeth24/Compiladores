@@ -67,7 +67,6 @@ def pickBeeper():
 
 def compileCode():
     input = codeText.get("1.0",'end-1c')
-    
     text_file = open("prueba.txt", "w")
     text_file.write(input)
     text_file.close()

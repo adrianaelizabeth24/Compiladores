@@ -1,7 +1,15 @@
-int a;
-def void prueba(int b):
- print("hola");
+int a, b;
+def void prueba():
+int c, d;
+int e;
+c = 2;
+d = 3;
+e = c+d;
+print(e);
+ print("estoy dentro de la funcion");
 end_def
-
 main:
-print("b");
+prueba();
+a = 1;
+b = 2;
+print(a+b);

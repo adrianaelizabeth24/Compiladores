@@ -1,0 +1,4 @@
+5
+"estoy dentro de la funcion"
+3
+terminé ejecucion

@@ -1841,7 +1841,7 @@ def p_era_func(p):
 	global funcionActiva
 	#era de funcionActiva
 	resultado.append("nul")
-	operador = dicOperadores("Era")
+	operador = dicOperadores["Era"]
 	arregloCuadruplos.append(cuadruplo(operador,funcionActiva,"nul","nul"))
 	iContadorCuadruplos+=1
 
