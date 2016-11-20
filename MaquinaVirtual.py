@@ -87,7 +87,7 @@ def leeFunciones():
 				inicioCuadruplo = int(word)
 			iContadorAux += 1
 		#agrega la función al arreglo de funciones
-		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,listaParam,inicioCuadruplo))
+		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,-2,listaParam,inicioCuadruplo))
 
 def leeConstantes():
 	global diccionarioMemConstante
@@ -279,8 +279,7 @@ def Era(op1):
 	for x in range(0,len(arregloFunciones)):
 		if(op1 == arregloFunciones[x].getNombre()):
 			iPosArray = x
-			iNumParam = arregloFunciones[x].getParametros()
-
+			iNumParam = len(arregloFunciones[x].getDirecciones())
 
 def Gosub(op1):
 	global InstruccionActual, iSaveInstruccionActual, iPosArray
@@ -288,7 +287,8 @@ def Gosub(op1):
 	InstruccionActual = arregloFunciones[iPosArray].getStart() - 1
 
 def Param(op1,result):
-	print("param")
+	valor = getValor(op1)
+	setValor(result,valor)
 
 
 def Ver(op1,op2,result):
@@ -301,6 +301,7 @@ def Ret():
 	InstruccionActual = iSaveInstruccionActual - 1
 	diccionarioMemLocal.pop(FuncionActiva-1)
 	diccionarioMemTemporalLl.pop(FuncionActiva-1)
+	bFuncion = False
 	FuncionActiva -= 1
 
 
@@ -314,7 +315,7 @@ def checkwall():
 	print("checkwall")
 
 def turnRight():
-	print("turnrigjy")
+	print("turnrigth")
 
 def turnLeft():
 	print("turnleft")

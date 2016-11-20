@@ -1,1 +1,1 @@
-prueba	void	[]	1
+prueba	void	[10000]	1

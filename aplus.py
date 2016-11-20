@@ -58,6 +58,7 @@ PTipo = []
 arregloCuadruplos = []
 listaParamFuncion = []
 listaAuxParamFuncion = []
+listaDireccionesFuncion = []
 arregloConstantes = []
 
 #diccionarios
@@ -629,15 +630,13 @@ def p_declaracion(p):
   global vgi, vli, vgf, vlf, vgs, vls
   #vars locales
   obj = ""
-  objAux = ""
   var = 0
 
   #si no es la primera variable a guardar checa si no se repite el nombre
   if(iContadorDiccionarioVar != 0):
     for x in range(0,iContadorDiccionarioVar):
-      objAux = dV[x]
       #compara los nombres
-      if(p[2] == objAux.getNombre()):
+      if(p[2] == dV[x].getNombre()):
         raise errorSemantico("Variable ya definida: " + p[2])
 
 
@@ -695,14 +694,12 @@ def p_declaracion_2(p):
   global vgi, vli, vgf, vlf, vgs, vls
   #vars locales
   obj = ""
-  objAux = ""
   var = 0
 
   #checa que no exista
   for x in range(0,iContadorDiccionarioVar):
-    objAux = dV[x]
     #compara los nombres
-    if(p[2] == objAux.getNombre()):
+    if(p[2] == dV[x].getNombre()):
       raise errorSemantico("Variable ya definida: " + p[2])
 
   #checa el tipo de variable y su scope y guarda esa direccion de memoria en var
@@ -754,15 +751,13 @@ def p_declaracionArreglo(p):
 	global vgi, vli, vgf, vlf, vgs, vls
 	#vars locales
 	obj = ""
-	objAux = ""
 	var = 0
 
 	#si no es la primera variable a guardar checa si no se repite el nombre
 	if(iContadorDiccionarioVar != 0):
 		for x in range(0,iContadorDiccionarioVar):
-			objAux = dV[x]
 			#compara los nombres
-			if(p[2] == objAux.getNombre()):
+			if(p[2] == dV[x].getNombre()):
 				raise errorSemantico("Variable ya definida: " + p[2])
 
 	#checa el tipo de variable y su scope y guarda esa direccion de memoria en var
@@ -1567,8 +1562,10 @@ def p_agregaFunc(p):
 
 	#agrega los parametros de la funcion
 	listaAux = []
+	listaDirecciones = []
 	listaAux.extend(listaParamFuncion)
-	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux, iContadorCuadruplos)
+	listaDirecciones.extend(listaDireccionesFuncion)
+	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux,listaDirecciones, iContadorCuadruplos)
 
 	#la agrega al diccionario
 	if(iContadorDiccionarioFuncion == 0):
@@ -1590,7 +1587,6 @@ def p_matchNomFunction(p):
 	'''
 	global nombreFuncion
 	global bscope
-	global listaParamFuncion
 	global iContadorDiccionarioFuncion, iContadorDiccionarioVar
 	global dF,dV
 	global tipoDeclaracionFuncion
@@ -1600,7 +1596,6 @@ def p_matchNomFunction(p):
 	if(tipoDeclaracionFuncion != "void"): 
 	#vars locales
 		obj = ""
-		objAux = ""
 		var = 0
 		#checa que no exista
 		for x in range(0,iContadorDiccionarioVar):
@@ -1663,15 +1658,13 @@ def p_function_2(p):
   global listaParamFuncion
   #vars locales
   obj = ""
-  objAux = ""
   var = 0
 
   #si no es la primera variable a guardar checa si no se repite el nombre
   if(iContadorDiccionarioVar != 0):
     for x in range(0,iContadorDiccionarioVar):
-      objAux = dV[x]
       #compara los nombres
-      if(p[2] == objAux.getNombre()):
+      if(p[2] == dV[x].getNombre()):
         raise errorSemantico("Variable ya definida: " + p[2])
 
 
@@ -1690,6 +1683,7 @@ def p_function_2(p):
   obj = tablaVar(p[2],tipoDeclaracion,'local',var,1)
   aux = dicTipos[tipoDeclaracion]
   listaParamFuncion.append(aux)
+  listaDireccionesFuncion.append(var)
 
   #en caso de agregarla la guarda en el diccionario
   if(iContadorDiccionarioVar == 0):
@@ -1752,7 +1746,7 @@ def p_destroyVars(p):
   global resultado
   global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb
   global bRetorna
-  global listaParamFuncion
+  global listaParamFuncion, listaDireccionesFuncion
 
   iAux = 0
   iAux = iContadorInicioLocal
@@ -1761,6 +1755,7 @@ def p_destroyVars(p):
     if(dV[x].getScope() == "local"):
       del dV[x]
   del listaParamFuncion[:]
+  del listaDireccionesFuncion[:]
  
   #para que se resetee bien el diccionario en caso de que haya una var/funcion
   if(bRetorna == 1):
@@ -1917,9 +1912,15 @@ def p_functionUsuario_aux1(p):
   listaAuxParamFuncion.append(tipo)
   #genera cuadruplo de param
   operando1 = PilaO.pop()
-  resultado.append(iContadorParametros + 1)
+  listaDirecciones = []
+  #agarra las direcciones de los parametros para guardar las direcciones de esos parametros
+  for x in range(0,iContadorDiccionarioFuncion):
+  	if(dF[x].getNombre() == funcionActiva):
+  		listaDirecciones.extend(dF[x].getDirecciones())
+  res = listaDirecciones[iContadorParametros]
+  resultado.append(res)
   operador = dicOperadores["Param"]
-  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",resultado[iContadorCuadruplos]))
+  arregloCuadruplos.append(cuadruplo(operador,operando1,"nul",res))
   iContadorCuadruplos+=1
   iContadorParametros+=1
 
@@ -1940,9 +1941,8 @@ def p_functionValidaParams(p):
 	listaAux = []
 	#guarda los parametros de la funcion qe se declaró
 	for x in range(0,iContadorDiccionarioFuncion):
-		objAux = dF[x]
-		if(objAux.getNombre() == funcionActiva):
-			listaAux.extend(objAux.getParametros())
+		if(dF[x].getNombre() == funcionActiva):
+			listaAux.extend(dF[x].getParametros())
 	#compara tamaños de listas
 	if(len(listaAuxParamFuncion) == len(listaAux)):
 		#compara tipos de parametrso sean iguales(está asi por que usé directamente el tipo del diccionario de tipos)
@@ -2095,7 +2095,7 @@ def writeObjectFile():
 		target.write("\t")
 		target.write(str(dF[x].getTipo()))
 		target.write("\t")
-		target.write(str(dF[x].getParametros()))
+		target.write(str(dF[x].getDirecciones()))
 		target.write("\t")
 		target.write(str(dF[x].getStart()))
 		target.write("\n")
