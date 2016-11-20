@@ -296,7 +296,13 @@ def Ver(op1,op2,result):
 
 def Ret():
 	global InstruccionActual, iSaveInstruccionActual
+	global diccionarioMemLocal, diccionarioMemTemporalLl
+	global FuncionActiva
 	InstruccionActual = iSaveInstruccionActual - 1
+	diccionarioMemLocal.pop(FuncionActiva-1)
+	diccionarioMemTemporalLl.pop(FuncionActiva-1)
+	FuncionActiva -= 1
+
 
 def Return(op1):
 	print("return")
