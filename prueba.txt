@@ -1,8 +1,18 @@
-int a, b;
-def int prueba(int z):
-	return 3;
-end_def
-main:
-a = 1;
-b = prueba(a);
-print(b);
+int f, ant, num, r;
+main: 
+
+f = 2;
+ant = 1;
+num = 0;
+r = 0;
+
+print("I'm bout to do it");
+
+if(f>5):
+print("yes");
+end_if
+else:
+print("no");
+end_else
+
+print(r);

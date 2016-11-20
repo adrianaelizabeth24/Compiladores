@@ -1290,6 +1290,12 @@ def p_condicion(p):
   '''
   condicion : imprimeIf PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndIf condicion_4
   '''
+  global PSaltosAux
+  global iContadorCuadruplos
+  global arregloCuadruplos
+  #llenas en donde se regresa cuando acabe el else
+  res = PSaltos.pop()
+  arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
 
 #genera el cuadruplo de condicion
 def p_cuacondicion1(p):
@@ -1332,33 +1338,12 @@ def p_matchElse(p):
 	'''
 	matchElse : ELSE
 	'''
-	global PSaltos, PSaltosAux, dicOperadores
-	global arregloCuadruplos
-	global iContadorCuadruplos
-	global operador, resultado
-	global bIf
 
-	PSaltos.append(iContadorCuadruplos)
-	operador = dicOperadores["Goto"]
-  #almacena el resultado en el arreglo de resultados para no perder la cuenta
-	resultado.append("nul")
-  #genera el cuadruplo
-	arregloCuadruplos.append(cuadruplo(operador,-2,"nul","nul"))
-  #sigye la cuenta del contador y resetea la variable boleana
-	iContadorCuadruplos+=1
-	bIf = 0
 
 def p_imprimeEndElse(p):
   '''
   imprimeEndElse : END_ELSE
   '''
-  global PSaltosAux
-  global iContadorCuadruplos
-  global arregloCuadruplos
-  #llenas en donde se regresa cuando acabe el else
-  res = PSaltos.pop()
-  arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
-  print(p[1])
 
 def p_imprimeIf(p):
   '''
@@ -1372,14 +1357,25 @@ def p_imprimeEndIf(p):
   '''
   imprimeEndIf : END_IF
   '''
-  global PSaltos
+  global PSaltos,dicOperadores
   global arregloCuadruplos
   global iContadorCuadruplos
+  global operador, resultado
+  global bIf
 
   #saca el tope de Psaltos , que es el apuntador al "gotof"
   res = PSaltos.pop()
   #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
-  arregloCuadruplos[res].setResultado(iContadorCuadruplos + 1)
+  arregloCuadruplos[res].setResultado(iContadorCuadruplos+1)
+  PSaltos.append(iContadorCuadruplos)
+  operador = dicOperadores["Goto"]
+  #almacena el resultado en el arreglo de resultados para no perder la cuenta
+  resultado.append("nul")
+  #genera el cuadruplo
+  arregloCuadruplos.append(cuadruplo(operador,-2,"nul","nul"))
+  #sigye la cuenta del contador y resetea la variable boleana
+  iContadorCuadruplos+=1
+  bIf = 0
 
 ###################################################################################################
 
@@ -1576,7 +1572,6 @@ def p_agregaFunc(p):
 
 	#incrementa el contadoe
 	iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
-	print(dF)
 	bscope = 0
 	#si no es void crea una variable global coon el mismo nombre
 
@@ -1947,7 +1942,9 @@ def p_functionValidaParams(p):
 	'''
 	global dF,listaAuxParamFuncion
 	global funcionActiva, iContadorDiccionarioFuncion
+	global iContadorParametros
 	listaAux = []
+	iContadorParametros = 0
 	#guarda los parametros de la funcion qe se declaró
 	for x in range(0,iContadorDiccionarioFuncion):
 		if(dF[x].getNombre() == funcionActiva):
@@ -1961,6 +1958,7 @@ def p_functionValidaParams(p):
 	#tamaño no igual --> error
 	else:
 		raise errorSemantico("La cantidad de parametros no concuerda con los parametros de la funcion")
+	del listaAuxParamFuncion[:]
 
 ###################################################################################################
 
@@ -1979,7 +1977,6 @@ def p_checkwall(p):
   operador = dicOperadores["checkwall"]
   arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
-  print("Encontré un checkwall\n")
 
 #función de sintaxis que revisa si se recive la función predeinida de move();
 def p_move(p):
@@ -2104,11 +2101,11 @@ def writeObjectFile():
 		target.write("\t")
 		target.write(str(dF[x].getTipo()))
 		target.write("\t")
-		target.write(str(dF[x].getDirecciones()))
-		target.write("\t")
 		target.write(str(dF[x].getStart()))
 		target.write("\t")
 		target.write(str(dF[x].getDirs()))
+		target.write("\t")
+		target.write(str(dF[x].getDirecciones()))
 		target.write("\n")
 	target.close()
 
@@ -2140,7 +2137,7 @@ for x in range(0,iContadorDiccionarioFuncion):
 	print("funcion numero" + str(x))
 	print(dF[x].getNombre())
 	print(dF[x].getTipo())
-	print(dF[x].getParametros())
+	print(dF[x].getDirecciones())
 	print(dF[x].getStart())
 	print("-----------------")
 

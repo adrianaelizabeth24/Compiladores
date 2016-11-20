@@ -22,9 +22,7 @@ InstruccionActual = 0
 FuncionActiva = 0
 bFuncion = False
 iPosArray = -2
-iNumParam = 0
 iSaveInstruccionActual = 0
-iContadorParam = 0
 i = True
 
 '''
@@ -77,17 +75,17 @@ def leeFunciones():
 				tipoFunc = word
 			#guarda parametros de funcion
 			elif(iContadorAux == 2):
-				#como detecta el [ y ]
-				#quita [
-				word = word[1:]
-				#quita ]
-				word = word[:-1]
-				listaParam.extend(word)
-			elif(iContadorAux == 3):
-				#guarda donde inicia el cuadruplo
+				#guarda donde se inicia el cuadruplo
 				inicioCuadruplo = int(word)
-			else:
+			elif(iContadorAux == 3):
 				dvm = int(word)
+			else:
+				word = word[1:]
+				word = word[:-1]
+				if(word != ""):
+					listaParam.append(int(word))
+				else:
+					listaParam.append(-2)
 			iContadorAux += 1
 		#agrega la función al arreglo de funciones
 		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,-2,listaParam,inicioCuadruplo,dvm))
@@ -275,7 +273,6 @@ def Era(op1):
 	global arregloFunciones
 	#entra a una funcion
 	bFuncion = True
-
 	FuncionActiva +=1
 	diccionarioMemLocal.append({})
 	diccionarioMemTemporalLl.append({})
@@ -306,7 +303,7 @@ def Ret():
 	diccionarioMemTemporalLl.pop(FuncionActiva-1)
 	bFuncion = False
 	FuncionActiva -= 1
-	iPosArray = 0
+	iPosArray = -2
 
 
 def Return(op1):
@@ -425,16 +422,20 @@ def getValor(memoriaVirtual):
 	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
 	global diccionarioMemTemporalGl, diccionarioMemTemporalLl
 	global bFuncion, FuncionActiva
-
+	#global
 	if(memoriaVirtual > 4999 and memoriaVirtual < 9000):
 		return diccionarioMemGlobal[memoriaVirtual]
+	#local
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
+		print(diccionarioMemLocal[FuncionActiva-1])
 		return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
+	#temporal
 	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
 		if(bFuncion == 0):
 			return diccionarioMemTemporalGl[memoriaVirtual]
 		else:
 			return diccionarioMemTemporalLl[FuncionActiva-1][memoriaVirtual]
+	#constantes
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		return diccionarioMemConstante[memoriaVirtual]
 
