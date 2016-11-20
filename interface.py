@@ -54,16 +54,29 @@ def putBeeper(event):
     valor = input("Dime stuffz: ")
     print('Me dijiste: ' + valor)
 
-def pickBeeper():
+def pickBeeper(event):
     global posBoneX
     global posBoneY
+    global w2
 
-    bone = tk.PhotoImage(file='./image/bone.gif')
+    var = draw.find_overlapping(posDogX, posDogY, posDogX+50, posDogY+50)
 
-    w2 = Label(draw, image=bone)
+    for item in var:
+      if (draw.itemcget(item, "tags") == 'bone'):
+        w2.destroy()
+        print ("¡Recibiste un hueso!")
+    
+
+def drawBone():
+    global posBoneX
+    global posBoneY
+    global w2
+
+    #bone = tk.PhotoImage(file='./image/bone.gif')
+    #w2 = Label(draw, image=bone)
     w2.bone = bone
     w2.pack(side="left")
-    draw.create_window(posBoneX, posBoneY, window=w2)
+    draw.create_window(posBoneX, posBoneY, window=w2, tags='bone')
 
 def compileCode():
     input = codeText.get("1.0",'end-1c')
@@ -205,6 +218,7 @@ def checkWall(event):
       if (draw.itemcget(item, "tags") == 'wall'):
         print ("Wall cercano")
 
+
 '''Crear divisiones de pantallas'''
 win = PanedWindow()
 win.pack(fill= BOTH, expand=1)
@@ -233,6 +247,9 @@ right.add(draw)
 outText = Text (right, height=2)
 outText.insert(END, 'Hello, world')
 right.add(outText)
+
+bone = tk.PhotoImage(file='./image/bone.gif')
+w2 = Label(draw, image=bone)
 
 '''
   Dibujar cuadricula
@@ -265,13 +282,13 @@ for x in range (0, 8):
   y1 = y1 + 50
   y2 = y2 + 50
 
-pickBeeper()
+drawBone()
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
 
 draw.tag_bind("dog", '<ButtonPress-1>', move)
 draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
-draw.tag_bind("dog", '<ButtonPress-2>', checkWall)
+draw.tag_bind("dog", '<ButtonPress-2>', pickBeeper)
 
 # animation in 150 milliseconds
 delay = 150
