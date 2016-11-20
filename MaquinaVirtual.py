@@ -63,6 +63,7 @@ def leeFunciones():
 	tipoFunc = ""
 	listaParam = []
 	inicioCuadruplo = 0
+	dvm = 0
 	#abre obj
 	f = open('aplusOBJFunciones.txt','r')
 	for line in f:
@@ -82,12 +83,14 @@ def leeFunciones():
 				#quita ]
 				word = word[:-1]
 				listaParam.extend(word)
-			else:
+			elif(iContadorAux == 3):
 				#guarda donde inicia el cuadruplo
 				inicioCuadruplo = int(word)
+			else:
+				dvm = int(word)
 			iContadorAux += 1
 		#agrega la función al arreglo de funciones
-		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,-2,listaParam,inicioCuadruplo))
+		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,-2,listaParam,inicioCuadruplo,dvm))
 
 def leeConstantes():
 	global diccionarioMemConstante
@@ -297,16 +300,19 @@ def Ver(op1,op2,result):
 def Ret():
 	global InstruccionActual, iSaveInstruccionActual
 	global diccionarioMemLocal, diccionarioMemTemporalLl
-	global FuncionActiva
+	global FuncionActiva,bFuncion
 	InstruccionActual = iSaveInstruccionActual - 1
 	diccionarioMemLocal.pop(FuncionActiva-1)
 	diccionarioMemTemporalLl.pop(FuncionActiva-1)
 	bFuncion = False
 	FuncionActiva -= 1
+	iPosArray = 0
 
 
 def Return(op1):
-	print("return")
+	dvm = arregloFunciones[iPosArray].getDirs()
+	valor = getValor(op1)
+	setValor(dvm,valor)
 
 def move():
 	print("move")

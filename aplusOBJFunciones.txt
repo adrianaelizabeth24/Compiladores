@@ -1,1 +1,1 @@
-prueba	void	[10000]	1
+prueba	int	[10000]	1	5002

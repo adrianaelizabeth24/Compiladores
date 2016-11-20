@@ -1,12 +1,13 @@
 #clase tipo tabla de funciones
 #atributos: nombre y tipo
 class tablaFunciones(object):
-      def __init__(self,nombre,tipo,parametros,direcciones,start):
+      def __init__(self,nombre,tipo,parametros,direcciones,start,dirs):
           self.nombre = nombre
           self.tipo = tipo
           self.parametros = parametros
           self.direcciones = direcciones
           self.start = start
+          self.dirs = dirs
 
       def getNombre(self):
           return self.nombre
@@ -23,6 +24,9 @@ class tablaFunciones(object):
       def getStart(self):
           return self.start
 
+      def getDirs(self):
+          return self.dirs
+
       def setNombre(self,nombre):
           self.nombre = nombre
 
@@ -37,3 +41,6 @@ class tablaFunciones(object):
 
       def setStart(self,start):
           self.start = start
+
+      def setDirs(self,dirs):
+          self.dirs = dirs

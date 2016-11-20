@@ -35,6 +35,7 @@ op = -2
 op1 = -2
 op2 = -2
 tipo = -2
+dVM = -2
 
 #strings
 tipoDeclaracion = ""
@@ -1551,7 +1552,7 @@ def p_agregaFunc(p):
 	global iContadorDiccionarioFuncion, iContadorDiccionarioVar,iContadorCuadruplos
 	global dF,dV
 	global tipoDeclaracionFuncion
-	global vgi, vli, vgf, vlf, vgs, vls
+	global dVM
 	global nombreFuncion
 
 	#checa que no exista una funcion que se llame igual
@@ -1565,7 +1566,7 @@ def p_agregaFunc(p):
 	listaDirecciones = []
 	listaAux.extend(listaParamFuncion)
 	listaDirecciones.extend(listaDireccionesFuncion)
-	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux,listaDirecciones, iContadorCuadruplos)
+	varAux = tablaFunciones(nombreFuncion,tipoDeclaracionFuncion,listaAux,listaDirecciones, iContadorCuadruplos, dVM)
 
 	#la agrega al diccionario
 	if(iContadorDiccionarioFuncion == 0):
@@ -1590,7 +1591,7 @@ def p_matchNomFunction(p):
 	global iContadorDiccionarioFuncion, iContadorDiccionarioVar
 	global dF,dV
 	global tipoDeclaracionFuncion
-	global vgi, vli, vgf, vlf, vgs, vls
+	global vgi, vgf, vgs, vgb, dVM
 
 	nombreFuncion = p[1]
 	if(tipoDeclaracionFuncion != "void"): 
@@ -1610,6 +1611,9 @@ def p_matchNomFunction(p):
 		elif(tipoDeclaracionFuncion == "float"):
 			var = vgf
 			vgf+=1
+		elif(tipoDeclaracionFuncion == "bool"):
+			var = vgb
+			vgb+=1
 		elif(tipoDeclaracionFuncion == "string"):
 			var = vgs
 			vgs+=1
@@ -1620,6 +1624,7 @@ def p_matchNomFunction(p):
 		dV[iContadorDiccionarioVar] = obj
 		#incrementa el contador
 		iContadorDiccionarioVar = iContadorDiccionarioVar + 1
+		dVM = var
 
 #tipo de funcion
 def p_tipoFunction(p):
@@ -1744,7 +1749,7 @@ def p_destroyVars(p):
   global dV,dicOperadores
   global iContadorInicioLocal, iContadorDiccionarioVar, iContadorTemporal, iContadorCuadruplos
   global resultado
-  global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb
+  global vli,vlf,vls,vlb,tgi,tgf,tgs,tgb, dVM
   global bRetorna
   global listaParamFuncion, listaDireccionesFuncion
 
@@ -1781,6 +1786,7 @@ def p_destroyVars(p):
   iContadorCuadruplos+=1
   #elimina bRetorna
   bRetorna = 0
+  dVM = -2
 
 def p_imprimeDef(p):
   '''
@@ -1853,6 +1859,7 @@ def p_go_sub(p):
 	tipo = ""
 	tipoDic = -2
 	var = 0
+	dirVM = 0
 	#cuadruplo gosub
 	resultado.append("nul")
 	operador = dicOperadores["Gosub"]
@@ -1863,6 +1870,7 @@ def p_go_sub(p):
 	for x in range(0,iContadorDiccionarioFuncion):
 		if(dF[x].getNombre() == funcionActiva):
 			tipo = dF[x].getTipo();
+			dirVM = dF[x].getDirs()
 	#si no es void DEBE haber parche
 	if(tipo != "void"):
 		#agrega el tipo de funcion a la pila de tipos
@@ -1885,7 +1893,8 @@ def p_go_sub(p):
 		PilaO.append(var)
 		resultado.append(var)
 		#genera parche guadalupano
-		arregloCuadruplos.append(cuadruplo("=",funcionActiva,"nul",resultado[iContadorCuadruplos]))
+		operador = dicOperadores["="]
+		arregloCuadruplos.append(cuadruplo(operador,dirVM,"nul",resultado[iContadorCuadruplos]))
 		iContadorTemporal += 1
 		iContadorCuadruplos += 1
 
@@ -2098,6 +2107,8 @@ def writeObjectFile():
 		target.write(str(dF[x].getDirecciones()))
 		target.write("\t")
 		target.write(str(dF[x].getStart()))
+		target.write("\t")
+		target.write(str(dF[x].getDirs()))
 		target.write("\n")
 	target.close()
 
