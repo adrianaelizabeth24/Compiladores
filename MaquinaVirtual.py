@@ -299,12 +299,7 @@ def Ver(op1,op2,result):
 	global i
 	var = True
 	valor1 = getValor(op1)
-	print("hola")
-	print(valor1)
-	print(op2)
-	print(result)
 	if(valor1 >= op2):
-
 		if(valor1 <= result):
 			var = True
 		else:
@@ -317,8 +312,8 @@ def Ver(op1,op2,result):
 
 def SumVer(op1,op2,result):
 	valor1 = getValor(op1)
-	newKey = op1+op2
-	setValor(newKey,valor1)
+	newKey = valor1+op2
+	setValor(result,valor1)
 
 def Ret():
 	global InstruccionActual, iSaveInstruccionActual
@@ -406,7 +401,6 @@ def Operacion(arregloCuadruplos):
 	elif(op == 20):
 		Param(op1,res)
 	elif(op == 21):
-		print(op1,op2,res)
 		Ver(op1,op2,res)
 	elif(op == 22):
 		Ret()

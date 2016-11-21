@@ -46,6 +46,7 @@ operando1 = ""
 operando2 = ""
 nombreFuncion = ""
 nombreIDArr = ""
+nombreIDArrAux = ""
 memTipo = ""
 funcionActiva = ""
 
@@ -1226,18 +1227,17 @@ def p_matchCteBool(p):
 #sintaxis para permitir operaciones con arreglos
 def p_arreglo(p):
 	'''
-	arreglo : validaDimensiones CORCHETE_IZQ expresion CORCHETE_DER 
+	arreglo : arregloAux 
 			| empty
 	'''
 
-#funcion auxiliar para generar cuadruplos de arreglos
-def p_validaDimesiones(p):
+def p_arregloAux(p):
 	'''
-	validaDimensiones : empty
+	arregloAux : CORCHETE_IZQ validaDimensiones expresion CORCHETE_DER
 	'''
 	global PilaO, PTipo, resultado, dicOperadores
 	global arregloCuadruplos
-	global nombreIDArr
+	global nombreIDArrAux
 	global iContadorDiccionarioVar,iContadorCuadruplos
 	global tgi
 	tam = 0
@@ -1248,15 +1248,10 @@ def p_validaDimesiones(p):
 	if(tipo != 0):
 		raise errorSemantico("Dentro del arreglo solo debes tener expresiones enteras")
 	#saca el operando1 que contiene la expresion
-	operando2 = PilaO.pop()
 	operando1 = PilaO.pop()
-	print("dfgh")
-	print(operando2)
-	print("nombre id")
-	print(nombreIDArr)
 	#busca la variable que se llame igual
 	for x in range(0,iContadorDiccionarioVar):
-		if(nombreIDArr == dV[x].getNombre()):
+		if(nombreIDArrAux == dV[x].getNombre()):
 			#saca el tamaño y la direccion
 			tam = dV[x].getSize()
 			direccion = dV[x].getDireccion()
@@ -1279,11 +1274,21 @@ def p_validaDimesiones(p):
 	#para no perder la cuenta
 	resultado.append(tgi)
 	#genera cuadruplo direccion base mas offset
-	arregloCuadruplos.append(cuadruplo(op,operando1,operando2,tgi))
+	arregloCuadruplos.append(cuadruplo(op,operando1,direccion,tgi))
 	#suma contadores
 	tgi+=1
 	iContadorCuadruplos+=1
 
+
+#funcion auxiliar para generar cuadruplos de arreglos
+def p_validaDimesiones(p):
+	'''
+	validaDimensiones : empty
+	'''
+	global PilaO, PTipo, nombreIDArr, nombreIDArrAux
+	PTipo.pop()
+	PilaO.pop()
+	nombreIDArrAux = nombreIDArr
 
 
 ###################################################################################################
