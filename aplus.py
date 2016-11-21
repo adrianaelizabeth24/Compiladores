@@ -1226,7 +1226,7 @@ def p_matchCteBool(p):
 #sintaxis para permitir operaciones con arreglos
 def p_arreglo(p):
 	'''
-	arreglo : validaDimensiones CORCHETE_IZQ expresion CORCHETE_DER
+	arreglo : validaDimensiones CORCHETE_IZQ expresion CORCHETE_DER 
 			| empty
 	'''
 
@@ -1248,10 +1248,12 @@ def p_validaDimesiones(p):
 	if(tipo != 0):
 		raise errorSemantico("Dentro del arreglo solo debes tener expresiones enteras")
 	#saca el operando1 que contiene la expresion
-	operando1 = PilaO.pop()
 	operando2 = PilaO.pop()
+	operando1 = PilaO.pop()
 	print("dfgh")
 	print(operando2)
+	print("nombre id")
+	print(nombreIDArr)
 	#busca la variable que se llame igual
 	for x in range(0,iContadorDiccionarioVar):
 		if(nombreIDArr == dV[x].getNombre()):
@@ -1265,7 +1267,7 @@ def p_validaDimesiones(p):
 	#como solo recibe un numero 
 	#ver exp 0 tam-1
 	operador = dicOperadores["Ver"]
-	arregloCuadruplos.append(cuadruplo(operador,operando2,0,tam-1))
+	arregloCuadruplos.append(cuadruplo(operador,operando1,0,tam-1))
 	#suma al contador de cuadruplos
 	iContadorCuadruplos+=1
 	#segundo cuadruplo donde suma direccion base
@@ -1277,7 +1279,7 @@ def p_validaDimesiones(p):
 	#para no perder la cuenta
 	resultado.append(tgi)
 	#genera cuadruplo direccion base mas offset
-	arregloCuadruplos.append(cuadruplo(op,operando2,operando1,tgi))
+	arregloCuadruplos.append(cuadruplo(op,operando1,operando2,tgi))
 	#suma contadores
 	tgi+=1
 	iContadorCuadruplos+=1

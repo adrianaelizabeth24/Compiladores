@@ -17,27 +17,32 @@ diccionarioMemTemporalLl = [{}]
 arregloCuadruplos = []
 #funciones
 arregloFunciones = []
+iSaveInstruccionActual = []
 
 InstruccionActual = 0
 FuncionActiva = 0
-bFuncion = False
 iPosArray = -2
-iSaveInstruccionActual = []
+bFuncion = False
+
+
 i = True
 
 '''
 vgi = 5000
 vgf = 6000
 vgs = 7000
-vgb = 8000
+vgb = 8000 
+
 vli= 10000
 vlf = 11000
 vlb = 12000
 vls = 13000
+
 tgi = 20000
 tgf = 21000
 tgs = 22000
 tgb = 23000
+
 ctei = 30000
 ctef = 31000
 ctes = 32000
@@ -278,7 +283,6 @@ def Era(op1):
 	for x in range(0,len(arregloFunciones)):
 		if(op1 == arregloFunciones[x].getNombre()):
 			iPosArray = x
-			iNumParam = len(arregloFunciones[x].getDirecciones())
 
 def Gosub(op1):
 	global InstruccionActual, iSaveInstruccionActual, iPosArray,FuncionActiva
@@ -295,7 +299,12 @@ def Ver(op1,op2,result):
 	global i
 	var = True
 	valor1 = getValor(op1)
+	print("hola")
+	print(valor1)
+	print(op2)
+	print(result)
 	if(valor1 >= op2):
+
 		if(valor1 <= result):
 			var = True
 		else:
@@ -305,6 +314,7 @@ def Ver(op1,op2,result):
 	if(var == False):
 		print("error de indexación")
 		i = False
+
 def SumVer(op1,op2,result):
 	valor1 = getValor(op1)
 	newKey = op1+op2
@@ -351,6 +361,7 @@ def End():
 	print("terminé ejecucion")
 	i = False
 
+#switch MV
 def Operacion(arregloCuadruplos):
 	op = arregloCuadruplos[0]
 	op1 = arregloCuadruplos[1]
@@ -395,6 +406,7 @@ def Operacion(arregloCuadruplos):
 	elif(op == 20):
 		Param(op1,res)
 	elif(op == 21):
+		print(op1,op2,res)
 		Ver(op1,op2,res)
 	elif(op == 22):
 		Ret()
@@ -415,28 +427,8 @@ def Operacion(arregloCuadruplos):
 	elif(op == 30):
 		SumVer(op1,op2,res)
 
-'''
-vgi = 5000
-vgf = 6000
-vgs = 7000
-vgb = 8000 
 
-vli= 10000
-vlf = 11000
-vlb = 12000
-vls = 13000
-
-tgi = 20000
-tgf = 21000
-tgs = 22000
-tgb = 23000
-
-ctei = 30000
-ctef = 31000
-ctes = 32000
-cteb = 33000
-'''
-
+#funcion de memoria que retorna el valor almacenado en una direccion
 def getValor(memoriaVirtual):
 	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
 	global diccionarioMemTemporalGl, diccionarioMemTemporalLl
@@ -457,6 +449,7 @@ def getValor(memoriaVirtual):
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		return diccionarioMemConstante[memoriaVirtual]
 
+#funcion de memoria que asigna un valor a una direccion
 def setValor(memoriaVirtual, valor):
 	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
 	global diccionarioMemTemporalGl, diccionarioMemTemporalLl
@@ -477,7 +470,7 @@ def setValor(memoriaVirtual, valor):
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		diccionarioMemConstante[memoriaVirtual] = valor
 
-
+#main
 leeObj()
 while (i == True):
 	Operacion(arregloCuadruplos[InstruccionActual])

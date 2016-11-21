@@ -1,3 +1,22 @@
-int a;
+int a[10];
+int b,c,d;
 main:
-read(a);
+b = 0;
+while(b < 10):
+a[b] = b;
+b = b + 1;
+end_while
+b = 0;
+c = 0;
+d = 0;
+while(b < 10):
+d = a[b];
+if(a[b] == 5):
+ c = b;
+end_if
+b = b + 1;
+end_while
+print(c+1);
+print(d);
+
+
