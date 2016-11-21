@@ -1,0 +1,1 @@
+factorial	int	1	5002	[10000]

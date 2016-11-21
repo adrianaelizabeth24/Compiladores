@@ -615,7 +615,7 @@ def p_cua_end(p):
 def p_declaracion_3(p):
   '''
   declaracion_3 : declaracion declaracion_3
-  							| declaracionArreglo declaracion_3
+  				| declaracionArreglo declaracion_3
                 | empty
   '''
 
@@ -646,6 +646,8 @@ def p_declaracion(p):
     var = vgi
     vgi += 1
   elif(tipoDeclaracion == "int" and bscope == 1):
+    print("sdfghjkldfghjdfghjk")
+    print(p[2])
     var = vli
     vli+=1
   elif(tipoDeclaracion == "float" and bscope == 0):
@@ -1537,6 +1539,8 @@ def p_function(p):
   '''
   function : imprimeDef tipoFunction matchNomFunction PARENTESIS_IZQ function_aux PARENTESIS_DER agregaFunc DOS_PUNTOS declaracion_3 estatuto_2 END_DEF
   '''
+  global bscope
+  bscope = 0
 
 #funcion auxiliar que agrega la funcion a la tabla de funciones
 def p_agregaFunc(p):
@@ -1572,7 +1576,6 @@ def p_agregaFunc(p):
 
 	#incrementa el contadoe
 	iContadorDiccionarioFuncion = iContadorDiccionarioFuncion + 1
-	bscope = 0
 	#si no es void crea una variable global coon el mismo nombre
 
 #funcion auxiliar que en caso de que la funcion retorne valor la guarda como var global

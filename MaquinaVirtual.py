@@ -273,8 +273,9 @@ def Era(op1):
 	global arregloFunciones
 	#entra a una funcion
 	bFuncion = True
-	FuncionActiva +=1
 	diccionarioMemLocal.append({})
+	print("ahhhhhhhhhhhhhhhhh")
+	print(len(diccionarioMemLocal))
 	diccionarioMemTemporalLl.append({})
 	for x in range(0,len(arregloFunciones)):
 		if(op1 == arregloFunciones[x].getNombre()):
@@ -282,7 +283,8 @@ def Era(op1):
 			iNumParam = len(arregloFunciones[x].getDirecciones())
 
 def Gosub(op1):
-	global InstruccionActual, iSaveInstruccionActual, iPosArray
+	global InstruccionActual, iSaveInstruccionActual, iPosArray,FuncionActiva
+	FuncionActiva +=1
 	iSaveInstruccionActual = InstruccionActual + 1
 	InstruccionActual = arregloFunciones[iPosArray].getStart() - 1
 
@@ -427,6 +429,8 @@ def getValor(memoriaVirtual):
 		return diccionarioMemGlobal[memoriaVirtual]
 	#local
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
+		print("dfghyjuklk")
+		print(FuncionActiva)
 		print(diccionarioMemLocal[FuncionActiva-1])
 		return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
 	#temporal

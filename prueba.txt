@@ -1,18 +1,14 @@
-int f, ant, num, r;
-main: 
-
-f = 2;
-ant = 1;
-num = 0;
-r = 0;
-
-print("I'm bout to do it");
-
-if(f>5):
-print("yes");
-end_if
-else:
-print("no");
-end_else
-
-print(r);
+int a,res;
+def int factorial(int n):
+	int r,g;
+	if(n == 1):
+		return 1;
+	end_if
+	g = factorial(n-1);
+	r = g * n;
+	return r;
+end_def
+main:
+a = 5;
+res = factorial(a);
+print(res);
