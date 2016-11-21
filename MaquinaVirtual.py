@@ -252,9 +252,9 @@ def Print(result):
 	res = getValor(result)
 	print(res)
 
-def Read():
-	#
-	print("un read")
+def Read(op1):
+	valor = input("teclea un valor: ")
+	setValor(op1,valor)
 
 def Goto(op1):
 	global InstruccionActual
