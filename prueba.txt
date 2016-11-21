@@ -1,12 +1,2 @@
-int a[10];
-int b,c,d;
 main:
-	b = 0;
-	while(b < 10):
-		a[b] = b;
-		c = a[b];
-		print(c);
-		b = b + 1;
-	end_while
-
-
+move();

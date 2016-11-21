@@ -5,6 +5,8 @@ import itertools as it
 import os
 import subprocess
 import random
+import sys
+from sys import argv
 
 clickBefore = False
 lineaX = 0
@@ -115,7 +117,7 @@ def moveRight():
     global posDogX
     posDogX = posDogX + 50
 
-def move(event):
+def move():
     global gradDog
 
     if gradDog == 1:
@@ -286,7 +288,6 @@ drawBone()
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
 
-draw.tag_bind("dog", '<ButtonPress-1>', move)
 draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
 draw.tag_bind("dog", '<ButtonPress-2>', pickBeeper)
 

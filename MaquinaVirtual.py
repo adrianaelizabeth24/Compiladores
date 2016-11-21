@@ -5,6 +5,8 @@
 #Mayra Ruiz a00812918
 
 from tablaFunciones import tablaFunciones
+import sys
+from sys import argv
 
 #variables globales
 #memoria
