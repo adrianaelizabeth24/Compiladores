@@ -22,7 +22,7 @@ InstruccionActual = 0
 FuncionActiva = 0
 bFuncion = False
 iPosArray = -2
-iSaveInstruccionActual = 0
+iSaveInstruccionActual = []
 i = True
 
 '''
@@ -274,8 +274,6 @@ def Era(op1):
 	#entra a una funcion
 	bFuncion = True
 	diccionarioMemLocal.append({})
-	print("ahhhhhhhhhhhhhhhhh")
-	print(len(diccionarioMemLocal))
 	diccionarioMemTemporalLl.append({})
 	for x in range(0,len(arregloFunciones)):
 		if(op1 == arregloFunciones[x].getNombre()):
@@ -284,14 +282,14 @@ def Era(op1):
 
 def Gosub(op1):
 	global InstruccionActual, iSaveInstruccionActual, iPosArray,FuncionActiva
-	FuncionActiva +=1
-	iSaveInstruccionActual = InstruccionActual + 1
+	iSaveInstruccionActual.append(InstruccionActual + 1)
 	InstruccionActual = arregloFunciones[iPosArray].getStart() - 1
 
 def Param(op1,result):
+	global FuncionActiva
 	valor = getValor(op1)
+	FuncionActiva+=1
 	setValor(result,valor)
-
 
 def Ver(op1,op2,result):
 	print("ver")
@@ -300,7 +298,8 @@ def Ret():
 	global InstruccionActual, iSaveInstruccionActual
 	global diccionarioMemLocal, diccionarioMemTemporalLl
 	global FuncionActiva,bFuncion
-	InstruccionActual = iSaveInstruccionActual - 1
+	sav = iSaveInstruccionActual.pop()
+	InstruccionActual = sav - 1
 	diccionarioMemLocal.pop(FuncionActiva-1)
 	diccionarioMemTemporalLl.pop(FuncionActiva-1)
 	bFuncion = False
@@ -429,9 +428,6 @@ def getValor(memoriaVirtual):
 		return diccionarioMemGlobal[memoriaVirtual]
 	#local
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
-		print("dfghyjuklk")
-		print(FuncionActiva)
-		print(diccionarioMemLocal[FuncionActiva-1])
 		return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
 	#temporal
 	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
@@ -447,15 +443,19 @@ def setValor(memoriaVirtual, valor):
 	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
 	global diccionarioMemTemporalGl, diccionarioMemTemporalLl
 	global bFuncion, FuncionActiva
+	#global
 	if(memoriaVirtual > 4999 and memoriaVirtual < 9000):
 		diccionarioMemGlobal[memoriaVirtual] = valor
+	#local
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
 		diccionarioMemLocal[FuncionActiva-1][memoriaVirtual] = valor
+	#temporal
 	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
 		if(bFuncion == 0):
 			diccionarioMemTemporalGl[memoriaVirtual] = valor
 		else:
 			diccionarioMemTemporalLl[FuncionActiva-1][memoriaVirtual] = valor
+	#cte
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		diccionarioMemConstante[memoriaVirtual] = valor
 

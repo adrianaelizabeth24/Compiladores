@@ -4,9 +4,11 @@ def int factorial(int n):
 	if(n == 1):
 		return 1;
 	end_if
-	g = factorial(n-1);
-	r = g * n;
-	return r;
+	else:
+		g = factorial(n-1);
+		r = g * n;
+		return r;
+	end_else
 end_def
 main:
 a = 5;
