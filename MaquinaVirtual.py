@@ -292,7 +292,23 @@ def Param(op1,result):
 	setValor(result,valor)
 
 def Ver(op1,op2,result):
-	print("ver")
+	global i
+	var = True
+	valor1 = getValor(op1)
+	if(valor1 >= op2):
+		if(valor1 <= result):
+			var = True
+		else:
+			var = False
+	else:
+		var = False
+	if(var == False):
+		print("error de indexación")
+		i = False
+def SumVer(op1,op2,result):
+	valor1 = getValor(op1)
+	newKey = op1+op2
+	setValor(newKey,valor1)
 
 def Ret():
 	global InstruccionActual, iSaveInstruccionActual
@@ -396,6 +412,8 @@ def Operacion(arregloCuadruplos):
 		pickBeeper()
 	elif(op == 29):
 		putBeeper()
+	elif(op == 30):
+		SumVer(op1,op2,res)
 
 '''
 vgi = 5000

@@ -1,16 +1,9 @@
-int a,res;
-def int factorial(int n):
-	int r,g;
-	if(n == 1):
-		return 1;
-	end_if
-	else:
-		g = factorial(n-1);
-		r = g * n;
-		return r;
-	end_else
-end_def
+int a[5];
+int b,c;
 main:
-a = 5;
-res = factorial(a);
-print(res);
+b = 0;
+while(b < 5):
+a[b] = b;
+print(a[b]);
+b = b + 1;
+end_while

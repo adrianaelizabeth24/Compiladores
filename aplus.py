@@ -354,7 +354,7 @@ cubo[3][1][12] = -1     # bool >= float = bool
 cubo[3][2][12] = -1    # bool >= string = error
 cubo[3][3][12] = -1    # bool >= bool = error
 
-dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, "end": 15, "Goto": 16, "GotoF": 17, "Era":18, "Gosub":19, "Param":20, "Ver":21, "Ret":22, "Return":23, "move":24 , "checkwall":25, "turnRight":26, "turnLeft":27, "pickBeeper":28, "putBeeper":29}
+dicOperadores = {"+" : 0, "-" : 1, "*" : 2, "/" : 3, "<" : 4, ">": 5, "=" : 6,"<>" : 7, "==" : 8, "&": 9, "|": 10, "<=": 11, ">=": 12, "print" : 13 , "read": 14, "end": 15, "Goto": 16, "GotoF": 17, "Era":18, "Gosub":19, "Param":20, "Ver":21, "Ret":22, "Return":23, "move":24 , "checkwall":25, "turnRight":26, "turnLeft":27, "pickBeeper":28, "putBeeper":29, "SumVer":30}
 
 dicTipos = {"int" : 0, "float" : 1, "string" : 2, "bool" : 3, "error" : -1}
 
@@ -1227,7 +1227,7 @@ def p_matchCteBool(p):
 def p_arreglo(p):
 	'''
 	arreglo : validaDimensiones CORCHETE_IZQ expresion CORCHETE_DER
-					| empty
+			| empty
 	'''
 
 #funcion auxiliar para generar cuadruplos de arreglos
@@ -1249,6 +1249,9 @@ def p_validaDimesiones(p):
 		raise errorSemantico("Dentro del arreglo solo debes tener expresiones enteras")
 	#saca el operando1 que contiene la expresion
 	operando1 = PilaO.pop()
+	operando2 = PilaO.pop()
+	print("dfgh")
+	print(operando2)
 	#busca la variable que se llame igual
 	for x in range(0,iContadorDiccionarioVar):
 		if(nombreIDArr == dV[x].getNombre()):
@@ -1256,18 +1259,17 @@ def p_validaDimesiones(p):
 			tam = dV[x].getSize()
 			direccion = dV[x].getDireccion()
 	#cuadruplo verifica
-	op = "ver"
 	#para no perder la cuenta
 	resultado.append("nul")
 	#cuadruplo verifica simplificado
 	#como solo recibe un numero 
 	#ver exp 0 tam-1
 	operador = dicOperadores["Ver"]
-	arregloCuadruplos.append(cuadruplo(operador,operando1,0,tam-1))
+	arregloCuadruplos.append(cuadruplo(operador,operando2,0,tam-1))
 	#suma al contador de cuadruplos
 	iContadorCuadruplos+=1
 	#segundo cuadruplo donde suma direccion base
-	op = dicOperadores["+"]
+	op = dicOperadores["SumVer"]
 	#es int la operacion por que es una direccion + una expresion "int"
 	PTipo.append(0)
 	#agregas el temporal que es una direccion de mememoria temporal int
@@ -1275,7 +1277,7 @@ def p_validaDimesiones(p):
 	#para no perder la cuenta
 	resultado.append(tgi)
 	#genera cuadruplo direccion base mas offset
-	arregloCuadruplos.append(cuadruplo(op,operando1,op,tgi))
+	arregloCuadruplos.append(cuadruplo(op,operando2,operando1,tgi))
 	#suma contadores
 	tgi+=1
 	iContadorCuadruplos+=1
