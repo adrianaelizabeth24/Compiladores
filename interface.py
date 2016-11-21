@@ -93,7 +93,7 @@ def compileCode():
     outText.delete("1.0", "end-1c")
     outText.insert(END, out_file.read())
 
-    with open('output.txt') as out:
+    with open('aplusGraphics.txt') as out:
       for line in out:
         if 'move()' in line:
           move()

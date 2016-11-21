@@ -18,6 +18,7 @@ arregloCuadruplos = []
 #funciones
 arregloFunciones = []
 iSaveInstruccionActual = []
+arregloGraphics = []
 
 InstruccionActual = 0
 FuncionActiva = 0
@@ -327,29 +328,34 @@ def Ret():
 	FuncionActiva -= 1
 	iPosArray = -2
 
-
 def Return(op1):
 	dvm = arregloFunciones[iPosArray].getDirs()
 	valor = getValor(op1)
 	setValor(dvm,valor)
 
 def move():
-	print("move")
+	global arregloGraphics
+	arregloGraphics.append("move()")
 
 def checkwall():
-	print("checkwall")
+	global arregloGraphics
+	arregloGraphics.append("checkwall()")
 
 def turnRight():
-	print("turnrigth")
+	global arregloGraphics
+	arregloGraphics.append("turnRight()")
 
 def turnLeft():
-	print("turnleft")
+	global arregloGraphics
+	arregloGraphics.append("turnLeft()")
 
 def pickBeeper():
-	print("pickbeeper")
+	global arregloGraphics
+	arregloGraphics.append("pickBeeper()")
 
 def putBeeper():
-	print("putbeep")
+	global arregloGraphics
+	arregloGraphics.append("putBeeper()")
 
 def End():
 	global i
@@ -464,8 +470,21 @@ def setValor(memoriaVirtual, valor):
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		diccionarioMemConstante[memoriaVirtual] = valor
 
+def writeGraphicsFile():
+	#genera obj de constantes
+	#toma el valor de la constante y su dirección virtual
+	filename = argv
+	filename = "aplusGraphics.txt"
+	target = open(filename, 'w')
+	target.truncate()
+	for x in range(0,len(arregloGraphics)):
+		target.write(str(arregloGraphics[x]))
+		target.write("\n")
+	target.close()
+
 #main
 leeObj()
 while (i == True):
 	Operacion(arregloCuadruplos[InstruccionActual])
 	InstruccionActual += 1
+writeGraphicsFile()
