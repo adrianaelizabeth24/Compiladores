@@ -1,5 +1,4 @@
 from tkinter import *
-# import tkmessagebox
 import tkinter as tk
 import itertools as it
 import os
@@ -7,6 +6,7 @@ import subprocess
 import random
 import sys
 from sys import argv
+import time
 
 clickBefore = False
 lineaX = 0
@@ -44,7 +44,7 @@ def animate():
     draw.create_image(posDogX, posDogY, anchor=NW, image=img, tags="dog")
     win.after(delay, animate)
 
-def putBeeper(event):
+def putBeeper():
     global posDogX
     global posDogY
     poop = tk.PhotoImage(file='./image/poop.gif')
@@ -53,10 +53,10 @@ def putBeeper(event):
     w.poop = poop
     w.pack(side="left")
     draw.create_window(posDogX + 20, posDogY + 20, window=w)
-    valor = input("Dime stuffz: ")
-    print('Me dijiste: ' + valor)
+    #valor = input("Dime stuffz: ")
+    #print('Me dijiste: ' + valor)
 
-def pickBeeper(event):
+def pickBeeper():
     global posBoneX
     global posBoneY
     global w2
@@ -99,6 +99,16 @@ def compileCode():
       for line in out:
         if 'move()' in line:
           move()
+        if 'turnLeft()' in line:
+          turnLeft()
+        if 'turnRight()' in line:
+          turnRight()
+        if 'pickBeeper()' in line:
+          pickBeeper()
+        if 'putBeeper()' in line:
+          putBeeper()
+        if 'checkwall()' in line:
+          checkWall()
 
 
 def moveUp():
@@ -129,20 +139,20 @@ def move():
     elif gradDog == 0 or gradDog == 4:
       moveUp()
 
-def turnLeft(event):
-  global gradDog
-  gradDog = gradDog + 1
-
-  if gradDog == 5:
-    gradDog = 1
-  rotateDog()
-
-def turnRight(event):
+def turnLeft():
   global gradDog
   gradDog = gradDog - 1
 
   if gradDog == 0:
     gradDog = 4
+  rotateDog()
+
+def turnRight():
+  global gradDog
+  gradDog = gradDog + 1
+
+  if gradDog == 5:
+    gradDog = 1
   rotateDog()
 
 def rotateDog():
@@ -210,11 +220,13 @@ def onObjectClick(event):
       clickBefore = False
       coord = 0, 0, 0, 0
 
-def checkWall(event):
+def checkWall():
     global posDogX
     global posDogY
 
     var = draw.find_overlapping(posDogX, posDogY, posDogX+50, posDogY+50)
+
+    subprocess.check_call([sys.executable, 'MaquinaVirtual.py', "hi"])
 
     for item in var:
       if (draw.itemcget(item, "tags") == 'wall'):
@@ -263,12 +275,6 @@ randY = random.randint(0, 7)
 posBoneX = 38 + (randX * 50) 
 posBoneY = 10 + (randY * 50)
 
-
-print(randX)
-print(randY)
-print(posBoneX)
-print(posBoneY)
-
 x1 = 0
 x2 = 13
 y1 = 10
@@ -288,8 +294,8 @@ drawBone()
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
 
-draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
-draw.tag_bind("dog", '<ButtonPress-2>', pickBeeper)
+#draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
+#draw.tag_bind("dog", '<ButtonPress-2>', pickBeeper)
 
 # animation in 150 milliseconds
 delay = 150
