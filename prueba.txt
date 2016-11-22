@@ -1,2 +1,3 @@
+int a;
 main:
-move();
+a = 2.0;

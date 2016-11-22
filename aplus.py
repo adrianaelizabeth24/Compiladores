@@ -647,8 +647,6 @@ def p_declaracion(p):
     var = vgi
     vgi += 1
   elif(tipoDeclaracion == "int" and bscope == 1):
-    print("sdfghjkldfghjdfghjk")
-    print(p[2])
     var = vli
     vli+=1
   elif(tipoDeclaracion == "float" and bscope == 0):
