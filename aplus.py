@@ -1267,12 +1267,13 @@ def p_arregloAux(p):
 	op = dicOperadores["SumVer"]
 	#es int la operacion por que es una direccion + una expresion "int"
 	PTipo.append(0)
+	dirAux = -1*tgi
 	#agregas el temporal que es una direccion de mememoria temporal int
-	PilaO.append(tgi)
+	PilaO.append(dirAux)
 	#para no perder la cuenta
-	resultado.append(tgi)
+	resultado.append(dirAux)
 	#genera cuadruplo direccion base mas offset
-	arregloCuadruplos.append(cuadruplo(op,operando1,direccion,tgi))
+	arregloCuadruplos.append(cuadruplo(op,operando1,direccion,dirAux))
 	#suma contadores
 	tgi+=1
 	iContadorCuadruplos+=1

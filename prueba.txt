@@ -1,3 +1,22 @@
-int a;
+int a[10];
+int b, c, d;
 main:
-a = 2.0;
+b = 0;
+c = 0;
+d = 0;
+
+while(b < 10):
+a[b] = c*3;
+print(a[b]);
+b = b + 1;
+c = c + 2;
+end_while
+
+b = 0;
+
+while(b < 10):
+if(a[b] == 6):
+ c = b;
+end_if
+b = b + 1;
+end_while

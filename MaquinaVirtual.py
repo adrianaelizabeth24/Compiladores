@@ -176,89 +176,344 @@ def leeCuadruplos():
 
 #funcion para sumar dos operandos
 def Suma(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	res = valor1 + valor2
-	setValor(result, res)
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		res = valor1 + valor2
+		setValor(result, res)
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		res = valor1 + valor2
+		setValor(result,res)
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 + valor2
+		setValor(result,res)
+	else:
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 + valor2
+		setValor(result,res)
 
 #funcion para restar dos operandos
 def Resta(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	res = valor1 - valor2
-	setValor(result, res)
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		res = valor1 - valor2
+		setValor(result, res)
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		res = valor1 - valor2
+		setValor(result,res)
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 - valor2
+		setValor(result,res)
+	else:
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 - valor2
+		setValor(result,res)
 
 #funcion para multiplicar dos operandos
 def Multiplicacion(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	res = valor1 * valor2
-	setValor(result, res)
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		res = valor1 * valor2
+		setValor(result, res)
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		res = valor1 * valor2
+		setValor(result,res)
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 * valor2
+		setValor(result,res)
+	else:
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 * valor2
+		setValor(result,res)
 
 #funcion para dividir dos operandos
 def Division(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	res = valor1 / valor2
-	setValor(result, res)
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		res = valor1 / valor2
+		setValor(result, res)
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		res = valor1 / valor2
+		setValor(result,res)
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 / valor2
+		setValor(result,res)
+	else:
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		res = valor1 / valor2
+		setValor(result,res)
 
 #compara dos valores y retorna verdadero o falso
 #de acuerdo a los operadores
 def MenorQue(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 < valor2):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 < valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		if(valor1 < valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 < valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 < valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
 def MayorQue(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 > valor2):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 > valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		if(valor1 > valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 > valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 > valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
 def Asignacion(op1,result):
-	valor = getValor(op1)
-	setValor(result,valor)
+	if(op1 > 0 and result > 0):
+		valor = getValor(op1)
+		setValor(result,valor)
+	elif(op1 < 0 and result > 0):
+		dirNueva = getValor(op1)
+		valor = getValor(dirNueva)
+		setValor(result,valor)
+	elif(op1 > 0 and result < 0):
+		dirNueva = getValor(result)
+		valor = getValor(op1)
+		setValor(dirNueva,valor)
+	else:
+		dirNueva1 = getValor(op1)
+		dirNueva2 = getValor(result)
+		valor = getValor(dirNueva1)
+		setValor(dirNueva2,valor)
 
 def Diferente(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 != valor2):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 != valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		if(valor1 != valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 != valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 != valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
 def IgualQue(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 == valor2):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 == valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		if(valor1 == valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 == valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 == valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
 def MenorIgual(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 <= valor2):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 <= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		if(valor1 <= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 <= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 <= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
 def MayorIgual(op1, op2, result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 >= valor2):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 >= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		valor2 = getValor(op2)
+		if(valor1 >= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		valor1 = getValor(op1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 >= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		if(valor1 >= valor2):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
 def Print(result):
-	res = getValor(result)
-	print(res)
+	if(result > 0):
+		res = getValor(result)
+		print(res)
+	else:
+		dirNueva = getValor(result)
+		res = getValor(dirNueva)
+		print(res)
 
 def Read(op1):
 	valor = input("teclea un valor: ")
@@ -316,7 +571,7 @@ def Ver(op1,op2,result):
 def SumVer(op1,op2,result):
 	valor1 = getValor(op1)
 	newKey = valor1+op2
-	setValor(result,valor1)
+	setValor(result,newKey)
 
 def Ret():
 	global InstruccionActual, iSaveInstruccionActual
@@ -442,7 +697,7 @@ def getValor(memoriaVirtual):
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
 		return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
 	#temporal
-	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
+	elif((memoriaVirtual > 19999 and memoriaVirtual < 24000) or (memoriaVirtual > -24000 and memoriaVirtual < -19999)):
 		if(bFuncion == 0):
 			return diccionarioMemTemporalGl[memoriaVirtual]
 		else:
@@ -463,7 +718,7 @@ def setValor(memoriaVirtual, valor):
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
 		diccionarioMemLocal[FuncionActiva-1][memoriaVirtual] = valor
 	#temporal
-	elif(memoriaVirtual > 19999 and memoriaVirtual < 24000):
+	elif((memoriaVirtual > 19999 and memoriaVirtual < 24000) or (memoriaVirtual > -24000 and memoriaVirtual < -19999)):
 		if(bFuncion == 0):
 			diccionarioMemTemporalGl[memoriaVirtual] = valor
 		else:
