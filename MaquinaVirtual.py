@@ -5,6 +5,7 @@
 #Mayra Ruiz a00812918
 
 from tablaFunciones import tablaFunciones
+from errorEjecucion import errorEjecucion
 import sys
 from sys import argv
 
@@ -58,11 +59,16 @@ cteb = 33000
 # "Era":18, "Gosub":19, "Param":20, "Ver":21, "Ret":22, "Return":23,
 # "move":24 , "checkwall":25, "turnRight":26, "turnLeft":27, "pickBeeper":28, "putBeeper":29}
 
+#funcion que lee los archivos de código intermedio
 def leeObj():
 	leeFunciones()
 	leeConstantes()
 	leeCuadruplos()
 
+#funcion que lee el archivo de tablas de procedimientos
+#dicho archivo contiene:
+#nombre de la funcion, tipo de funcion, lista de direcciones de parametros, inicio de cuadruplo, dirección virtual de la funcion
+#lo almacena en arregloFunciones
 def leeFunciones():
 	global arregloFunciones
 	nombre = ""
@@ -88,6 +94,7 @@ def leeFunciones():
 			elif(iContadorAux == 3):
 				dvm = int(word)
 			else:
+				#elimina corchetes y comas
 				word = word[1:]
 				word = word[:-1]
 				if(word != ""):
@@ -98,6 +105,9 @@ def leeFunciones():
 		#agrega la función al arreglo de funciones
 		arregloFunciones.append(tablaFunciones(nombre,tipoFunc,-2,listaParam,inicioCuadruplo,dvm))
 
+#funcion que lee el archvio de constantes
+#archivo contiene direccion virtual y valor de constante
+#lo almacena directamente en memoria
 def leeConstantes():
 	global diccionarioMemConstante
 	key = 0
@@ -129,6 +139,8 @@ def leeConstantes():
 		#agrega a memoria
 		diccionarioMemConstante[key] = value
 
+#funcion que lee el archivo de cuadruplos
+#lo almacena en arregloCuadruplos
 def leeCuadruplos():
 	global arregloCuadruplos
 	op = 0
@@ -175,60 +187,120 @@ def leeCuadruplos():
 		arregloCuadruplos.append([op,op1,op2,res])
 
 #funcion para sumar dos operandos
+#en caso de recibir un operando negativo
+#esta tratando con un temporal indirecto
+#es el temporal que almacena una dirección (la base + offset)
+#debe acceder al valor de la dirección que almacena
 def Suma(op1, op2, result):
+	#si ambos son positivos
 	if(op1 > 0 and op2 > 0):
+		#obtiene valor 1
 		valor1 = getValor(op1)
+		#obtiene valor 2
 		valor2 = getValor(op2)
+		#suma
 		res = valor1 + valor2
+		#asigna a memoria
 		setValor(result, res)
+	#op1 es temporal indirecto
 	elif(op1 < 0 and op2 > 0):
+		#dirección nueva
 		dirNueva1 = getValor(op1)
+		#encuentra valor 1
 		valor1 = getValor(dirNueva1)
+		#encuentra valor 2
 		valor2 = getValor(op2)
+		#operacion
 		res = valor1 + valor2
+		#asigna a memoria
 		setValor(result,res)
+	#op2 es temporal indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#nueva dirección
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#resultado
 		res = valor1 + valor2
+		#asignación
 		setValor(result,res)
+	#ambos son temporales indirectos
 	else:
+		#dirección nueva1
 		dirNueva1 = getValor(op1)
+		#valor
 		valor1 = getValor(dirNueva1)
+		#dirección nueva2
 		dirNueva2 = getValor(op2)
+		#valor2
 		valor2 = getValor(dirNueva2)
+		#resultado
 		res = valor1 + valor2
+		#asignación
 		setValor(result,res)
 
 #funcion para restar dos operandos
+#en caso de recibir un operando negativo
+#esta tratando con un temporal indirecto
+#es el temporal que almacena una dirección (la base + offset)
+#debe acceder al valor de la dirección que almacena
 def Resta(op1, op2, result):
+	#ningun temporal indirecto
 	if(op1 > 0 and op2 > 0):
+		#valor1
 		valor1 = getValor(op1)
+		#valor 2
 		valor2 = getValor(op2)
+		#resta
 		res = valor1 - valor2
+		#asigna resultado a memoria
 		setValor(result, res)
+	#temporal indirecto
 	elif(op1 < 0 and op2 > 0):
+		#obtiene nueva dirección
 		dirNueva1 = getValor(op1)
+		#obtiene valor de la dirección
 		valor1 = getValor(dirNueva1)
+		#obtiene valor2
 		valor2 = getValor(op2)
+		#resta
 		res = valor1 - valor2
+		#asigna valor a memoria
 		setValor(result,res)
+	#temporal indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor1
 		valor1 = getValor(op1)
+		#nueva dirección
 		dirNueva2 = getValor(op2)
+		#valor de dirNueva2
 		valor2 = getValor(dirNueva2)
+		#resta
 		res = valor1 - valor2
+		#asigna valor a memoria
 		setValor(result,res)
+	#dos temporales indirectos
 	else:
+		#dirección nueva
 		dirNueva1 = getValor(op1)
+		#valor
 		valor1 = getValor(dirNueva1)
+		#dirección nueva
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#resta
 		res = valor1 - valor2
+		#asigna valor
 		setValor(result,res)
 
 #funcion para multiplicar dos operandos
+#en caso de recibir un operando negativo
+#esta tratando con un temporal indirecto
+#es el temporal que almacena una dirección (la base + offset)
+#debe acceder al valor de la dirección que almacena
 def Multiplicacion(op1, op2, result):
 	if(op1 > 0 and op2 > 0):
 		valor1 = getValor(op1)
@@ -256,6 +328,10 @@ def Multiplicacion(op1, op2, result):
 		setValor(result,res)
 
 #funcion para dividir dos operandos
+#en caso de recibir un operando negativo
+#esta tratando con un temporal indirecto
+#es el temporal que almacena una dirección (la base + offset)
+#debe acceder al valor de la dirección que almacena
 def Division(op1, op2, result):
 	if(op1 > 0 and op2 > 0):
 		valor1 = getValor(op1)
@@ -282,253 +358,423 @@ def Division(op1, op2, result):
 		res = valor1 / valor2
 		setValor(result,res)
 
-#compara dos valores y retorna verdadero o falso
+#compara dos valores con < y retorna verdadero o falso
 #de acuerdo a los operadores
+#en caso de recibir un operando negativo
+#esta tratando con un temporal indirecto
+#es el temporal que almacena una dirección (la base + offset)
+#debe acceder al valor de la dirección que almacena
 def MenorQue(op1, op2, result):
+	#no hay temporales indirectos
 	if(op1 > 0 and op2 > 0):
+		#valor
 		valor1 = getValor(op1)
 		valor2 = getValor(op2)
+		#compara y resuelve
 		if(valor1 < valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op1 es indirecto
 	elif(op1 < 0 and op2 > 0):
+		#nueva direccion
 		dirNueva1 = getValor(op1)
+		#valores
 		valor1 = getValor(dirNueva1)
 		valor2 = getValor(op2)
+		#compara
 		if(valor1 < valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op2 es indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#direccion
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 < valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#ambos son indirectos
 	else:
+		#direccion y valor
 		dirNueva1 = getValor(op1)
 		valor1 = getValor(dirNueva1)
+		#direccion y valor
 		dirNueva2 = getValor(op2)
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 < valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
 
+#compara dos valores con > y retorna verdadero o falso
+#verifica temporales indirectos
 def MayorQue(op1, op2, result):
+	#no hay temporales indirectos
 	if(op1 > 0 and op2 > 0):
+		#valor
 		valor1 = getValor(op1)
 		valor2 = getValor(op2)
+		#compara y resuelve
 		if(valor1 > valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op1 es indirecto
 	elif(op1 < 0 and op2 > 0):
+		#nueva direccion
 		dirNueva1 = getValor(op1)
+		#valores
 		valor1 = getValor(dirNueva1)
 		valor2 = getValor(op2)
+		#compara
 		if(valor1 > valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op2 es indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#direccion
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 > valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#ambos son indirectos
 	else:
+		#direccion y valor
 		dirNueva1 = getValor(op1)
 		valor1 = getValor(dirNueva1)
+		#direccion y valor
 		dirNueva2 = getValor(op2)
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 > valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
 
+#asigna el valor de una dirección a otro
+#verifica temporales indirectos
 def Asignacion(op1,result):
+	#no indirectos
 	if(op1 > 0 and result > 0):
+		#valor de op1
 		valor = getValor(op1)
+		#se asigna a direcion de result
 		setValor(result,valor)
+	#un indirecto
 	elif(op1 < 0 and result > 0):
+		#dirección nueva de op1
 		dirNueva = getValor(op1)
+		#valor de dirNueva
 		valor = getValor(dirNueva)
+		#asigna valor
 		setValor(result,valor)
+	#un indirecto
 	elif(op1 > 0 and result < 0):
+		#dirección nueva
 		dirNueva = getValor(result)
+		#valor
 		valor = getValor(op1)
+		#asignar valor a dirección nueva
 		setValor(dirNueva,valor)
+	#dos indirectos
 	else:
+		#direccion nueva de op1
 		dirNueva1 = getValor(op1)
+		#dirección nueva result
 		dirNueva2 = getValor(result)
 		valor = getValor(dirNueva1)
+		#asigna valor de dirección nueva1 a dirección nueva 2
 		setValor(dirNueva2,valor)
 
+#compara dos valores con <> y retorna verdadero o falso
+#verifica temporales indirectos
 def Diferente(op1, op2, result):
+	#no hay temporales indirectos
 	if(op1 > 0 and op2 > 0):
+		#valor
 		valor1 = getValor(op1)
 		valor2 = getValor(op2)
+		#compara y resuelve
 		if(valor1 != valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op1 es indirecto
 	elif(op1 < 0 and op2 > 0):
+		#nueva direccion
 		dirNueva1 = getValor(op1)
+		#valores
 		valor1 = getValor(dirNueva1)
 		valor2 = getValor(op2)
+		#compara
 		if(valor1 != valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op2 es indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#direccion
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 != valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#ambos son indirectos
 	else:
+		#direccion y valor
 		dirNueva1 = getValor(op1)
 		valor1 = getValor(dirNueva1)
+		#direccion y valor
 		dirNueva2 = getValor(op2)
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 != valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
 
+#compara dos valores con == y retorna verdadero o falso
+#verifica temporales indirectos
 def IgualQue(op1, op2, result):
+	#no hay temporales indirectos
 	if(op1 > 0 and op2 > 0):
+		#valor
 		valor1 = getValor(op1)
 		valor2 = getValor(op2)
+		#compara y resuelve
 		if(valor1 == valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op1 es indirecto
 	elif(op1 < 0 and op2 > 0):
+		#nueva direccion
 		dirNueva1 = getValor(op1)
+		#valores
 		valor1 = getValor(dirNueva1)
 		valor2 = getValor(op2)
+		#compara
 		if(valor1 == valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op2 es indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#direccion
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 == valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#ambos son indirectos
 	else:
+		#direccion y valor
 		dirNueva1 = getValor(op1)
 		valor1 = getValor(dirNueva1)
+		#direccion y valor
 		dirNueva2 = getValor(op2)
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 == valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
 
+#compara dos valores con <= y retorna verdadero o falso
+#verifica temporales indirectos
 def MenorIgual(op1, op2, result):
+	#no hay temporales indirectos
 	if(op1 > 0 and op2 > 0):
+		#valor
 		valor1 = getValor(op1)
 		valor2 = getValor(op2)
+		#compara y resuelve
 		if(valor1 <= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op1 es indirecto
 	elif(op1 < 0 and op2 > 0):
+		#nueva direccion
 		dirNueva1 = getValor(op1)
+		#valores
 		valor1 = getValor(dirNueva1)
 		valor2 = getValor(op2)
+		#compara
 		if(valor1 <= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op2 es indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#direccion
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 <= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#ambos son indirectos
 	else:
+		#direccion y valor
 		dirNueva1 = getValor(op1)
 		valor1 = getValor(dirNueva1)
+		#direccion y valor
 		dirNueva2 = getValor(op2)
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 <= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
 
+#compara dos valores con >= y retorna verdadero o falso
+#verifica temporales indirectos
 def MayorIgual(op1, op2, result):
+	#no hay temporales indirectos
 	if(op1 > 0 and op2 > 0):
+		#valor
 		valor1 = getValor(op1)
 		valor2 = getValor(op2)
+		#compara y resuelve
 		if(valor1 >= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op1 es indirecto
 	elif(op1 < 0 and op2 > 0):
+		#nueva direccion
 		dirNueva1 = getValor(op1)
+		#valores
 		valor1 = getValor(dirNueva1)
 		valor2 = getValor(op2)
+		#compara
 		if(valor1 >= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#si op2 es indirecto
 	elif(op1 > 0 and op2 < 0):
+		#valor
 		valor1 = getValor(op1)
+		#direccion
 		dirNueva2 = getValor(op2)
+		#valor
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 >= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
+	#ambos son indirectos
 	else:
+		#direccion y valor
 		dirNueva1 = getValor(op1)
 		valor1 = getValor(dirNueva1)
+		#direccion y valor
 		dirNueva2 = getValor(op2)
 		valor2 = getValor(dirNueva2)
+		#compara
 		if(valor1 >= valor2):
 			setValor(result,"true")
 		else:
 			setValor(result,"false")
 
+#imprime
+#verifica temporales indirectos
 def Print(result):
+	#no hay temporales indirectos
 	if(result > 0):
+		#toma el valor e imprime
 		res = getValor(result)
 		print(res)
+	#temporal indirecto
 	else:
+		#nueva direccipon
 		dirNueva = getValor(result)
+		#saca el valor e imprime
 		res = getValor(dirNueva)
 		print(res)
 
+#lee un valor de consola
 def Read(op1):
+	#lee valor
 	valor = input("teclea un valor: ")
-	setValor(op1,valor)
+	#verifica si es int
+	if((op1 > 4999 and op1 < 6000 ) or (op1 > 9999 and op1 < 11000)):
+		try:
+			#parsea a int
+			val = int(valor)
+			setValor(op1,val)
+		#error
+		except:
+			raise errorEjecucion("Debes guardar una variable de tipo int")
+	#verifica float
+	elif((op1 > 5999 and op1 < 7000) or (op1 > 10999 and op1 < 12000)):
+		try:
+			val = float(valor)
+			setValor(op1,val)
+		except:
+			raise errorEjecucion("Debes guardar una variable de tipo float")
+	#verifica string
+	elif((op1 > 6999 and op1 < 8000) or (op1 > 11999 and op1 < 13000)):
+		try:
+			val = string(valor)
+			setValor(op1,val)
+		except:
+			raise errorEjecucion("Debes guardar una variable de tipo string")
+	#verifica bool
+	else:
+		if(valor == "true" or valor == "false"):
+			setValor(op1,valor)
+		else:
+			raise errorEjecucion("Debes guardar una variable de tipo boleana")
 
+#goto
 def Goto(op1):
 	global InstruccionActual
+	#modifica instrucción actual a la del operador -1
 	InstruccionActual = op1 - 1
 
+#goto en caso de ser falso
 def GotoF(op1,result):
 	global InstruccionActual
+	#verifica si valor es falso
 	operando1 = getValor(op1)
 	if(operando1 == "false"):
+		#nueva isntruccción actual
 		InstruccionActual = result - 1
 
+#expande registro de memoria
 def Era(op1):
 	global bFuncion
 	global FuncionActiva, iPosArray
@@ -536,26 +782,38 @@ def Era(op1):
 	global arregloFunciones
 	#entra a una funcion
 	bFuncion = True
+	#crea memoria local y temporal
 	diccionarioMemLocal.append({})
 	diccionarioMemTemporalLl.append({})
+	#obtiene indice de función
+	#es para no tener que buscarlo siempre,optimiza
 	for x in range(0,len(arregloFunciones)):
 		if(op1 == arregloFunciones[x].getNombre()):
 			iPosArray = x
 
+#va a función
 def Gosub(op1):
 	global InstruccionActual, iSaveInstruccionActual, iPosArray,FuncionActiva
+	#agrgea la isntrucción actual a la pila
 	iSaveInstruccionActual.append(InstruccionActual + 1)
+	#nueva instruccióna actual
 	InstruccionActual = arregloFunciones[iPosArray].getStart() - 1
 
+#parametros recibidos
 def Param(op1,result):
 	global FuncionActiva
+	#obtiene valor de op1
 	valor = getValor(op1)
+	#accede a siguiente memoria
 	FuncionActiva+=1
+	#guarda el valor en la memoria recién creada
 	setValor(result,valor)
 
+#verifica que el inidice de un arreglo este en el rango
 def Ver(op1,op2,result):
 	global i
 	var = True
+	#verifica que este en el rango
 	valor1 = getValor(op1)
 	if(valor1 >= op2):
 		if(valor1 <= result):
@@ -564,32 +822,42 @@ def Ver(op1,op2,result):
 			var = False
 	else:
 		var = False
+	#levanta una excepcion
 	if(var == False):
-		print("error de indexación")
+		raise errorEjecucion("Índice no válido")
 		i = False
 
+#guarda la dirección base en el temporal
 def SumVer(op1,op2,result):
 	valor1 = getValor(op1)
 	newKey = valor1+op2
 	setValor(result,newKey)
 
+#termina funcion
 def Ret():
 	global InstruccionActual, iSaveInstruccionActual
 	global diccionarioMemLocal, diccionarioMemTemporalLl
 	global FuncionActiva,bFuncion
+	#saca la utlimo contador a la instrucción local
 	sav = iSaveInstruccionActual.pop()
 	InstruccionActual = sav - 1
+	#elimina el era
 	diccionarioMemLocal.pop(FuncionActiva-1)
 	diccionarioMemTemporalLl.pop(FuncionActiva-1)
+	#termina funcion
 	bFuncion = False
+	#resetea contadores
 	FuncionActiva -= 1
 	iPosArray = -2
 
+#regresa un valor
 def Return(op1):
+	#almacena el valor en la dirección de la función
 	dvm = arregloFunciones[iPosArray].getDirs()
 	valor = getValor(op1)
 	setValor(dvm,valor)
 
+#doggy
 def move():
 	global arregloGraphics
 	arregloGraphics.append("move()")
@@ -614,6 +882,7 @@ def putBeeper():
 	global arregloGraphics
 	arregloGraphics.append("putBeeper()")
 
+#termina ejecución
 def End():
 	global i
 	print("terminé ejecucion")
@@ -684,7 +953,6 @@ def Operacion(arregloCuadruplos):
 	elif(op == 30):
 		SumVer(op1,op2,res)
 
-
 #funcion de memoria que retorna el valor almacenado en una direccion
 def getValor(memoriaVirtual):
 	global diccionarioMemGlobal, diccionarioMemLocal, diccionarioMemConstante
@@ -692,19 +960,34 @@ def getValor(memoriaVirtual):
 	global bFuncion, FuncionActiva
 	#global
 	if(memoriaVirtual > 4999 and memoriaVirtual < 9000):
-		return diccionarioMemGlobal[memoriaVirtual]
+		try:
+			return diccionarioMemGlobal[memoriaVirtual]
+		except:
+			raise errorEjecucion("Valor no asignado")
 	#local
 	elif(memoriaVirtual > 9999 and memoriaVirtual < 14000):
-		return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
+		try:
+			return diccionarioMemLocal[FuncionActiva-1][memoriaVirtual]
+		except:
+			raise errorEjecucion("Valor no asignado")
 	#temporal
 	elif((memoriaVirtual > 19999 and memoriaVirtual < 24000) or (memoriaVirtual > -24000 and memoriaVirtual < -19999)):
 		if(bFuncion == 0):
-			return diccionarioMemTemporalGl[memoriaVirtual]
+			try:
+				return diccionarioMemTemporalGl[memoriaVirtual]
+			except:
+				raise errorEjecucion("Valor no asignado")
 		else:
-			return diccionarioMemTemporalLl[FuncionActiva-1][memoriaVirtual]
+			try:
+				return diccionarioMemTemporalLl[FuncionActiva-1][memoriaVirtual]
+			except:
+				raise errorEjecucion("Valor no asignado")
 	#constantes
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
-		return diccionarioMemConstante[memoriaVirtual]
+		try:
+			return diccionarioMemConstante[memoriaVirtual]
+		except:
+			raise errorEjecucion("Valor no asignado")
 
 #funcion de memoria que asigna un valor a una direccion
 def setValor(memoriaVirtual, valor):
@@ -727,6 +1010,7 @@ def setValor(memoriaVirtual, valor):
 	elif(memoriaVirtual > 29999 and memoriaVirtual < 34000):
 		diccionarioMemConstante[memoriaVirtual] = valor
 
+#escribe comandos para el grafico
 def writeGraphicsFile():
 	#genera obj de constantes
 	#toma el valor de la constante y su dirección virtual
