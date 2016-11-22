@@ -1244,7 +1244,7 @@ def p_arregloAux(p):
 	tipo = PTipo.pop();
 	#si no es int no se puede
 	if(tipo != 0):
-		raise errorSemantico("Dentro del arreglo solo debes tener expresiones enteras")
+		raise errorSemantico("El índice del arreglo solo debe contener expresiones enteras")
 	#saca el operando1 que contiene la expresion
 	operando1 = PilaO.pop()
 	#busca la variable que se llame igual
