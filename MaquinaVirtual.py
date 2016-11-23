@@ -903,7 +903,7 @@ def Ver(op1,op2,result):
 		var = False
 	#levanta una excepcion
 	if(var == False):
-		raise errorEjecucion("Índice no válido")
+		raise errorEjecucion("Índice no válido: " + str(valor1))
 		i = False
 
 #guarda la dirección base en el temporal
