@@ -607,21 +607,75 @@ def IgualQue(op1, op2, result):
 		else:
 			setValor(result,"false")
 
+#operador and
 def And(op1,op2,result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 == "true" and valor2 == "true"):
-		setValor(result,"true")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 == "true" and valor2 == "true"):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva = getValor(op1)
+		valor1 = getValor(dirNueva)
+		valor2 = getValor(op2)
+		if(valor1 == "true" and valor2 == "true"):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
+	elif(op1 > 0 and op2 < 0):
+		dirNueva = getValor(op2)
+		valor2 = getValor(dirNueva)
+		valor1 = getValor(op1)
+		if(valor1 == "true" and valor2 == "true"):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 	else:
-		setValor(result,"false")
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		if(valor1 == "true" and valor2 == "true"):
+			setValor(result,"true")
+		else:
+			setValor(result,"false")
 
+#operador or
 def Or(op1,op2,result):
-	valor1 = getValor(op1)
-	valor2 = getValor(op2)
-	if(valor1 == "false" and valor2 == "false"):
-		setValor(result,"false")
+	if(op1 > 0 and op2 > 0):
+		valor1 = getValor(op1)
+		valor2 = getValor(op2)
+		if(valor1 == "false" and valor2 == "false"):
+			setValor(result,"false")
+		else:
+			setValor(result,"true")
+	elif(op1 < 0 and op2 > 0):
+		dirNueva = getValor(op1)
+		valor1 = getValor(dirNueva)
+		valor2 = getValor(op2)
+		if(valor1 == "false" and valor2 == "false"):
+			setValor(result,"false")
+		else:
+			setValor(result,"true")
+	elif(op1 > 0 and op2 < 0):
+		dirNueva = getValor(op2)
+		valor2 = getValor(dirNueva)
+		valor1 = getValor(op1)
+		if(valor1 == "false" and valor2 == "false"):
+			setValor(result,"false")
+		else:
+			setValor(result,"true")
 	else:
-		setValor(result,"true")
+		dirNueva2 = getValor(op2)
+		valor2 = getValor(dirNueva2)
+		dirNueva1 = getValor(op1)
+		valor1 = getValor(dirNueva1)
+		if(valor1 == "false" and valor2 == "false"):
+			setValor(result,"false")
+		else:
+			setValor(result,"true")
 
 #compara dos valores con <= y retorna verdadero o falso
 #verifica temporales indirectos
