@@ -1,4 +1,23 @@
-int a;
-main:
-read(a);
-print(a);
+int a,b,res,itera;
+def int fibo(int num1, int num2, int max):
+	int cont,num3;
+	cont = 1;
+	num3 = 0;
+	while (cont <= max):
+		num1 = num2;
+		num2 = num3;
+		num3 = num1 + num2;
+		cont = cont + 1;
+	end_while
+	return num3;
+end_def
+main: 
+
+a = 1;
+b = 1;
+itera = 10;
+res = fibo(a,b,itera);
+print(res);
+
+
+

@@ -26,6 +26,8 @@ arregloGraphics = []
 InstruccionActual = 0
 FuncionActiva = 0
 iPosArray = -2
+numParametros = 0
+iContadorParametros = 0
 bFuncion = False
 
 
@@ -605,6 +607,22 @@ def IgualQue(op1, op2, result):
 		else:
 			setValor(result,"false")
 
+def And(op1,op2,result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(valor1 == "true" and valor2 == "true"):
+		setValor(result,"true")
+	else:
+		setValor(result,"false")
+
+def Or(op1,op2,result):
+	valor1 = getValor(op1)
+	valor2 = getValor(op2)
+	if(valor1 == "false" and valor2 == "false"):
+		setValor(result,"false")
+	else:
+		setValor(result,"true")
+
 #compara dos valores con <= y retorna verdadero o falso
 #verifica temporales indirectos
 def MenorIgual(op1, op2, result):
@@ -779,17 +797,19 @@ def Era(op1):
 	global bFuncion
 	global FuncionActiva, iPosArray
 	global diccionarioMemTemporalLl, diccionarioMemLocal
-	global arregloFunciones
+	global arregloFunciones,numParametros,iContadorParametros
 	#entra a una funcion
 	bFuncion = True
 	#crea memoria local y temporal
 	diccionarioMemLocal.append({})
 	diccionarioMemTemporalLl.append({})
+	iContadorParametros = 0
 	#obtiene indice de función
 	#es para no tener que buscarlo siempre,optimiza
 	for x in range(0,len(arregloFunciones)):
 		if(op1 == arregloFunciones[x].getNombre()):
 			iPosArray = x
+			numParametros = len(arregloFunciones[x].getDirecciones())
 
 #va a función
 def Gosub(op1):
@@ -802,12 +822,17 @@ def Gosub(op1):
 #parametros recibidos
 def Param(op1,result):
 	global FuncionActiva
+	global iContadorParametros,numParametros
 	#obtiene valor de op1
+	iContadorParametros += 1
 	valor = getValor(op1)
 	#accede a siguiente memoria
 	FuncionActiva+=1
 	#guarda el valor en la memoria recién creada
 	setValor(result,valor)
+	if(iContadorParametros != numParametros):
+		FuncionActiva -= 1
+
 
 #verifica que el inidice de un arreglo este en el rango
 def Ver(op1,op2,result):
@@ -852,6 +877,7 @@ def Ret():
 
 #regresa un valor
 def Return(op1):
+	global InstruccionActual
 	#almacena el valor en la dirección de la función
 	dvm = arregloFunciones[iPosArray].getDirs()
 	valor = getValor(op1)
@@ -890,6 +916,7 @@ def End():
 
 #switch MV
 def Operacion(arregloCuadruplos):
+	global FuncionActiva
 	op = arregloCuadruplos[0]
 	op1 = arregloCuadruplos[1]
 	op2 = arregloCuadruplos[2]
@@ -912,6 +939,10 @@ def Operacion(arregloCuadruplos):
 		Diferente(op1,op2,res)
 	elif(op == 8):
 		IgualQue(op1,op2,res)
+	elif(op == 9):
+		And(op1,op2,res)
+	elif(op == 10):
+		Or(op1,op2,res)
 	elif(op == 11):
 		MenorIgual(op1,op2,res)
 	elif(op == 12):

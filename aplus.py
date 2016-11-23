@@ -382,6 +382,8 @@ tokens = (
   'PUT_BEEPER',
   'IF',
   'END_IF',
+  'ELIF',
+  'END_ELIF',
   'ELSE',
   'END_ELSE',
   'PRINT',
@@ -401,6 +403,8 @@ tokens = (
   'MENOR_IGUAL',
   'MAYOR_IGUAL',
   'DOS_PUNTOS',
+  'AND',
+  'OR',
   'COMA',
   'ID',
   'CTE_INT',
@@ -425,11 +429,13 @@ t_MAYOR_IGUAL       = r'\>='
 t_DIFERENTE         = r'\<>'
 t_EQUIVALE          = r'\='
 t_IGUAL_A           = r'\=='
+t_AND               = r'\&'
+t_OR                = r'\|'
 t_PUNTO_Y_COMA      = r'\;'
 t_DOS_PUNTOS        = r'\:'
 t_COMA              = r'\,'
-t_CORCHETE_IZQ 			= r'\['
-t_CORCHETE_DER			= r'\]'
+t_CORCHETE_IZQ 		= r'\['
+t_CORCHETE_DER		= r'\]'
 
 
 #palabras reservadas del lenguaje
@@ -450,13 +456,15 @@ reserved = {
   'putBeeper' : 'PUT_BEEPER',
   'if'        : 'IF',
   'end_if'    : 'END_IF',
+  'elif'   : 'ELIF',
+  'end_elif'    : 'END_ELIF',
   'else'      : 'ELSE',
   'end_else'  : 'END_ELSE',
   'print'     : 'PRINT',
-  'read'			: 'READ',
+  'read'    : 'READ',
   'def'       : 'DEF',
   'end_def'   : 'END_DEF',
-  'main'	: 'MAIN',
+  'main'    : 'MAIN',
   'true'  : 'TRUE',
   'false' : 'FALSE'
 }
@@ -856,6 +864,58 @@ def p_asignacion_aux(p):
 					| funcionUsuario
 	'''
 
+#funcion que utiliza los operadores de bit and y or
+def p_comparadores(p):
+	'''
+	comparadores : exp comparadores_2
+	'''
+
+#funcion auxiliar de comparadores
+def p_comparadores_2(p):
+	'''
+	comparadores_2  : comp
+					| empty
+	'''
+
+#funcion que contiene el and y or
+def p_comp(p):
+	'''
+	comp : AND exp
+		 | OR exp
+	'''
+	global arregloCuadruplos
+	global tipo
+	global resultado
+	global iContadorTemporal, iContadorDiccionarioVar, iContadorCuadruplos
+	global dicOperadores
+	global PTipo,PilaO
+	global tgb
+
+	#checa el tipo de dato
+	op2 = PTipo.pop()
+	op1 = PTipo.pop()
+	op = dicOperadores[p[1]]
+	tipo = cubo[op1][op2][op]
+	if(tipo != 3):
+		raise errorSemantico("uso incorrecto de tipos ")
+	else:
+		## cuadruplos de condicion
+		# toma el operador 1 y los operandos
+		operador = p[1]
+		operando2 = PilaO.pop()
+		operando1 = PilaO.pop()
+		#incrementa el contador y lo agrega al arreglo de resultados
+		iContadorTemporal += 1
+		resultado.append(tgb)
+		#genera el cuadruplo
+		arregloCuadruplos.append(cuadruplo(op,operando1,operando2,resultado[iContadorCuadruplos]))
+		#el temporal lo mete a la pila
+		PilaO.append(tgb)
+		PTipo.append(tipo)
+		#suma uno al contador
+		iContadorCuadruplos += 1
+		tgb+=1
+
 #funcion para hacer expresiones booleanas 
 def p_exp(p):
   '''
@@ -871,7 +931,6 @@ def p_exp_2(p):
       | IGUAL_A expresion
       | MAYOR_IGUAL expresion
       | MENOR_IGUAL expresion
-      | empty
   '''
   global arregloCuadruplos
   global tipo
@@ -897,6 +956,7 @@ def p_exp_2(p):
   	#incrementa el contador y lo agrega al arreglo de resultados
   	iContadorTemporal += 1
   	resultado.append(tgb)
+  	PTipo.append(tipo)
   	#genera el cuadruplo
   	arregloCuadruplos.append(cuadruplo(op,operando1,operando2,resultado[iContadorCuadruplos]))
   	#el temporal lo mete a la pila
@@ -1278,7 +1338,6 @@ def p_arregloAux(p):
 	tgi+=1
 	iContadorCuadruplos+=1
 
-
 #funcion auxiliar para generar cuadruplos de arreglos
 def p_validaDimesiones(p):
 	'''
@@ -1298,14 +1357,17 @@ def p_validaDimesiones(p):
 #funcion para aceptar condiciones s
 def p_condicion(p):
   '''
-  condicion : imprimeIf PARENTESIS_IZQ condicion_2 PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndIf condicion_4
+  condicion : imprimeIf PARENTESIS_IZQ comparadores PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndIf condicion_3 condicion_4
   '''
   global PSaltosAux
   global iContadorCuadruplos
   global arregloCuadruplos
   #llenas en donde se regresa cuando acabe el else
-  res = PSaltos.pop()
-  arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
+  #el elif ocupa la pila auxiliar
+  while(len(PSaltosAux)>0):
+  	res = PSaltosAux.pop()
+  	#rellena el cuadruplo
+  	arregloCuadruplos[res].setOperando1(iContadorCuadruplos)
 
 #genera el cuadruplo de condicion
 def p_cuacondicion1(p):
@@ -1329,12 +1391,12 @@ def p_cuacondicion1(p):
   #suma uno al contador
   iContadorCuadruplos += 1
 
-#la condicion puede checar una expresion o un checkwall
-def p_condicion_2(p):
-  '''
-  condicion_2 : exp 
-            | checkwall
-  '''
+#genera el cuadruplo de elif (else if)
+def p_condicion_3(p):
+	'''
+	condicion_3 : ELIF PARENTESIS_IZQ comparadores PARENTESIS_DER DOS_PUNTOS cuacondicion1 estatuto_2 imprimeEndElif condicion_3
+				| empty
+	'''
 
 #permite un else
 def p_condicion_4(p):
@@ -1349,12 +1411,36 @@ def p_matchElse(p):
 	matchElse : ELSE
 	'''
 
+#cuando acaba el elif genera el goto
+def p_imprimeEndElif(p):
+	'''
+	imprimeEndElif : END_ELIF
+	'''
+	global PSaltos,dicOperadores,PSaltosAux
+	global arregloCuadruplos
+	global iContadorCuadruplos
+	global operador, resultado
 
+	#saca el tope de Psaltos , que es el apuntador al "goto"
+	res = PSaltos.pop()
+	#al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
+	arregloCuadruplos[res].setResultado(iContadorCuadruplos+1)
+	PSaltosAux.append(iContadorCuadruplos)
+	operador = dicOperadores["Goto"]
+	#almacena el resultado en el arreglo de resultados para no perder la cuenta
+	resultado.append("nul")
+	#genera el cuadruplo
+	arregloCuadruplos.append(cuadruplo(operador,-2,"nul","nul"))
+	#sigye la cuenta del contador y resetea la variable boleana
+	iContadorCuadruplos+=1
+
+#cuando acabe el else llena los goto, como son muchos que tiene que sacar de la pila y todos van al mismo los saca con un while
 def p_imprimeEndElse(p):
   '''
   imprimeEndElse : END_ELSE
   '''
 
+#if
 def p_imprimeIf(p):
   '''
   imprimeIf : IF
@@ -1363,21 +1449,22 @@ def p_imprimeIf(p):
   #enciende if
   bIf = 1
 
+#cuando acaba el if genera el primer goto por que no sabes si va a venir o no elif o else
 def p_imprimeEndIf(p):
   '''
   imprimeEndIf : END_IF
   '''
-  global PSaltos,dicOperadores
+  global PSaltos,dicOperadores,PSaltosAux
   global arregloCuadruplos
   global iContadorCuadruplos
   global operador, resultado
   global bIf
 
-  #saca el tope de Psaltos , que es el apuntador al "gotof"
+  #saca el tope de Psaltos , que es el apuntador al "goto"
   res = PSaltos.pop()
   #al cuadruplo ubicado en la posición res le mete contador temporal + 1 porque apunta a la siguiente direccion
   arregloCuadruplos[res].setResultado(iContadorCuadruplos+1)
-  PSaltos.append(iContadorCuadruplos)
+  PSaltosAux.append(iContadorCuadruplos)
   operador = dicOperadores["Goto"]
   #almacena el resultado en el arreglo de resultados para no perder la cuenta
   resultado.append("nul")
@@ -1469,7 +1556,7 @@ def p_read(p):
 #funcion de sintaxis del ciclo --> estructura "while ( expresion ) : codigo end_while"
 def p_ciclo(p):
   '''
-  ciclo : imprimeWhile PARENTESIS_IZQ exp PARENTESIS_DER DOS_PUNTOS cuaciclo1 estatuto_2 imprimeEndWhile
+  ciclo : imprimeWhile PARENTESIS_IZQ comparadores PARENTESIS_DER DOS_PUNTOS cuaciclo1 estatuto_2 imprimeEndWhile
   '''
 
 #funcion auxiliar para ayudar a generar el cuadruplo gotof
@@ -1743,6 +1830,7 @@ def p_returnFunc(p):
   		operando1 = PilaO.pop()
   		operador = dicOperadores["Return"]
   		resultado.append("nul")
+  		#PSaltos.append(iContadorCuadruplos)
   		arregloCuadruplos.append(cuadruplo(operador,operando1,"nul","nul"))
   		iContadorCuadruplos+=1
 
@@ -1788,6 +1876,8 @@ def p_destroyVars(p):
   #genera cuadruplo ret
   resultado.append("nul")
   operador = dicOperadores["Ret"]
+  #p = PSaltos.pop()
+  #arregloCuadruplos[p].setResultado(iContadorCuadruplos)
   arregloCuadruplos.append(cuadruplo(operador,"nul","nul","nul"))
   iContadorCuadruplos+=1
   #elimina bRetorna
