@@ -2235,11 +2235,13 @@ for x in range(0,iContadorDiccionarioVar):
 print("\n")
 
 for x in range(0,iContadorDiccionarioFuncion):
-	print("funcion numero" + str(x))
+	print("funcion numero " + str(x))
 	print(dF[x].getNombre())
 	print(dF[x].getTipo())
+	print(dF[x].getParametros())
 	print(dF[x].getDirecciones())
 	print(dF[x].getStart())
+	print(dF[x].getDirs())
 	print("-----------------")
 
 print("\n")

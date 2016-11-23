@@ -16,6 +16,7 @@ posDogY = 210
 gradDog = 1
 posBoneX = 0
 posBoneY = 0
+runBefore = False
 
 # every gif's frame
 fname_list = \
@@ -77,7 +78,7 @@ def drawBone():
     #bone = tk.PhotoImage(file='./image/bone.gif')
     #w2 = Label(draw, image=bone)
     w2.bone = bone
-    w2.pack(side="left")
+    w2.pack()
     draw.create_window(posBoneX, posBoneY, window=w2, tags='bone')
 
 def compileCode():
@@ -85,7 +86,6 @@ def compileCode():
     text_file = open("prueba.txt", "w")
     text_file.write(input)
     text_file.close()
-    os.system('aplus.py')
     subprocess.call(["python", "./aplus.py"]);
 
     with open("output.txt", "w+") as output:
@@ -109,6 +109,11 @@ def compileCode():
           putBeeper()
         if 'checkwall()' in line:
           checkWall()
+    '''if (runBefore == True): 
+      reiniciar()
+      runBefore = False
+    else:
+      runBefore = True'''
 
 
 def moveUp():
@@ -226,12 +231,33 @@ def checkWall():
 
     var = draw.find_overlapping(posDogX, posDogY, posDogX+50, posDogY+50)
 
-    subprocess.check_call([sys.executable, 'MaquinaVirtual.py', "hi"])
-
     for item in var:
       if (draw.itemcget(item, "tags") == 'wall'):
-        print ("Wall cercano")
+        print ("Hay un muro cercano")
 
+def deleteAll(event):
+    draw.delete("wall")
+
+def reiniciar(event):
+    global posDogX
+    global posDogY
+    global w2
+
+    posDogX = 200
+    posDogY = 210
+
+    w2.destroy()
+
+    randX = random.randint(0, 11)
+    randY = random.randint(0, 7)
+
+    posBoneX = 38 + (randX * 50) 
+    posBoneY = 10 + (randY * 50)
+    bone = tk.PhotoImage(file='./image/bone.gif')
+    w2 = Label(draw, image=bone)
+    drawBone()
+
+    draw.delete("wall")
 
 '''Crear divisiones de pantallas'''
 win = PanedWindow()
@@ -293,6 +319,8 @@ for x in range (0, 8):
 drawBone()
 
 draw.tag_bind("grid", '<ButtonPress-1>', onObjectClick)
+
+draw.bind('<Double-Button-3>', reiniciar)
 
 #draw.tag_bind("dog", '<ButtonPress-3>', turnLeft)
 #draw.tag_bind("dog", '<ButtonPress-2>', pickBeeper)
