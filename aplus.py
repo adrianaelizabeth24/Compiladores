@@ -637,7 +637,7 @@ def p_declaracion(p):
   global iContadorDiccionarioVar
   global dV
   global tipoDeclaracion
-  global vgi, vli, vgf, vlf, vgs, vls
+  global vgi, vli, vgf, vlf, vgs, vls,vgb,vlb
   #vars locales
   obj = ""
   var = 0
@@ -669,6 +669,12 @@ def p_declaracion(p):
   elif(tipoDeclaracion == "string" and bscope == 1):
     var = vls
     vls+=1
+  elif(tipoDeclaracion == "bool" and bscope == 0):
+    var = vgb
+    vgb+=1
+  elif(tipoDeclaracion == "bool" and bscope == 1):
+    var = vlb
+    vlb+=1
 
   #crea el objeto tablaVar con : nombre, tipo, scope, direccion
   if(bscope == 0):
@@ -701,7 +707,7 @@ def p_declaracion_2(p):
   global iContadorDiccionarioVar
   global dV
   global tipoDeclaracion
-  global vgi, vli, vgf, vlf, vgs, vls
+  global vgi, vli, vgf, vlf, vgs, vls, vgb, vlb
   #vars locales
   obj = ""
   var = 0
@@ -731,6 +737,12 @@ def p_declaracion_2(p):
   elif(tipoDeclaracion == "string" and bscope == 1):
     var = vls
     vls+=1
+  elif(tipoDeclaracion == "bool" and bscope == 0):
+    var = vgb
+    vgb+=1
+  elif(tipoDeclaracion == "bool" and bscope == 1):
+    var = vlb
+    vlb+=1
 
   #crea el objeto tablaVar con : nombre, tipo, scope, direccion
   if(bscope == 0):
@@ -789,6 +801,12 @@ def p_declaracionArreglo(p):
 	elif(tipoDeclaracion == "string" and bscope == 1):
 		var = vls
 		vls+=p[4]
+	elif(tipoDeclaracion == "bool" and bscope == 0):
+		var = vgb
+		vgb+=1
+	elif(tipoDeclaracion == "bool" and bscope == 1):
+		var = vlb
+		vlb+=p[4]
 
   #crea el objeto tablaVar con : nombre, tipo, scope, direccion
 	if(bscope == 0):
@@ -1752,7 +1770,7 @@ def p_function_2(p):
   global iContadorDiccionarioVar
   global dV
   global tipoDeclaracion
-  global vli, vlf, vls
+  global vli, vlf, vls, vlb
   global listaParamFuncion
   #vars locales
   obj = ""
@@ -1776,6 +1794,9 @@ def p_function_2(p):
   elif(tipoDeclaracion == "string"):
     var = vls
     vls+=1
+  elif(tipoDeclaracion == "bool"):
+    var = vlb
+    vlb += 1
   
   #se genera el objeto y se agrega a la listaParam
   obj = tablaVar(p[2],tipoDeclaracion,'local',var,1)
