@@ -229,7 +229,7 @@ def checkWall():
     global posDogX
     global posDogY
 
-    var = draw.find_overlapping(posDogX, posDogY, posDogX+50, posDogY+50)
+    var = draw.find_overlapping(posDogX, posDogY, posDogX+60, posDogY+60)
 
     for item in var:
       if (draw.itemcget(item, "tags") == 'wall'):
