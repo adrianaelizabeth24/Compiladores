@@ -4,6 +4,10 @@ __pycache__/
 __pycache__/parsetab.cpython-35.pyc
 parser.out
 parsetab.py
+aplusOBJConstantes.txt
+aplusOBJCuadruplos.txt
+prueba.txt
+output.txt
 
 # C extensions
 *.so
@@ -90,3 +94,14 @@ ENV/
 
 # Rope project settings
 .ropeproject
+aplusOBJConstantes.txt
+__pycache__/cuadruplo.cpython-35.pyc
+*.pyc
+aplusOBJConstantes.txt
+aplusOBJCuadruplos.txt
+output.txt
+parser.out
+parsetab.py
+prueba.txt
+*.pyc
+*.DS_Store
